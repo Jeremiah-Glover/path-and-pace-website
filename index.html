@@ -13,16 +13,16 @@
   --ink:     #EAE8F8;
   --muted:   rgba(234,232,248,0.42);
   --dim:     rgba(234,232,248,0.17);
-  --red:     #FF1845;
-  --red-lo:  rgba(255,24,69,0.12);
-  --cyan:    #00CCFF;
-  --cyan-lo: rgba(0,204,255,0.10);
+  --red:     #FF5500;
+  --red-lo:  rgba(255,85,0,0.12);
+  --cyan:    #00E5C8;
+  --cyan-lo: rgba(0,229,200,0.10);
   --border:  rgba(255,255,255,0.055);
-  --border-r:rgba(255,24,69,0.22);
+  --border-r:rgba(255,85,0,0.22);
   --teal:    #00E5C8;
   --teal-lo: rgba(0,229,200,0.10);
-  --glow-r:  0 0 14px rgba(255,24,69,0.55), 0 0 48px rgba(255,24,69,0.18);
-  --glow-c:  0 0 14px rgba(0,204,255,0.55), 0 0 48px rgba(0,204,255,0.18);
+  --glow-r:  0 0 14px rgba(255,85,0,0.55), 0 0 48px rgba(255,85,0,0.18);
+  --glow-c:  0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
   --glow-t:  0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
   --font: 'Space Grotesk', sans-serif;
   --mono: 'Space Mono', monospace;
@@ -70,7 +70,7 @@ body {
   left: -320px; top: -320px;
   width: 640px; height: 640px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,24,69,0.055) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(255,85,0,0.055) 0%, transparent 65%);
   pointer-events: none; z-index: 0;
   will-change: transform;
 }
@@ -112,7 +112,7 @@ nav.scrolled {
   font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--red); text-decoration: none;
   padding: 9px 22px;
-  border: 1px solid rgba(255,24,69,0.28); border-radius: 3px;
+  border: 1px solid rgba(255,85,0,0.28); border-radius: 3px;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .nav-cta:hover {
@@ -133,7 +133,7 @@ nav.scrolled {
 .hero::before {
   content: '';
   position: absolute; left: 0; right: 0; height: 1px; top: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,24,69,0.25) 40%, rgba(0,204,255,0.2) 60%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255,85,0,0.25) 40%, rgba(0,229,200,0.2) 60%, transparent 100%);
   animation: scan 9s linear infinite;
   pointer-events: none;
 }
@@ -173,7 +173,7 @@ nav.scrolled {
 }
 .hi {
   color: var(--red);
-  text-shadow: 0 0 40px rgba(255,24,69,0.45), 0 0 90px rgba(255,24,69,0.18);
+  text-shadow: 0 0 40px rgba(255,85,0,0.45), 0 0 90px rgba(255,85,0,0.18);
 }
 
 .hero-sub {
@@ -236,7 +236,7 @@ nav.scrolled {
 }
 .m-item::after {
   content: '◆'; font-size: 5px; color: var(--red);
-  filter: drop-shadow(0 0 5px rgba(255,24,69,0.9));
+  filter: drop-shadow(0 0 5px rgba(255,85,0,0.9));
 }
 @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
@@ -290,8 +290,8 @@ nav.scrolled {
 .pcard-glow {
   position: absolute; inset: 0; pointer-events: none; opacity: 0;
   transition: opacity 0.35s;
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,24,69,0.06) 0%, transparent 100%);
-  border: 1px solid rgba(255,24,69,0.18);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,85,0,0.06) 0%, transparent 100%);
+  border: 1px solid rgba(255,85,0,0.18);
 }
 .pcard:hover .pcard-glow { opacity: 1; }
 
@@ -404,8 +404,8 @@ nav.scrolled {
   transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
 }
 .form-field:focus {
-  border-color: rgba(255,24,69,0.4);
-  box-shadow: 0 0 0 3px rgba(255,24,69,0.07), 0 0 18px rgba(255,24,69,0.08);
+  border-color: rgba(255,85,0,0.4);
+  box-shadow: 0 0 0 3px rgba(255,85,0,0.07), 0 0 18px rgba(255,85,0,0.08);
 }
 .form-field::placeholder { color: var(--dim); }
 .form-ta {
@@ -416,8 +416,8 @@ nav.scrolled {
   transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
 }
 .form-ta:focus {
-  border-color: rgba(255,24,69,0.4);
-  box-shadow: 0 0 0 3px rgba(255,24,69,0.07), 0 0 18px rgba(255,24,69,0.08);
+  border-color: rgba(255,85,0,0.4);
+  box-shadow: 0 0 0 3px rgba(255,85,0,0.07), 0 0 18px rgba(255,85,0,0.08);
 }
 .form-ta::placeholder { color: var(--dim); }
 .form-submit {
@@ -567,15 +567,15 @@ footer {
 
   <!-- Geometric rings accent -->
   <svg class="hero-rings" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="170" cy="170" r="160" stroke="rgba(255,24,69,0.5)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="160" stroke="rgba(255,85,0,0.5)" stroke-width="0.6" fill="none"/>
     <circle cx="170" cy="170" r="126" stroke="rgba(0,229,200,0.4)" stroke-width="0.4" fill="none"/>
-    <circle cx="170" cy="170" r="92"  stroke="rgba(255,24,69,0.35)" stroke-width="0.5" fill="none" stroke-dasharray="4 8"/>
+    <circle cx="170" cy="170" r="92"  stroke="rgba(255,85,0,0.35)" stroke-width="0.5" fill="none" stroke-dasharray="4 8"/>
     <circle cx="170" cy="170" r="58"  stroke="rgba(0,229,200,0.3)" stroke-width="0.4" fill="none"/>
-    <circle cx="170" cy="170" r="26"  stroke="rgba(255,24,69,0.45)" stroke-width="0.6" fill="none"/>
-    <circle cx="170" cy="170" r="4"   fill="rgba(255,24,69,0.7)"/>
+    <circle cx="170" cy="170" r="26"  stroke="rgba(255,85,0,0.45)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="4"   fill="rgba(255,85,0,0.7)"/>
     <!-- Crosshairs -->
-    <line x1="170" y1="4"   x2="170" y2="336" stroke="rgba(255,24,69,0.12)" stroke-width="0.5"/>
-    <line x1="4"   y1="170" x2="336" y2="170" stroke="rgba(255,24,69,0.12)" stroke-width="0.5"/>
+    <line x1="170" y1="4"   x2="170" y2="336" stroke="rgba(255,85,0,0.12)" stroke-width="0.5"/>
+    <line x1="4"   y1="170" x2="336" y2="170" stroke="rgba(255,85,0,0.12)" stroke-width="0.5"/>
   </svg>
 
   <div class="hero-tag">Indie Product Studio &nbsp;·&nbsp; Atlanta, GA</div>
@@ -631,15 +631,15 @@ footer {
       </a>
 
       <a href="legal.html?tab=freq-privacy" class="pcard reveal">
-        <div class="pcard-glow" style="background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,204,255,0.06) 0%, transparent 100%); border-color: rgba(0,204,255,0.18);"></div>
+        <div class="pcard-glow" style="background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,229,200,0.06) 0%, transparent 100%); border-color: rgba(0,229,200,0.18);"></div>
         <div class="pcard-img" style="background:#090D12;">
           <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2">
-            <circle cx="36" cy="36" r="32" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="22" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="12" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="3"  fill="#00CCFF"/>
-            <line x1="36" y1="4"  x2="36" y2="68" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
-            <line x1="4"  y1="36" x2="68" y2="36" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
+            <circle cx="36" cy="36" r="32" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="22" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="12" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="3"  fill="#00E5C8"/>
+            <line x1="36" y1="4"  x2="36" y2="68" stroke="#00E5C8" stroke-width="0.3" opacity="0.4"/>
+            <line x1="4"  y1="36" x2="68" y2="36" stroke="#00E5C8" stroke-width="0.3" opacity="0.4"/>
           </svg>
           <div class="pcard-fade"></div>
         </div>
@@ -996,7 +996,7 @@ document.getElementById('formBtn').addEventListener('click', function() {
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel">
 const DEFAULTS = /*EDITMODE-BEGIN*/{
-  "glowColor": "#FF6B00",
+  "glowColor": "#FF5500",
   "accentColor": "#00E5C8",
   "tealColor": "#7AFFD4",
   "glowIntensity": "vivid"
@@ -1042,17 +1042,17 @@ function TweaksApp() {
       <TweakSection label="① Primary — hero text · nav dot · buttons · card hover" />
       <TweakColor label=""
         value={t.glowColor}
-        options={['#FF1845','#FF6B00','#FFD600','#FF0090','#C084FC','#8B5CF6','#00E5C8','#14B8A6','#00CCFF','#A3E635']}
+        options={['#FF5500','#FF6B00','#FFD600','#FF0090','#C084FC','#8B5CF6','#00E5C8','#14B8A6','#00E5C8','#A3E635']}
         onChange={v => setTweak('glowColor', v)} />
       <TweakSection label="② Secondary — eyebrows · card arrows · status badges" />
       <TweakColor label=""
         value={t.accentColor}
-        options={['#00CCFF','#06B6D4','#14B8A6','#00E5C8','#A3E635','#10B981','#EC4899','#F97316','#FBBF24','#8B5CF6']}
+        options={['#00E5C8','#06B6D4','#14B8A6','#00E5C8','#A3E635','#10B981','#EC4899','#F97316','#FBBF24','#8B5CF6']}
         onChange={v => setTweak('accentColor', v)} />
       <TweakSection label="③ Tertiary — studio rule · numbered list · rings · footer" />
       <TweakColor label=""
         value={t.tealColor}
-        options={['#14B8A6','#00E5C8','#00FFCC','#00FF9D','#4ADE80','#06B6D4','#7AFFD4','#00CCFF','#A3E635','#FBBF24']}
+        options={['#14B8A6','#00E5C8','#00FFCC','#00FF9D','#4ADE80','#06B6D4','#7AFFD4','#00E5C8','#A3E635','#FBBF24']}
         onChange={v => setTweak('tealColor', v)} />
       <TweakSection label="Glow intensity" />
       <TweakRadio label=""
