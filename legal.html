@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal — Path & Pace</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #0D0E1E;
+  --surf:   #12142A;
+  --surf2:  #181B36;
+  --ink:    #EAE8F8;
+  --muted:  rgba(234,232,248,0.48);
+  --dim:    rgba(234,232,248,0.18);
+  --orange: #FF6B00;
+  --teal:   #00E5C8;
+  --cyan:   #00CCFF;
+  --border: rgba(255,255,255,0.06);
+  --border-o: rgba(255,107,0,0.22);
+  --glow-o: 0 0 14px rgba(255,107,0,0.55), 0 0 48px rgba(255,107,0,0.18);
+  --glow-t: 0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 16px; line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 22px 56px; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(13,14,30,0.82); backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.01em;
+}
+.logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--orange); box-shadow: var(--glow-o);
+  animation: dot-pulse 2.8s ease-in-out infinite; flex-shrink: 0;
+}
+@keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+.nav-back {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+}
+.nav-back::before { content: '←'; color: var(--teal); }
+.nav-back:hover { color: var(--ink); }
+
+/* ── HEADER ── */
+.page-header {
+  padding: 136px 56px 64px;
+  background: var(--surf); position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,107,0,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-header::after {
+  content: 'LEGAL';
+  position: absolute; right: 48px; bottom: -24px;
+  font-family: var(--font); font-size: 152px; font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,107,0,0.08);
+  line-height: 1; pointer-events: none; white-space: nowrap; letter-spacing: -0.04em;
+}
+.header-label {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+}
+.header-label::before { content: ''; width: 28px; height: 1px; background: var(--orange); box-shadow: var(--glow-o); }
+.header-title {
+  font-size: clamp(42px,6vw,76px); font-weight: 700;
+  color: var(--ink); line-height: 0.95; letter-spacing: -0.03em;
+}
+.header-title em { font-style: normal; color: var(--orange); }
+.header-sub {
+  margin-top: 18px; font-size: 15px; font-weight: 300;
+  color: var(--muted); max-width: 480px; line-height: 1.7;
+}
+
+/* ── TAB BAR ── */
+.tab-bar {
+  background: var(--surf); border-bottom: 1px solid var(--border);
+  padding: 0 56px; display: flex; gap: 0; overflow-x: auto;
+  position: sticky; top: 66px; z-index: 100;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dim); background: none; border: none;
+  padding: 18px 22px; cursor: pointer; white-space: nowrap;
+  transition: color 0.2s; border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--muted); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--orange); }
+
+/* ── CONTENT ── */
+.content-area { max-width: 780px; margin: 0 auto; padding: 64px 56px 100px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.doc-meta { margin-bottom: 48px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+.doc-title { font-size: 30px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.1; letter-spacing: -0.02em; }
+.doc-title em { font-style: normal; color: var(--orange); }
+.doc-date { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 0.12em; }
+
+.doc-intro {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  padding: 20px 24px; margin-bottom: 40px;
+  font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8;
+  border-radius: 0 4px 4px 0;
+}
+.doc-intro strong { color: var(--ink); font-weight: 600; }
+
+.doc-section { margin-bottom: 40px; }
+.doc-section-num {
+  font-family: var(--mono); font-size: 10px; font-weight: 400;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 6px; opacity: 0.7;
+}
+.doc-section h2 {
+  font-size: 18px; font-weight: 600; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  margin-bottom: 16px; letter-spacing: -0.01em;
+}
+.doc-section p { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.85; margin-bottom: 12px; }
+.doc-section ul, .doc-section ol { margin: 8px 0 14px 20px; }
+.doc-section li { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.85; margin-bottom: 8px; }
+.doc-section strong { color: var(--ink); font-weight: 600; }
+.doc-section a { color: var(--teal); text-decoration: none; transition: text-shadow 0.2s; }
+.doc-section a:hover { text-shadow: var(--glow-t); }
+.doc-section .caps { font-size: 13px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; color: var(--ink); opacity: 0.75; }
+
+.sig-block {
+  background: var(--surf); border: 1px solid var(--border);
+  padding: 28px 32px; margin-top: 8px; border-radius: 3px;
+}
+.sig-row { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 24px; }
+.sig-field { border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.sig-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 400;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 22px;
+}
+.sig-party {
+  font-family: var(--mono); font-size: 10px; font-weight: 400;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 20px; margin-top: 4px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg); padding: 36px 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.footer-logo { font-size: 15px; font-weight: 700; color: var(--dim); }
+.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.footer-link {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); text-decoration: none; transition: text-shadow 0.2s;
+}
+.footer-link:hover { text-shadow: var(--glow-t); }
+
+@media (max-width: 768px) {
+  nav { padding: 18px 24px; }
+  .page-header { padding: 110px 24px 48px; }
+  .tab-bar { padding: 0 16px; }
+  .content-area { padding: 48px 24px 80px; }
+  footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+  .sig-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="rebrand.html" class="nav-logo">
+    <div class="logo-dot"></div>
+    Path &amp; Pace
+  </a>
+  <a href="rebrand.html" class="nav-back">Back to site</a>
+</nav>
+
+<div class="page-header">
+  <div class="header-label">Path &amp; Pace LLC</div>
+  <h1 class="header-title">Legal &amp;<br><em>Notices.</em></h1>
+  <p class="header-sub">Our policies, terms, and agreements — written like humans, not lawyers trying to bill more hours.</p>
+</div>
+
+<div class="tab-bar" role="tablist">
+  <button class="tab-btn active" role="tab" data-tab="hb-privacy">HB Privacy</button>
+  <button class="tab-btn" role="tab" data-tab="hb-terms">HB Terms</button>
+  <button class="tab-btn" role="tab" data-tab="hb-nda">Beta NDA</button>
+  <button class="tab-btn" role="tab" data-tab="freq-privacy">Frequency Privacy</button>
+</div>
+
+<div class="content-area">
+  <div class="tab-panel active" id="panel-hb-privacy" role="tabpanel">
+    <div class="doc-meta">
+      <div class="doc-title">HoneyBadger — <em>Privacy Policy</em></div>
+      <div class="doc-date">Last Updated: June 1, 2026</div>
+    </div>
+    <div class="doc-intro">This Privacy Policy explains how <strong>Path &amp; Pace, LLC</strong> ("we," "us") handles your information in the HoneyBadger app (the "App"). The App stores some data on your device and some on servers we operate, and uses a third-party AI provider to generate its features.</div>
+    <div id="hb-privacy-content"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-hb-terms" role="tabpanel">
+    <div class="doc-meta">
+      <div class="doc-title">HoneyBadger — <em>Terms of Service</em></div>
+      <div class="doc-date">Last Updated: June 1, 2026</div>
+    </div>
+    <div class="doc-intro">By downloading, installing, or using HoneyBadger (the "App"), you agree to these Terms of Service. These Terms are a binding agreement between you and <strong>Path &amp; Pace, LLC</strong>.</div>
+    <div id="hb-terms-content"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-hb-nda" role="tabpanel">
+    <div class="doc-meta">
+      <div class="doc-title">HoneyBadger — <em>Beta Tester NDA</em></div>
+      <div class="doc-date">Effective Date: June 1, 2026</div>
+    </div>
+    <div class="doc-intro">This Non-Disclosure Agreement ("Agreement") is between <strong>Path &amp; Pace, LLC</strong> ("Company") and the individual signing below ("Tester"). It covers Tester's participation in the private beta of HoneyBadger.</div>
+    <div id="hb-nda-content"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-freq-privacy" role="tabpanel">
+    <div class="doc-meta">
+      <div class="doc-title">Frequency — <em>Privacy Policy</em></div>
+      <div class="doc-date">Effective: May 28, 2026 · Updated: May 28, 2026</div>
+    </div>
+    <div class="doc-intro">This Privacy Policy describes how information is collected, used, and protected when you use the Frequency mobile application, operated by <strong>Path &amp; Pace LLC</strong> on behalf of the Frequency community.</div>
+    <div id="freq-privacy-content"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Path &amp; Pace</div>
+  <div class="footer-copy">© 2026 Path &amp; Pace LLC · Atlanta, GA</div>
+  <a href="mailto:jeremiahglover@path-and-pace.com" class="footer-link">Contact</a>
+</footer>
+
+<script>
+// Tab switching
+function activateTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+  const panel = document.getElementById('panel-' + name);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activateTab(btn.dataset.tab);
+    window.scrollTo({ top: 0 });
+    history.replaceState(null, '', '?tab=' + btn.dataset.tab);
+  });
+});
+// Query param support
+const qTab = new URLSearchParams(window.location.search).get('tab');
+if (qTab) activateTab(qTab);
+
+// Helper
+function renderSections(targetId, sections) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  el.innerHTML = sections.map((s, i) => `
+    <div class="doc-section">
+      <div class="doc-section-num">${String(i + 1).padStart(2, '0')}</div>
+      <h2>${s.title}</h2>
+      ${s.body}
+    </div>
+  `).join('');
+}
+
+// ─── HB PRIVACY ───
+renderSections('hb-privacy-content', [
+  { title: 'Information We Collect', body: `<p>Depending on which features you use, we may collect and store:</p><ul><li><strong>Account information</strong> — your name and Apple ID email address, received when you sign in with Apple.</li><li><strong>Profile and project data</strong> — your bio, projects, goals, energy levels, notes, and similar information you enter.</li><li><strong>Calendar information</strong> — if you grant access, we read your calendar data to provide reminders and meeting context. We do <strong>not</strong> access your email.</li><li><strong>Audio you record</strong> — recordings of your own voice (self-recording) and transcriptions of them.</li><li><strong>Device information</strong> — basic technical data such as device type and app version, used to operate and troubleshoot the App.</li></ul><p>We do <strong>not</strong> intentionally collect Social Security numbers, financial account numbers, government IDs, health records, or precise biometric identifiers.</p>` },
+  { title: 'Where Your Data Lives', body: `<ul><li><strong>On your device</strong> — recordings, transcriptions, and certain local data.</li><li><strong>On our servers</strong> — we operate backend services on <strong>Google Cloud / Firebase</strong> (authentication, database, and cloud functions). Account and profile data you enter is stored there.</li></ul>` },
+  { title: 'Third Parties We Share Data With', body: `<p>We use the following service providers to operate the App:</p><ul><li><strong>Anthropic (Claude API)</strong> — to generate suggestions, summaries, briefings, and transcriptions. Content you submit is transmitted to and processed on their systems. <strong>Don't submit anything you're not comfortable having processed by a third-party AI service.</strong></li><li><strong>Google / Firebase</strong> — authentication, database, and cloud function infrastructure.</li><li><strong>RevenueCat</strong> — manages subscription and purchase status.</li><li><strong>Apple</strong> — Sign in with Apple, device OS services, notifications, and App Store.</li></ul><p>We do <strong>not</strong> sell your personal information, and we do <strong>not</strong> use it to advertise to you.</p>` },
+  { title: 'How We Use Information', body: `<p>We use your information solely to operate and improve the App's features — generating reminders, briefings, transcriptions, and project intelligence, managing your account, and processing purchases.</p>` },
+  { title: 'AI Output Limitations', body: `<p>AI Output is automated and may be inaccurate, incomplete, or outdated. See the Terms of Service for the full disclaimer. Do not rely on AI Output for critical decisions.</p>` },
+  { title: 'Your Rights and Controls', body: `<ul><li><strong>Account deletion:</strong> Delete your account from within the App. We delete your associated personal data from our servers within 30 days, except anything we are legally required to retain.</li><li><strong>Data export:</strong> Request a copy of your personal data by contacting us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>.</li><li><strong>Permissions:</strong> Grant or revoke microphone, calendar, and notification access in your device settings at any time.</li></ul>` },
+  { title: 'Data Retention', body: `<p>We retain your account and profile data while your account is active. When you delete your account, we delete that data from our systems except where law requires retention. Content sent to the AI provider is subject to that provider's retention practices.</p>` },
+  { title: 'Security', body: `<p>We take reasonable measures to protect your data, including using established infrastructure providers and limiting access. No method of storage or transmission is 100% secure, and we cannot guarantee absolute security.</p>` },
+  { title: 'Children', body: `<p>The App is intended for users 18 and older. We do not knowingly collect information from anyone under 18.</p>` },
+  { title: 'Changes to This Policy', body: `<p>We may update this Policy. We'll revise the "Last Updated" date and, for material changes, notify you in the App where appropriate.</p>` },
+  { title: 'Contact', body: `<p>Questions about privacy? Contact us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>.</p>` }
+]);
+
+// ─── HB TERMS ───
+renderSections('hb-terms-content', [
+  { title: 'Acceptance of These Terms', body: `<p>By downloading, installing, or using HoneyBadger (the "App"), you agree to these Terms of Service ("Terms"). If you don't agree, don't use the App. These Terms are a binding agreement between you and <strong>Path &amp; Pace, LLC</strong> ("we," "us," "our").</p>` },
+  { title: 'Eligibility', body: `<p>You must be at least 18 years old to use the App. By using it, you confirm you are 18 or older.</p>` },
+  { title: 'What the App Does', body: `<p>HoneyBadger is a personal assistant tool that may include calendar awareness, reminders, project tracking, meeting-context briefing, and audio capture and transcription of <strong>your own voice</strong> ("self-recording"). The App's AI assistant feature is referred to as "Chief." The App uses artificial intelligence — including third-party AI services — to generate suggestions, summaries, reminders, and other output ("AI Output").</p>` },
+  { title: 'AI Output — Read This Carefully', body: `<p>AI Output is generated by automated systems and can be wrong, incomplete, outdated, or misleading. It is provided for convenience only.</p><ul><li>The App is <strong>not</strong> a system of record. Do not rely on it for anything where an error could cause harm.</li><li>You are responsible for independently verifying anything important before acting on it.</li><li>We do not guarantee that reminders, notifications, transcriptions, or briefings will be delivered, accurate, or on time.</li></ul>` },
+  { title: 'Audio Recording and Your Consent Obligations', body: `<p>The App's recording feature is designed to capture <strong>only your own voice</strong> (self-recording — e.g., voice memos, dictation).</p><p><strong>You agree that:</strong></p><ul><li>You will use recording only to capture your own voice.</li><li>You will <strong>not</strong> use the App to record any other person without first obtaining all legally required consents.</li><li>Recording laws vary by state and country — some require every participant to consent. <strong>You are solely responsible</strong> for knowing and following the laws that apply to you.</li></ul>` },
+  { title: 'Accounts, Plans, and Billing', body: `<p>If we charge fees for any plan, subscription, or feature, the pricing, billing cycle, and renewal terms will be disclosed before you are charged. Purchases are processed through the Apple App Store and managed via RevenueCat. We do not collect or store your payment card details. Subscriptions may auto-renew unless cancelled through your App Store account before the renewal date.</p>` },
+  { title: 'Acceptable Use', body: `<p>You agree not to:</p><ul><li>Use the App for any unlawful purpose, including unlawful recording or surveillance.</li><li>Reverse engineer, decompile, or attempt to extract source code.</li><li>Interfere with or attempt to gain unauthorized access to the App or its systems.</li><li>Use the App to harass, harm, or violate the rights of others.</li><li>Use the App or AI Output to develop a competing AI model or service, or to generate unlawful, infringing, or harmful content.</li></ul>` },
+  { title: 'Intellectual Property', body: `<p>We own the App, its design, branding, logo, and underlying technology. We grant you a limited, personal, non-exclusive, non-transferable, revocable license to use the App for your own personal use.</p><p><strong>Your content</strong> (recordings, notes, project data) remains yours. By using the App, you grant us the limited right to process that content solely to operate the App and provide its features.</p>` },
+  { title: 'Feedback', body: `<p>If you send us ideas, suggestions, or feedback, you agree we may use them freely, without restriction or compensation, to improve and develop the App.</p>` },
+  { title: 'Disclaimer of Warranties', body: `<p class="caps">The App is provided "as is" and "as available," without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, accuracy, and non-infringement. We do not warrant that the App will be uninterrupted, error-free, secure, or that AI Output will be accurate or reliable.</p>` },
+  { title: 'Limitation of Liability', body: `<p class="caps">To the fullest extent permitted by law, we will not be liable for any indirect, incidental, special, consequential, or punitive damages. Our total liability for any claim will not exceed the greater of (a) the amount you paid us in the 12 months before the claim, or (b) USD $100.</p>` },
+  { title: 'Indemnification', body: `<p>You agree to defend, indemnify, and hold us harmless from any claim, damage, loss, or expense (including reasonable attorneys' fees) arising from (a) your use of the App, (b) your violation of these Terms, (c) your recording of any person, or (d) your violation of any law or third-party right.</p>` },
+  { title: 'Termination', body: `<p>We may suspend or terminate your access at any time, with or without cause. You may stop using the App at any time. Sections that by their nature should survive termination will survive.</p>` },
+  { title: 'Governing Law and Disputes', body: `<p>These Terms are governed by the laws of the State of <strong>Georgia</strong>, without regard to conflict-of-law rules. You agree to the exclusive jurisdiction of state and federal courts located in <strong>Fulton County, Georgia</strong>.</p>` },
+  { title: 'Changes to These Terms', body: `<p>We may update these Terms. If we make material changes, we'll update the "Last Updated" date and notify you in the App where appropriate. Continued use after changes means you accept them.</p>` },
+  { title: 'Contact', body: `<p>Questions? Contact us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>.</p>` }
+]);
+
+// ─── HB NDA ───
+renderSections('hb-nda-content', [
+  { title: 'Purpose', body: `<p>Company is giving Tester early access to the App to evaluate it and provide feedback (the "Purpose"). To do that, Company will share confidential information, and this Agreement protects it.</p>` },
+  { title: 'Confidential Information', body: `<p>"Confidential Information" means any non-public information Tester learns through the beta, including:</p><ul><li>The App itself, its features, design, screens, logo, and user experience;</li><li>Any code, prompts, architecture, data models, or technical details;</li><li>Roadmaps, plans, pricing ideas, and business strategy;</li><li>The existence and details of the beta program; and</li><li>Anything marked confidential or that a reasonable person would understand to be confidential.</li></ul>` },
+  { title: "Tester's Obligations", body: `<p>Tester agrees to:</p><ul><li>Keep Confidential Information secret and not disclose it to anyone;</li><li>Use it only for the Purpose;</li><li>Not publish, post, screenshot, demo, stream, or describe the App publicly (including on social media) without Company's prior written permission;</li><li>Not reverse engineer, decompile, or attempt to extract source code from the App; and</li><li>Protect it with at least reasonable care.</li></ul>` },
+  { title: 'Exclusions', body: `<p>Confidential Information does not include information that: (a) is or becomes public through no fault of Tester; (b) Tester already lawfully knew without obligation of confidence; (c) is lawfully received from a third party free to disclose it; or (d) is independently developed without using Confidential Information.</p>` },
+  { title: 'Feedback and Ownership', body: `<p>If Tester provides feedback, suggestions, bug reports, or ideas ("Feedback"), Tester <strong>assigns all rights in that Feedback to Company</strong> and agrees Company may use it freely, without restriction, attribution, or compensation. Tester acquires no ownership, license, or other right in the App by participating.</p>` },
+  { title: 'Recording Feature Acknowledgment', body: `<p>Tester understands the App's recording feature is intended to capture only the user's own voice. Tester agrees not to use it to record any other person without that person's legally required consent, and Tester is solely responsible for compliance with all recording and privacy laws.</p>` },
+  { title: 'Data Handling Acknowledgment', body: `<p>Tester understands that information entered or recorded in the App may be stored on Company's servers and sent to a third-party AI provider for processing. Tester should not enter information they are not comfortable having stored and processed as described in the Privacy Policy.</p>` },
+  { title: 'No Warranty', body: `<p>The App is provided "as is" for testing. It may contain bugs, may be unreliable, and its AI-generated output may be inaccurate. Company makes no warranties and is not liable for any loss arising from Tester's use of the beta.</p>` },
+  { title: 'Term and Return', body: `<p>This Agreement starts on the Effective Date and continues during the beta and for <strong>two (2) years</strong> after it ends. On Company's request or at the end of the beta, Tester will stop using the App and delete any Confidential Information in their possession.</p>` },
+  { title: 'Remedies', body: `<p>Tester agrees that a breach could cause Company harm that money alone can't fix, and that Company may seek injunctive relief in addition to any other remedy available.</p>` },
+  { title: 'General', body: `<ul><li><strong>Governing law:</strong> State of <strong>Georgia</strong> — disputes handled in state or federal courts located there.</li><li><strong>No partnership:</strong> This Agreement doesn't create any employment, partnership, or joint venture.</li><li><strong>Entire agreement:</strong> This is the full agreement and can only be changed in writing signed by both parties.</li><li><strong>Severability:</strong> If any part is unenforceable, the rest stays in effect.</li></ul>` },
+  { title: 'Signatures', body: `
+    <div class="sig-block">
+      <p class="sig-party">Company — Path &amp; Pace, LLC</p>
+      <div class="sig-row">
+        <div class="sig-field"><div class="sig-label">Signature</div></div>
+        <div class="sig-field"><div class="sig-label">Name</div></div>
+        <div class="sig-field"><div class="sig-label">Date</div></div>
+        <div></div>
+      </div>
+      <p class="sig-party">Tester</p>
+      <div class="sig-row">
+        <div class="sig-field"><div class="sig-label">Signature</div></div>
+        <div class="sig-field"><div class="sig-label">Name</div></div>
+        <div class="sig-field"><div class="sig-label">Date</div></div>
+        <div class="sig-field"><div class="sig-label">Email</div></div>
+      </div>
+    </div>
+  ` }
+]);
+
+// ─── FREQUENCY PRIVACY ───
+renderSections('freq-privacy-content', [
+  { title: 'About This Policy and Operator', body: `<p>Frequency is a community-centered mobile application designed to help members connect, share experiences, and engage with content related to wellness, consciousness, and personal elevation.</p><p><strong>Path &amp; Pace LLC</strong>, a limited liability company organized under the laws of the State of Georgia, United States, operates the Frequency App on behalf of the Frequency community.</p><p>For all privacy-related inquiries: <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a></p>` },
+  { title: 'Information We Collect', body: `<ul><li><strong>Contact Information:</strong> Your name, email address, and phone number.</li><li><strong>Profile Information:</strong> Any optional information you add to your profile, such as a display name, bio, or interests.</li><li><strong>Usage and Interaction Data:</strong> Information about how you use the App, including features accessed, content viewed, time spent, and interactions with other users.</li><li><strong>Device and Technical Information:</strong> Device type, operating system version, unique device identifiers, IP address, language preferences, and crash logs.</li><li><strong>User-Submitted Content:</strong> Messages, posts, comments, or other content you voluntarily submit.</li></ul><p>The App is currently free to use and does not process payment information.</p>` },
+  { title: 'How We Use Your Information', body: `<ul><li><strong>App Functionality:</strong> Creating and managing accounts, authenticating identity, enabling community features.</li><li><strong>Product Personalization:</strong> Customizing your experience based on your activity and preferences.</li><li><strong>Analytics and Improvement:</strong> Analyzing usage patterns to improve features and identify bugs.</li><li><strong>Communications:</strong> Sending account-related notices, security alerts, policy updates.</li><li><strong>Safety, Security, and Integrity:</strong> Detecting and preventing fraud, abuse, harassment, or violations of our Terms of Use.</li><li><strong>Legal Compliance:</strong> Complying with applicable laws, regulations, court orders, or other legal processes.</li></ul>` },
+  { title: 'How We Share Your Information', body: `<p>We do not sell your personal information. We share information only in these limited circumstances:</p><ul><li><strong>Service Providers:</strong> Trusted third-party vendors who provide infrastructure, hosting, analytics, or technical services on our behalf.</li><li><strong>Community Features:</strong> Information you share within community features will be visible to other members.</li><li><strong>Legal Process and Safety:</strong> When required by law, court order, or to prevent fraud or harm.</li><li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets.</li><li><strong>With Your Consent:</strong> In any other case, only with your explicit consent.</li></ul>` },
+  { title: 'Data Retention', body: `<p>We retain your personal information for as long as your account remains active. If you request account deletion, we will delete or anonymize your personal information within thirty (30) days, except where required by law.</p>` },
+  { title: 'Your Rights and Choices', body: `<p>You may have rights including access, correction, deletion, opt-out, data portability, and withdraw of consent. To exercise any of these rights, contact us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>. We will respond within thirty (30) days.</p>` },
+  { title: "Children's Privacy", body: `<p>The Frequency App is not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us immediately.</p>` },
+  { title: 'Data Security', body: `<p>We implement reasonable technical, administrative, and organizational measures designed to protect your personal information. However, no method of electronic transmission or storage is 100% secure. <strong>We cannot guarantee absolute security.</strong></p>` },
+  { title: 'Third-Party Services', body: `<p>The App integrates with third-party services including cloud hosting, analytics, push notifications, and authentication providers. These parties may receive information about you and are bound by their own privacy policies, which we do not control.</p>` },
+  { title: 'Tracking and Analytics Disclosure', body: `<p>Consistent with our Apple App Store privacy disclosures, the App may collect:</p><ul><li><strong>Name</strong> — Product Personalization, Analytics, App Functionality. Linked to user identity.</li><li><strong>Email Address</strong> — App Functionality, Analytics, Product Personalization. Linked to user identity.</li><li><strong>Phone Number</strong> — Analytics, App Functionality, Product Personalization. Linked to user identity.</li></ul><p>You may limit tracking via <strong>Settings › Privacy &amp; Security › Tracking</strong> on iOS.</p>` },
+  { title: 'International Users', body: `<p>The App is operated from the United States. If you access the App from outside the United States, your information may be transferred to, stored, and processed in the United States. By using the App, you consent to such transfer and processing.</p>` },
+  { title: 'Changes to This Policy', body: `<p>We may update this Privacy Policy from time to time. When we make material changes, we will update the "Last Updated" date. Your continued use of the App following any update constitutes acceptance of the revised Policy.</p>` },
+  { title: 'Contact Us', body: `<p>If you have any questions, concerns, or requests regarding this Privacy Policy, please contact us:</p><ul><li><strong>Path &amp; Pace LLC</strong> · Atlanta, Georgia, United States</li><li>Email: <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a></li></ul>` }
+]);
+</script>
+</body>
+</html>

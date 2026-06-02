@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Path & Pace</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0D0E1E;
+  --surf:    #12142A;
+  --surf2:   #181B36;
+  --ink:     #EAE8F8;
+  --muted:   rgba(234,232,248,0.42);
+  --dim:     rgba(234,232,248,0.17);
+  --red:     #FF1845;
+  --red-lo:  rgba(255,24,69,0.12);
+  --cyan:    #00CCFF;
+  --cyan-lo: rgba(0,204,255,0.10);
+  --border:  rgba(255,255,255,0.055);
+  --border-r:rgba(255,24,69,0.22);
+  --teal:    #00E5C8;
+  --teal-lo: rgba(0,229,200,0.10);
+  --glow-r:  0 0 14px rgba(255,24,69,0.55), 0 0 48px rgba(255,24,69,0.18);
+  --glow-c:  0 0 14px rgba(0,204,255,0.55), 0 0 48px rgba(0,204,255,0.18);
+  --glow-t:  0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+
+}
+
+/* ── AMBIENT ── */
+.orb {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; z-index: 0; filter: blur(90px);
+}
+.orb-1 {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, transparent 70%);
+  top: -160px; right: -120px;
+  animation: drift-a 20s ease-in-out infinite;
+}
+.orb-2 {
+  width: 540px; height: 540px;
+  background: radial-gradient(circle, rgba(0,229,200,0.14) 0%, transparent 70%);
+  bottom: 5%; left: -80px;
+  animation: drift-b 26s ease-in-out infinite;
+}
+.orb-3 {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, rgba(122,255,212,0.10) 0%, transparent 70%);
+  top: 40%; right: 20%;
+  animation: drift-a 32s ease-in-out infinite reverse;
+}
+@keyframes drift-a { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-70px,90px)} }
+@keyframes drift-b { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,-60px)} }
+
+.cursor-orb {
+  position: fixed;
+  left: -320px; top: -320px;
+  width: 640px; height: 640px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,24,69,0.055) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+  will-change: transform;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 22px 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.35s, border-color 0.35s, backdrop-filter 0.35s;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(10,9,16,0.75);
+  backdrop-filter: blur(22px) saturate(1.5);
+  border-bottom-color: var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.01em;
+}
+.logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red);
+  box-shadow: var(--glow-r);
+  animation: dot-pulse 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--red); text-decoration: none;
+  padding: 9px 22px;
+  border: 1px solid rgba(255,24,69,0.28); border-radius: 3px;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover {
+  background: var(--red-lo);
+  border-color: var(--red);
+  box-shadow: var(--glow-r);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 130px 56px 90px;
+  position: relative; overflow: hidden;
+}
+
+/* Scan line */
+.hero::before {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 1px; top: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,24,69,0.25) 40%, rgba(0,204,255,0.2) 60%, transparent 100%);
+  animation: scan 9s linear infinite;
+  pointer-events: none;
+}
+@keyframes scan {
+  0%   { top: -1px; opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Hero accent – geometric rings */
+.hero-rings {
+  position: absolute; right: 8vw; top: 50%; transform: translateY(-50%);
+  width: 340px; height: 340px; pointer-events: none; opacity: 0.14;
+  animation: ring-spin 40s linear infinite;
+}
+@keyframes ring-spin { from{transform:translateY(-50%) rotate(0deg)} to{transform:translateY(-50%) rotate(360deg)} }
+
+.hero-tag {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em;
+  color: var(--red); margin-bottom: 44px;
+  display: flex; align-items: center; gap: 14px;
+  opacity: 0; animation: up 0.7s ease 0.15s forwards;
+}
+.hero-tag::before {
+  content: ''; width: 30px; height: 1px;
+  background: var(--red); box-shadow: var(--glow-r); flex-shrink: 0;
+}
+
+.hero-h1 {
+  font-size: clamp(60px, 8.5vw, 124px);
+  font-weight: 700;
+  line-height: 0.91;
+  letter-spacing: -0.035em;
+  max-width: 860px;
+  opacity: 0; animation: up 0.8s ease 0.3s forwards;
+}
+.hi {
+  color: var(--red);
+  text-shadow: 0 0 40px rgba(255,24,69,0.45), 0 0 90px rgba(255,24,69,0.18);
+}
+
+.hero-sub {
+  margin-top: 38px;
+  font-size: 18px; font-weight: 300; color: var(--muted);
+  max-width: 440px; line-height: 1.8;
+  opacity: 0; animation: up 0.8s ease 0.46s forwards;
+}
+
+.hero-btns {
+  margin-top: 56px; display: flex; gap: 22px; align-items: center;
+  opacity: 0; animation: up 0.8s ease 0.62s forwards;
+}
+.btn-solid {
+  height: 52px; padding: 0 32px;
+  background: var(--red); color: #fff;
+  font-family: var(--font); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: none; cursor: pointer; border-radius: 3px;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+  transition: box-shadow 0.25s, transform 0.15s;
+}
+.btn-solid:hover { box-shadow: var(--glow-r); transform: translateY(-1px); }
+.btn-ghost {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+  color: var(--muted); text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--ink); }
+
+.hero-scroll {
+  position: absolute; bottom: 38px; left: 56px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.16em; color: var(--dim);
+  opacity: 0; animation: fadein 0.8s ease 1.3s forwards;
+}
+.hero-scroll-line {
+  width: 1px; height: 44px;
+  background: linear-gradient(to bottom, transparent, var(--dim));
+}
+
+@keyframes up { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+@keyframes fadein { from{opacity:0} to{opacity:1} }
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surf); overflow: hidden; padding: 13px 0;
+}
+.marquee-track {
+  display: flex; animation: marquee 26s linear infinite; white-space: nowrap;
+}
+.m-item {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); padding: 0 38px;
+  display: flex; align-items: center; gap: 38px; flex-shrink: 0;
+}
+.m-item::after {
+  content: '◆'; font-size: 5px; color: var(--red);
+  filter: drop-shadow(0 0 5px rgba(255,24,69,0.9));
+}
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── PRODUCTS ── */
+.products { padding: 112px 56px; position: relative; }
+.p-inner { max-width: 1200px; margin: 0 auto; }
+
+.eyebrow {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.eyebrow.cyan { color: var(--cyan); }
+.eyebrow.cyan::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--cyan); box-shadow: var(--glow-c); flex-shrink: 0;
+}
+.eyebrow.red { color: var(--red); }
+.eyebrow.red::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--red); box-shadow: var(--glow-r); flex-shrink: 0;
+}
+
+.p-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 48px; padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+.section-h {
+  font-size: clamp(36px,5vw,58px); font-weight: 700;
+  line-height: 1.0; letter-spacing: -0.03em;
+}
+.section-h em { font-style: normal; color: var(--cyan); }
+.p-note {
+  font-size: 13px; font-weight: 300; color: var(--muted);
+  max-width: 200px; text-align: right; line-height: 1.7;
+}
+
+.p-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+}
+
+.pcard {
+  background: var(--bg); display: flex; flex-direction: column;
+  text-decoration: none; overflow: hidden; position: relative;
+  transition: background 0.3s;
+}
+.pcard:hover { background: var(--surf); }
+.pcard-glow {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  transition: opacity 0.35s;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,24,69,0.06) 0%, transparent 100%);
+  border: 1px solid rgba(255,24,69,0.18);
+}
+.pcard:hover .pcard-glow { opacity: 1; }
+
+.pcard-img {
+  width: 100%; aspect-ratio: 3/2; overflow: hidden; position: relative;
+  background: var(--surf); display: flex; align-items: center; justify-content: center;
+}
+.pcard-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.45) brightness(0.55);
+  transition: transform 0.6s ease, filter 0.3s;
+}
+.pcard:hover .pcard-img img { transform: scale(1.05); filter: saturate(0.6) brightness(0.65); }
+.pcard-fade {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--bg) 0%, transparent 55%);
+}
+
+.pcard-body { padding: 22px 26px 30px; flex: 1; display: flex; flex-direction: column; }
+
+.pcard-status {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 11px;
+  display: flex; align-items: center; gap: 7px;
+}
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; box-shadow: 0 0 6px currentColor;
+  animation: dot-pulse 2.5s ease-in-out infinite;
+}
+.pcard-name {
+  font-size: 27px; font-weight: 700; color: var(--ink);
+  line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 10px;
+}
+.pcard-name em { font-style: normal; color: var(--red); }
+.pcard-desc { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.85; flex: 1; }
+.pcard-arrow {
+  margin-top: 22px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--cyan);
+  display: flex; align-items: center; gap: 8px;
+  transition: gap 0.25s, text-shadow 0.25s;
+}
+.pcard:hover .pcard-arrow { gap: 14px; text-shadow: var(--glow-c); }
+
+.pcard-empty {
+  background: rgba(255,255,255,0.013);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 28px; text-align: center;
+  min-height: 320px; border: 1px dashed rgba(255,255,255,0.05);
+}
+.empty-glyph {
+  font-family: var(--mono); font-size: 52px; font-weight: 700;
+  color: rgba(255,255,255,0.04); line-height: 1; margin-bottom: 14px;
+}
+.empty-txt {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--dim); letter-spacing: 0.1em; line-height: 2.2;
+}
+
+/* ── STUDIO ── */
+.studio { padding: 112px 56px; border-top: 1px solid var(--border); }
+.studio-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.studio-h {
+  font-size: clamp(38px,5vw,60px); font-weight: 700;
+  line-height: 0.97; letter-spacing: -0.03em; margin-top: 16px;
+}
+.studio-h em { font-style: normal; color: var(--red); }
+.studio-p {
+  font-size: 18px; font-weight: 300; color: var(--muted);
+  line-height: 1.9; margin-bottom: 18px;
+}
+.studio-p strong { color: var(--ink); font-weight: 600; }
+.studio-rule { width: 28px; height: 1px; background: var(--teal); box-shadow: var(--glow-t); margin: 28px 0; }
+.studio-vals { display: flex; flex-direction: column; }
+.s-val {
+  display: flex; align-items: baseline; gap: 20px;
+  padding: 15px 0; border-top: 1px solid var(--border);
+  font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.7;
+}
+.s-val:last-child { border-bottom: 1px solid var(--border); }
+.s-num {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--teal); flex-shrink: 0; opacity: 0.75;
+}
+
+/* ── CONTACT ── */
+.contact { padding: 112px 56px; border-top: 1px solid var(--border); background: var(--surf); }
+.contact-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.contact-h {
+  font-size: clamp(40px,5.5vw,68px); font-weight: 700;
+  line-height: 0.95; letter-spacing: -0.03em; margin-top: 16px;
+}
+.contact-h em { font-style: normal; color: var(--red); }
+.contact-sub { margin-top: 20px; font-size: 17px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px;
+}
+.form-field {
+  width: 100%; height: 50px;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 0 16px; font-family: var(--font); font-size: 15px; font-weight: 300;
+  color: var(--ink); outline: none; border-radius: 3px;
+  transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
+}
+.form-field:focus {
+  border-color: rgba(255,24,69,0.4);
+  box-shadow: 0 0 0 3px rgba(255,24,69,0.07), 0 0 18px rgba(255,24,69,0.08);
+}
+.form-field::placeholder { color: var(--dim); }
+.form-ta {
+  width: 100%; height: 120px;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 14px 16px; font-family: var(--font); font-size: 15px; font-weight: 300;
+  color: var(--ink); outline: none; resize: none; border-radius: 3px;
+  transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
+}
+.form-ta:focus {
+  border-color: rgba(255,24,69,0.4);
+  box-shadow: 0 0 0 3px rgba(255,24,69,0.07), 0 0 18px rgba(255,24,69,0.08);
+}
+.form-ta::placeholder { color: var(--dim); }
+.form-submit {
+  width: 100%; height: 52px;
+  background: var(--red); color: #fff;
+  border: none; font-family: var(--font); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+  border-radius: 3px; margin-top: 6px;
+  transition: box-shadow 0.25s, transform 0.15s;
+}
+.form-submit:hover { box-shadow: var(--glow-r); transform: translateY(-1px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg); padding: 52px 56px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  border-top: 1px solid var(--border); gap: 40px;
+}
+.footer-left { display: flex; flex-direction: column; gap: 8px; }
+.footer-logo { font-size: 15px; font-weight: 700; color: var(--dim); }
+.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: 0.06em; margin-top: 4px; }
+.footer-nav { display: flex; flex-direction: column; gap: 10px; }
+.footer-nav-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 4px;
+}
+.footer-link {
+  font-size: 13px; font-weight: 300; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-link:hover { color: var(--ink); }
+.footer-email {
+  font-family: var(--mono); font-size: 11px; color: var(--dim);
+  text-decoration: none; text-align: right; line-height: 1.9;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.footer-email:hover { color: var(--cyan); text-shadow: var(--glow-c); }
+
+/* ── SPLASH ── */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 1; transition: opacity 0.9s ease; pointer-events: all;
+}
+.splash.hiding { opacity: 0; pointer-events: none; }
+#splashCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.splash-content {
+  position: relative; z-index: 2;
+  max-width: 600px; width: 90%; text-align: center; padding: 0 24px;
+}
+.splash-from {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,107,0,0.7);
+  margin-bottom: 22px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  animation: fadein 0.6s ease 0.4s both;
+}
+.splash-from-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange); box-shadow: var(--glow-o);
+  animation: dot-pulse 2.5s ease-in-out infinite; flex-shrink: 0;
+}
+.splash-msg {
+  font-size: 30px; font-weight: 600; line-height: 1.4;
+  color: #fff; letter-spacing: -0.025em; text-wrap: pretty;
+  margin-bottom: 44px;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.7);
+  animation: msg-in 0.85s cubic-bezier(0.16,1,0.3,1) 0.6s both;
+}
+@keyframes msg-in { from{opacity:0;transform:translateY(18px) scale(0.97)} to{opacity:1;transform:none} }
+.splash-footer {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  animation: fadein 0.6s ease 1.1s both;
+}
+.splash-skip {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); background: none;
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+  cursor: pointer; padding: 11px 28px; transition: all 0.25s;
+}
+.splash-skip:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+.splash-timer {
+  width: 180px; height: 2px; background: rgba(255,255,255,0.08);
+  position: relative; overflow: hidden; border-radius: 2px;
+}
+.splash-timer-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--teal));
+  box-shadow: 0 0 8px var(--orange); width: 0%; transition: none;
+}
+
+/* ── FLOAT ORBS ── */
+#float-orbs {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 1; overflow: hidden;
+}
+.fo {
+  position: absolute;
+  width: 84px; height: 84px; border-radius: 50%;
+  border: 1px solid rgba(255,107,0,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  color: rgba(255,107,0,0.28);
+  transform: translate(-50%,-50%);
+  transition: opacity 1.3s ease;
+}
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav, .hero, .products, .studio, .contact { padding-left: 24px; padding-right: 24px; }
+  .hero-h1 { font-size: clamp(48px,12vw,80px); }
+  .hero-rings, .hero-scroll { display: none; }
+  .p-grid { grid-template-columns: 1fr; }
+  .p-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .p-note { text-align: left; max-width: none; }
+  .studio-inner, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+  footer { flex-direction: column; align-items: flex-start; gap: 32px; padding: 36px 24px; }
+  .footer-email { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1" id="orb1"></div>
+<div class="orb orb-2" id="orb2"></div>
+<div class="orb orb-3" id="orb3"></div>
+<div class="cursor-orb" id="cursorOrb"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-dot"></div>
+    Path &amp; Pace
+  </a>
+  <div class="nav-links">
+    <a href="honeybadger/index.html" target="_blank" class="nav-link">HoneyBadger ↗</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+  <!-- Geometric rings accent -->
+  <svg class="hero-rings" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="170" cy="170" r="160" stroke="rgba(255,24,69,0.5)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="126" stroke="rgba(0,229,200,0.4)" stroke-width="0.4" fill="none"/>
+    <circle cx="170" cy="170" r="92"  stroke="rgba(255,24,69,0.35)" stroke-width="0.5" fill="none" stroke-dasharray="4 8"/>
+    <circle cx="170" cy="170" r="58"  stroke="rgba(0,229,200,0.3)" stroke-width="0.4" fill="none"/>
+    <circle cx="170" cy="170" r="26"  stroke="rgba(255,24,69,0.45)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="4"   fill="rgba(255,24,69,0.7)"/>
+    <!-- Crosshairs -->
+    <line x1="170" y1="4"   x2="170" y2="336" stroke="rgba(255,24,69,0.12)" stroke-width="0.5"/>
+    <line x1="4"   y1="170" x2="336" y2="170" stroke="rgba(255,24,69,0.12)" stroke-width="0.5"/>
+  </svg>
+
+  <div class="hero-tag">Indie Product Studio &nbsp;·&nbsp; Atlanta, GA</div>
+  <div id="float-orbs"></div>
+  <h1 class="hero-h1">We make what<br>we <span class="hi">wish</span><br>existed.</h1>
+  <p class="hero-sub">Path &amp; Pace builds tools for capable people who are tired of not shipping. Less planning. More done.</p>
+  <div class="hero-btns">
+    <a href="#products" class="btn-solid">See what we're building ↓</a>
+    <a href="#studio" class="btn-ghost">Our story →</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item">Build</span><span class="m-item">Ship</span><span class="m-item">Repeat</span>
+    <span class="m-item">Products</span><span class="m-item">Ideas</span><span class="m-item">Systems</span>
+    <span class="m-item">Execute</span><span class="m-item">Grow</span>
+    <span class="m-item">Build</span><span class="m-item">Ship</span><span class="m-item">Repeat</span>
+    <span class="m-item">Products</span><span class="m-item">Ideas</span><span class="m-item">Systems</span>
+    <span class="m-item">Execute</span><span class="m-item">Grow</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="p-inner">
+    <div class="p-header reveal">
+      <div>
+        <div class="eyebrow cyan">What we're building</div>
+        <h2 class="section-h">Real products.<br><em>Real people.</em></h2>
+      </div>
+      <p class="p-note">Every product we build solves a problem we've actually lived.</p>
+    </div>
+    <div class="p-grid">
+
+      <a href="honeybadger/index.html" target="_blank" class="pcard reveal">
+        <div class="pcard-glow"></div>
+        <div class="pcard-img">
+          <img src="honeybadger/chief.png" alt="HoneyBadger">
+          <div class="pcard-fade"></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-status"><div class="status-dot"></div>Private Beta</div>
+          <div class="pcard-name">Honey<em>Badger</em></div>
+          <p class="pcard-desc">Your personal AI Chief of Staff. Warm, frank, and relentlessly on your side. He doesn't let you hide from what actually matters.</p>
+          <div class="pcard-arrow">Explore <span>→</span></div>
+        </div>
+      </a>
+
+      <a href="legal.html?tab=freq-privacy" class="pcard reveal">
+        <div class="pcard-glow" style="background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,204,255,0.06) 0%, transparent 100%); border-color: rgba(0,204,255,0.18);"></div>
+        <div class="pcard-img" style="background:#090D12;">
+          <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2">
+            <circle cx="36" cy="36" r="32" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="22" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="12" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="3"  fill="#00CCFF"/>
+            <line x1="36" y1="4"  x2="36" y2="68" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
+            <line x1="4"  y1="36" x2="68" y2="36" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
+          </svg>
+          <div class="pcard-fade"></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-status" style="color:var(--cyan);">
+            <div class="status-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
+            Live · iOS
+          </div>
+          <div class="pcard-name" style="color:var(--ink);">Frequency</div>
+          <p class="pcard-desc">A community-centered app for wellness, consciousness, and personal elevation. Connect with people on the same frequency.</p>
+          <div class="pcard-arrow" style="color:var(--red);">Privacy Policy →</div>
+        </div>
+      </a>
+
+      <div class="pcard-empty reveal">
+        <div class="empty-glyph">?_</div>
+        <p class="empty-txt">Something's brewing.<br>Check back soon.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section class="studio" id="studio">
+  <div class="studio-inner">
+    <div class="reveal">
+      <div class="eyebrow red">Who we are</div>
+      <h2 class="studio-h">Small on<br><em>purpose.</em></h2>
+    </div>
+    <div class="reveal">
+      <p class="studio-p">We're not trying to be an agency. Not a startup. Not a VC-backed lab. <strong>Path &amp; Pace is an indie studio</strong> that builds things it genuinely believes in and finds the people who need them.</p>
+      <p class="studio-p">Everything starts from the same question: <strong>why doesn't this exist yet?</strong> If we can't answer that honestly, we don't build it.</p>
+      <div class="studio-rule"></div>
+      <div class="studio-vals">
+        <div class="s-val"><div class="s-num">01</div>Build things that solve real problems — not things that look good in a pitch deck.</div>
+        <div class="s-val"><div class="s-num">02</div>Ship early, learn fast, and don't fall in love with the plan.</div>
+        <div class="s-val"><div class="s-num">03</div>Treat users like smart adults. They are.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="eyebrow cyan">Get in touch</div>
+      <h2 class="contact-h">Let's talk<br>about what<br>you're <em>building.</em></h2>
+      <p class="contact-sub">Consulting, partnerships, ideas, or just a conversation. No intake forms. No fluff. Just a real talk.</p>
+    </div>
+    <div class="reveal" style="padding-top:6px;">
+      <div class="form-group">
+        <label class="form-label">Your name</label>
+        <input class="form-field" type="text" placeholder="First and last">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-field" type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">What's on your mind?</label>
+        <textarea class="form-ta" placeholder="Give me the short version..."></textarea>
+      </div>
+      <button class="form-submit" id="formBtn">Send it →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">Path &amp; Pace</div>
+    <div class="footer-copy">© 2026 Path &amp; Pace LLC · Atlanta, GA</div>
+  </div>
+  <div class="footer-nav">
+    <div class="footer-nav-label">Legal &amp; Policies</div>
+    <a href="legal.html?tab=hb-privacy" class="footer-link">HoneyBadger Privacy</a>
+    <a href="legal.html?tab=hb-terms" class="footer-link">HoneyBadger Terms</a>
+    <a href="legal.html?tab=hb-nda" class="footer-link">Beta Tester NDA</a>
+    <a href="legal.html?tab=freq-privacy" class="footer-link">Frequency Privacy</a>
+  </div>
+  <a href="mailto:jeremiahglover@path-and-pace.com" class="footer-email">jeremiahglover@<br>path-and-pace.com</a>
+</footer>
+
+<!-- SPLASH -->
+<div id="splash" class="splash">
+  <canvas id="splashCanvas"></canvas>
+  <div class="splash-content">
+    <div class="splash-from"><span class="splash-from-dot"></span>Chief says</div>
+    <p class="splash-msg" id="splashMsg"></p>
+    <div class="splash-footer">
+      <button class="splash-skip" id="splashSkip">Got it &rarr;</button>
+      <div class="splash-timer"><div class="splash-timer-fill" id="splashFill"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CHIEF_MSGS = [
+  "Today's the day you do that thing you've been putting off. You already know what it is.",
+  "You've got more in the tank than you're using. Let's change that.",
+  "One thing done is worth ten things planned. What's your one thing today?",
+  "You're more capable than you're giving yourself credit for. Act like it.",
+  "Whatever you've been overthinking — make the call. You already know the answer.",
+  "Progress isn't always pretty. But it's yours. Keep moving.",
+  "Don't shrink today. Take up the space you've earned.",
+  "You're not behind. You're exactly where you need to be to take the next step.",
+  "Big wins come from small, consistent moves. Pick one and make it.",
+  "Your future self is counting on what you do right now. Don't let 'em down.",
+  "The doubt in your head is louder than the truth. The truth? You've got this.",
+  "Nothing good happens from the sidelines. Get in the game.",
+  "You've solved harder problems than this one. Same energy.",
+  "Ship the thing. Fix it later. Done beats perfect every single time.",
+  "Less noise, more signal. What actually matters today?",
+  "You didn't come this far to play small.",
+  "The best time to level up is before you feel ready.",
+  "Today's a good day to be the version of yourself you actually respect.",
+  "Trust the work. Not the worry.",
+  "One conversation you've been avoiding is worth ten you've already had. Make the call.",
+  "You're building something real. That matters — even when it doesn't feel like it.",
+  "Momentum is just discipline with a head start. Get started.",
+  "The answer to your biggest problem is usually the simplest one you keep ignoring.",
+  "What's actually true today — not what you're afraid might be true?",
+  "Clear eyes. Full effort. No excuses.",
+  "You know what to do. Now go do it.",
+  "Rest is part of the work. But right now? Time to get after it.",
+  "The gap between where you are and where you want to be closes one action at a time.",
+  "Stop explaining yourself to people who aren't in the arena with you.",
+  "Every version of you that succeeded started by deciding to. Decide.",
+  "Nobody's coming to save you. Good — that means it's yours to take.",
+  "Don't let perfect be the enemy of shipped.",
+  "The energy you bring to today is the energy today gives back. Choose wisely.",
+  "You've been through harder. This is manageable. Go.",
+  "Less overthinking. More doing. Analyze the results later.",
+];
+(function initSplash() {
+  const el     = document.getElementById('splash');
+  const msg    = document.getElementById('splashMsg');
+  const fill   = document.getElementById('splashFill');
+  const skip   = document.getElementById('splashSkip');
+  const canvas = document.getElementById('splashCanvas');
+  const ctx    = canvas.getContext('2d');
+  const RECENT_KEY = 'pp_chief_seen_v3';
+  const DURATION   = 8000;
+
+  // Message selection
+  let seen = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+  const unseen = CHIEF_MSGS.map((_,i)=>i).filter(i=>!seen.includes(i));
+  const pool = unseen.length > 0 ? unseen : CHIEF_MSGS.map((_,i)=>i);
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  seen = [pick, ...seen].slice(0, 12);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(seen));
+  msg.textContent = CHIEF_MSGS[pick];
+
+  // Canvas setup
+  let cw, ch, startTs = null, animId;
+  function resize() { cw = canvas.width = window.innerWidth; ch = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const ORANGE = [255, 107, 0];
+  const TEAL   = [0, 229, 200];
+  function eio(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  function drawOrb(x, y, r, rgb, a) {
+    if (r <= 0 || a <= 0) return;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0,    `rgba(${rgb},${(a*0.55).toFixed(3)})`);
+    g.addColorStop(0.45, `rgba(${rgb},${(a*0.22).toFixed(3)})`);
+    g.addColorStop(1,    `rgba(${rgb},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+  }
+
+  function frame(ts) {
+    if (!startTs) startTs = ts;
+    const t = (ts - startTs) / 1000;
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.fillStyle = 'rgba(10,9,22,0.95)';
+    ctx.fillRect(0, 0, cw, ch);
+
+    const cx = cw/2, cy = ch/2;
+    const base = Math.min(cw, ch) * 0.30;
+
+    // 14s story cycle
+    const ph = (t % 14) / 14;
+    let ot = 0;
+    if (ph > 0.58 && ph < 0.86) ot = eio((ph-0.58)/0.28);
+    else if (ph >= 0.86)         ot = 1 - eio((ph-0.86)/0.14);
+
+    // WORK — orange, steady orbit
+    const wA = t * 0.38;
+    const wX = cx + Math.cos(wA)       * base * 0.62 * (1 - ot*0.75);
+    const wY = cy + Math.sin(wA*0.65)  * base * 0.42 * (1 - ot*0.75);
+    const wR = base * Math.max(0.05, 0.80 - ot*0.72);
+    const wAl = Math.max(0, 1 - ot*0.93);
+
+    // PLAY — teal, orbits opposite, surges toward work
+    const pA  = wA + Math.PI*(1 + ot);
+    const pXn = cx + Math.cos(pA)      * base * 0.62 * (1 - ot*0.65);
+    const pYn = cy + Math.sin(pA*0.65) * base * 0.42 * (1 - ot*0.65);
+    const pX  = pXn + (wX - pXn) * ot * 0.92;
+    const pY  = pYn + (wY - pYn) * ot * 0.92;
+    const pR  = base * (0.78 + ot*0.80);
+    const pAl = 0.72 + ot*0.28;
+
+    const ORG = ORANGE.join(',');
+    const TEL = TEAL.join(',');
+
+    drawOrb(wX, wY, wR, ORG, wAl);
+    if (wAl > 0.05) drawOrb(wX, wY, wR*0.38, ORG, wAl*0.7);
+    drawOrb(pX, pY, pR, TEL, pAl);
+    drawOrb(pX, pY, pR*0.38, TEL, pAl*0.5);
+
+    animId = requestAnimationFrame(frame);
+  }
+  animId = requestAnimationFrame(frame);
+
+  // Timer bar
+  requestAnimationFrame(() => {
+    fill.style.transition = `width ${DURATION}ms linear`;
+    fill.style.width = '100%';
+  });
+
+  function dismiss() {
+    cancelAnimationFrame(animId);
+    el.classList.add('hiding');
+    setTimeout(() => el.remove(), 950);
+  }
+  const timer = setTimeout(dismiss, DURATION);
+  skip.addEventListener('click', () => { clearTimeout(timer); dismiss(); });
+  el.addEventListener('click', e => { if (e.target === el) { clearTimeout(timer); dismiss(); } });
+})();
+
+// Wish — unified slow color fade
+const wishEl = document.querySelector('.hi');
+function hexToRgbArr(h) { const n=parseInt(h.trim().replace('#',''),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function lerpRgb(a,b,t) { return a.map((v,i)=>Math.round(v+(b[i]-v)*t)); }
+function getThemeColors() {
+  const s = getComputedStyle(document.documentElement);
+  return [s.getPropertyValue('--red').trim(), s.getPropertyValue('--cyan').trim(), s.getPropertyValue('--teal').trim()];
+}
+const WISH_PERIOD = 5000;
+function animateWish(ts) {
+  const cols = getThemeColors().map(hexToRgbArr);
+  const n = cols.length;
+  const phase = (ts % (WISH_PERIOD * n)) / WISH_PERIOD;
+  const idx = Math.floor(phase) % n;
+  const [r,g,b] = lerpRgb(cols[idx], cols[(idx+1)%n], phase - Math.floor(phase));
+  if (wishEl) {
+    wishEl.style.color = `rgb(${r},${g},${b})`;
+    wishEl.style.textShadow = `0 0 44px rgba(${r},${g},${b},0.55), 0 0 110px rgba(${r},${g},${b},0.22)`;
+  }
+  requestAnimationFrame(animateWish);
+}
+requestAnimationFrame(animateWish);
+
+// Floating text orbs
+const WORDS = ['build','ship','focus','ideas','iterate','grow','execute','create','systems','think'];
+const floatContainer = document.getElementById('float-orbs');
+const ORB_CFG = [
+  { x:64, y:22, r:18, sp:0.50, ph:0.0, wi:0 },
+  { x:76, y:58, r:22, sp:0.40, ph:1.8, wi:3 },
+  { x:52, y:78, r:15, sp:0.60, ph:0.9, wi:6 },
+  { x:42, y:16, r:20, sp:0.35, ph:2.5, wi:8 },
+];
+const fOrbs = ORB_CFG.map((cfg, fi) => {
+  const div = document.createElement('div');
+  div.className = 'fo';
+  div.style.left = cfg.x + '%';
+  div.style.top  = cfg.y + '%';
+  const span = document.createElement('span');
+  div.appendChild(span);
+  floatContainer.appendChild(div);
+  let wi = cfg.wi;
+  function nextWord() {
+    const word = WORDS[wi++ % WORDS.length];
+    let i = 0; span.textContent = '';
+    const iv = setInterval(() => {
+      span.textContent = word.slice(0, ++i) + (i < word.length ? '_' : '');
+      if (i >= word.length) {
+        clearInterval(iv);
+        setTimeout(() => {
+          div.style.opacity = '0';
+          setTimeout(() => { div.style.opacity = ''; nextWord(); }, 1200);
+        }, 1800 + Math.random()*1600);
+      }
+    }, 85);
+  }
+  setTimeout(nextWord, fi * 800 + Math.random()*400);
+  return { div, cfg };
+});
+function driftOrbs(ts) {
+  const t = ts / 1000;
+  const s = getComputedStyle(document.documentElement);
+  const rc = hexToRgbArr(s.getPropertyValue('--red').trim());
+  const cc = hexToRgbArr(s.getPropertyValue('--cyan').trim());
+  fOrbs.forEach(({ div, cfg }, i) => {
+    const dx = Math.sin(t * cfg.sp + cfg.ph) * cfg.r;
+    const dy = Math.cos(t * cfg.sp * 0.65 + cfg.ph) * cfg.r * 0.6;
+    div.style.left = (cfg.x + dx * 0.5) + '%';
+    div.style.top  = (cfg.y + dy * 0.5) + '%';
+    const col = i % 2 === 0 ? rc : cc;
+    div.style.borderColor = `rgba(${col[0]},${col[1]},${col[2]},0.18)`;
+    div.style.color = `rgba(${col[0]},${col[1]},${col[2]},0.35)`;
+    div.style.background = `radial-gradient(circle, rgba(${col[0]},${col[1]},${col[2]},0.04) 0%, transparent 70%)`;
+  });
+  requestAnimationFrame(driftOrbs);
+}
+requestAnimationFrame(driftOrbs);
+
+// Cursor orb
+const orb = document.getElementById('cursorOrb');
+document.addEventListener('mousemove', e => {
+  orb.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+}, { passive: true });
+
+// Nav on scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// Scroll reveals
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Form
+document.getElementById('formBtn').addEventListener('click', function() {
+  this.textContent = 'Sent ✓';
+  this.style.background = '#0e9e5a';
+  this.style.boxShadow = '0 0 24px rgba(14,158,90,0.45)';
+  setTimeout(() => {
+    this.textContent = 'Send it →';
+    this.style.background = '';
+    this.style.boxShadow = '';
+  }, 3200);
+});
+</script>
+
+<!-- TWEAKS -->
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "glowColor": "#FF6B00",
+  "accentColor": "#00E5C8",
+  "tealColor": "#7AFFD4",
+  "glowIntensity": "vivid"
+}/*EDITMODE-END*/;
+
+function hexToRgb(hex) {
+  const n = parseInt(hex.replace('#',''), 16);
+  return `${(n>>16)&255},${(n>>8)&255},${n&255}`;
+}
+
+function TweaksApp() {
+  const [t, setTweak] = useTweaks(DEFAULTS);
+
+  React.useEffect(() => {
+    const r = document.documentElement;
+    const rgb = hexToRgb(t.glowColor);
+    const strength = t.glowIntensity === 'subtle' ? [0.4, 0.12] : t.glowIntensity === 'vivid' ? [0.75, 0.28] : [0.55, 0.18];
+
+    r.style.setProperty('--red', t.glowColor);
+    r.style.setProperty('--red-lo', `rgba(${rgb},0.10)`);
+    r.style.setProperty('--border-r', `rgba(${rgb},0.22)`);
+    r.style.setProperty('--glow-r', `0 0 14px rgba(${rgb},${strength[0]}), 0 0 48px rgba(${rgb},${strength[1]})`);
+
+    const rgb2 = hexToRgb(t.accentColor);
+    r.style.setProperty('--cyan', t.accentColor);
+    r.style.setProperty('--cyan-lo', `rgba(${rgb2},0.10)`);
+    r.style.setProperty('--glow-c', `0 0 14px rgba(${rgb2},${strength[0]}), 0 0 48px rgba(${rgb2},${strength[1]})`);
+
+    const rgb3 = hexToRgb(t.tealColor);
+    r.style.setProperty('--teal', t.tealColor);
+    r.style.setProperty('--teal-lo', `rgba(${rgb3},0.10)`);
+    r.style.setProperty('--glow-t', `0 0 14px rgba(${rgb3},${strength[0]}), 0 0 48px rgba(${rgb3},${strength[1]})`);
+
+    // Update hero hi glow
+    const hi = document.querySelector('.hi');
+    if (hi) hi.style.textShadow = `0 0 40px rgba(${rgb},0.45), 0 0 90px rgba(${rgb},0.18)`;
+    const orbEl = document.getElementById('cursorOrb');
+    if (orbEl) orbEl.style.background = `radial-gradient(circle, rgba(${rgb},0.055) 0%, transparent 65%)`;
+  }, [t]);
+
+  return (
+    <TweaksPanel title="Tweaks">
+      <TweakSection label="① Primary — hero text · nav dot · buttons · card hover" />
+      <TweakColor label=""
+        value={t.glowColor}
+        options={['#FF1845','#FF6B00','#FFD600','#FF0090','#C084FC','#8B5CF6','#00E5C8','#14B8A6','#00CCFF','#A3E635']}
+        onChange={v => setTweak('glowColor', v)} />
+      <TweakSection label="② Secondary — eyebrows · card arrows · status badges" />
+      <TweakColor label=""
+        value={t.accentColor}
+        options={['#00CCFF','#06B6D4','#14B8A6','#00E5C8','#A3E635','#10B981','#EC4899','#F97316','#FBBF24','#8B5CF6']}
+        onChange={v => setTweak('accentColor', v)} />
+      <TweakSection label="③ Tertiary — studio rule · numbered list · rings · footer" />
+      <TweakColor label=""
+        value={t.tealColor}
+        options={['#14B8A6','#00E5C8','#00FFCC','#00FF9D','#4ADE80','#06B6D4','#7AFFD4','#00CCFF','#A3E635','#FBBF24']}
+        onChange={v => setTweak('tealColor', v)} />
+      <TweakSection label="Glow intensity" />
+      <TweakRadio label=""
+        value={t.glowIntensity}
+        options={['subtle','medium','vivid']}
+        onChange={v => setTweak('glowIntensity', v)} />
+    </TweaksPanel>
+  );
+}
+
+function mountTweaks() {
+  ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweaksApp />);
+}
+if (document.readyState === 'complete') {
+  setTimeout(mountTweaks, 0);
+} else {
+  window.addEventListener('load', () => setTimeout(mountTweaks, 0));
+}
+</script>
+
+</body>
+</html>
