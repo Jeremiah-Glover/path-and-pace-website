@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Path & Pace — Visual Mockup</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1b2e; font-family: 'Segoe UI', sans-serif; color: #eae8f8; }
+
+/* ── LABEL UTILITY ── */
+.section-label {
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+  color: #555; margin-bottom: 4px; font-family: monospace;
+}
+
+/* ══ PAGE 1: INDEX ══════════════════════════════════════════════════════════ */
+.page { max-width: 960px; margin: 0 auto 80px; border: 1px solid #2a2b40; }
+.page-title {
+  background: #0d0e1e; padding: 10px 18px; font-size: 11px; font-family: monospace;
+  color: #666; letter-spacing: .15em; border-bottom: 1px solid #2a2b40;
+  display: flex; align-items: center; gap: 10px;
+}
+.page-title .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.page-title .dot-r { background: #ff5f57; }
+.page-title .dot-y { background: #febc2e; }
+.page-title .dot-g { background: #28c840; }
+.url-bar {
+  background: #161728; border-radius: 4px; padding: 3px 12px;
+  font-size: 11px; color: #888; flex: 1; text-align: center;
+}
+
+/* NAV */
+.nav {
+  background: rgba(13,14,30,0.95);
+  border-bottom: 1px solid #1e1f38;
+  padding: 16px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF1845; box-shadow: 0 0 8px #FF1845; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-link { font-size: 11px; color: #888; letter-spacing: .1em; }
+.nav-cta {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  color: #FF1845; padding: 7px 18px;
+  border: 1px solid rgba(255,24,69,.35); border-radius: 3px;
+}
+
+/* HERO */
+.hero {
+  background: #0d0e1e; padding: 60px 40px 50px;
+  position: relative; overflow: hidden; min-height: 320px;
+}
+.hero-orb {
+  position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+}
+.hero-orb-1 { width: 300px; height: 300px; background: rgba(255,107,0,.18); right: -60px; top: -60px; }
+.hero-orb-2 { width: 200px; height: 200px; background: rgba(0,229,200,.12); left: -40px; bottom: -40px; }
+.hero-tag { font-family: monospace; font-size: 11px; letter-spacing: .2em; color: #FF1845; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+.hero-tag::before { content: ''; width: 24px; height: 1px; background: #FF1845; }
+.hero-h1 { font-size: 72px; font-weight: 700; line-height: .92; letter-spacing: -.03em; margin-bottom: 28px; }
+.hero-h1 .wish { color: #FF1845; text-shadow: 0 0 30px rgba(255,24,69,.5); }
+.hero-sub { font-size: 16px; font-weight: 300; color: rgba(234,232,248,.5); max-width: 400px; line-height: 1.7; margin-bottom: 36px; }
+.hero-btns { display: flex; gap: 18px; align-items: center; }
+.btn-solid { background: #FF1845; color: #fff; padding: 13px 26px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+.btn-ghost { font-size: 12px; color: rgba(234,232,248,.5); }
+.hero-rings {
+  position: absolute; right: 60px; top: 50%; transform: translateY(-50%);
+  opacity: .18;
+}
+
+/* MARQUEE */
+.marquee {
+  background: #12142a; border-top: 1px solid #1e1f38; border-bottom: 1px solid #1e1f38;
+  padding: 11px 0; overflow: hidden;
+  font-family: monospace; font-size: 12px; letter-spacing: .18em;
+  color: rgba(234,232,248,.4); text-transform: uppercase;
+  white-space: nowrap; text-align: center;
+}
+
+/* PRODUCTS */
+.products { background: #0d0e1e; padding: 60px 40px; }
+.eyebrow { font-family: monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.eyebrow.cyan { color: #00CCFF; }
+.eyebrow.cyan::before { content: ''; width: 20px; height: 1px; background: #00CCFF; }
+.eyebrow.red { color: #FF1845; }
+.eyebrow.red::before { content: ''; width: 20px; height: 1px; background: #FF1845; }
+.section-h { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -.025em; }
+.section-h em { font-style: normal; color: #00CCFF; }
+.prod-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; padding-bottom: 18px; border-bottom: 1px solid #1e1f38; }
+.prod-note { font-size: 12px; color: rgba(234,232,248,.4); max-width: 180px; text-align: right; line-height: 1.6; }
+.prod-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: #1e1f38; border: 1px solid #1e1f38; border-radius: 4px; overflow: hidden; }
+.pcard { background: #0d0e1e; }
+.pcard-img { aspect-ratio: 3/2; background: #12142a; display: flex; align-items: center; justify-content: center; color: #333; font-size: 13px; font-family: monospace; position: relative; overflow: hidden; }
+.pcard-img-text { position: relative; z-index: 1; }
+.pcard-img-fade { position: absolute; inset: 0; background: linear-gradient(to top, #0d0e1e 0%, transparent 55%); }
+.pcard-body { padding: 18px 22px 24px; }
+.pcard-status { font-family: monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.sdot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.pcard-name { font-size: 24px; font-weight: 700; margin-bottom: 8px; line-height: 1.1; }
+.pcard-desc { font-size: 14px; font-weight: 300; color: rgba(234,232,248,.5); line-height: 1.7; margin-bottom: 16px; }
+.pcard-arrow { font-family: monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+.pcard-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 280px; text-align: center; }
+.empty-glyph { font-family: monospace; font-size: 44px; font-weight: 700; color: rgba(255,255,255,.06); margin-bottom: 10px; }
+.empty-txt { font-family: monospace; font-size: 10px; color: rgba(234,232,248,.2); letter-spacing: .1em; line-height: 2.1; }
+
+/* STUDIO */
+.studio { padding: 60px 40px; border-top: 1px solid #1e1f38; background: #0d0e1e; }
+.studio-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.studio-h { font-size: 48px; font-weight: 700; line-height: .96; letter-spacing: -.025em; margin-top: 12px; }
+.studio-h em { font-style: normal; color: #FF1845; }
+.studio-p { font-size: 15px; font-weight: 300; color: rgba(234,232,248,.5); line-height: 1.8; margin-bottom: 14px; }
+.studio-p strong { color: #eae8f8; font-weight: 600; }
+.studio-rule { width: 24px; height: 1px; background: #00E5C8; margin: 22px 0; }
+.s-val { display: flex; align-items: baseline; gap: 16px; padding: 12px 0; border-top: 1px solid #1e1f38; font-size: 14px; font-weight: 300; color: rgba(234,232,248,.5); line-height: 1.6; }
+.s-val:last-child { border-bottom: 1px solid #1e1f38; }
+.s-num { font-family: monospace; font-size: 10px; color: #00E5C8; opacity: .7; flex-shrink: 0; }
+
+/* CONTACT */
+.contact { padding: 60px 40px; border-top: 1px solid #1e1f38; background: #12142a; }
+.contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.contact-h { font-size: 48px; font-weight: 700; line-height: .95; letter-spacing: -.025em; margin-top: 12px; }
+.contact-h em { font-style: normal; color: #FF1845; }
+.contact-sub { margin-top: 16px; font-size: 15px; font-weight: 300; color: rgba(234,232,248,.5); line-height: 1.7; }
+.form-label { display: block; font-family: monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(234,232,248,.25); margin-bottom: 7px; }
+.form-field { width: 100%; height: 46px; background: #0d0e1e; border: 1px solid #1e1f38; border-radius: 3px; padding: 0 14px; font-size: 14px; color: rgba(234,232,248,.3); font-family: inherit; margin-bottom: 12px; display: flex; align-items: center; }
+.form-ta { width: 100%; height: 100px; background: #0d0e1e; border: 1px solid #1e1f38; border-radius: 3px; padding: 12px 14px; font-size: 14px; color: rgba(234,232,248,.3); margin-bottom: 12px; display: flex; align-items: flex-start; }
+.form-submit { width: 100%; height: 48px; background: #FF1845; color: #fff; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; }
+
+/* FOOTER */
+.footer {
+  background: #0d0e1e; padding: 36px 40px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  border-top: 1px solid #1e1f38;
+}
+.footer-logo { font-size: 14px; font-weight: 700; color: rgba(234,232,248,.25); margin-bottom: 4px; }
+.footer-copy { font-family: monospace; font-size: 10px; color: rgba(234,232,248,.2); }
+.footer-nav-label { font-family: monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #00E5C8; margin-bottom: 8px; }
+.footer-link { font-size: 12px; font-weight: 300; color: rgba(234,232,248,.4); display: block; margin-bottom: 5px; }
+.footer-email { font-family: monospace; font-size: 10px; color: rgba(234,232,248,.25); text-align: right; line-height: 1.8; }
+
+/* ══ PAGE 2: LEGAL ══════════════════════════════════════════════════════════ */
+.legal-nav {
+  background: rgba(13,14,30,.95); border-bottom: 1px solid #1e1f38;
+  padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+}
+.legal-back { font-family: monospace; font-size: 10px; letter-spacing: .12em; color: rgba(234,232,248,.5); }
+.legal-back::before { content: '← '; color: #00E5C8; }
+.legal-page-header {
+  background: #12142a; padding: 60px 40px 48px; position: relative; overflow: hidden;
+  border-bottom: 1px solid #1e1f38;
+}
+.legal-page-header::after {
+  content: 'LEGAL'; position: absolute; right: 30px; bottom: -18px;
+  font-size: 110px; font-weight: 700; color: transparent;
+  -webkit-text-stroke: 1px rgba(255,107,0,.1); line-height: 1; letter-spacing: -.04em;
+}
+.legal-label { font-family: monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #FF6B00; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.legal-label::before { content: ''; width: 24px; height: 1px; background: #FF6B00; }
+.legal-h { font-size: 52px; font-weight: 700; line-height: .95; letter-spacing: -.025em; }
+.legal-h em { font-style: normal; color: #FF6B00; }
+.legal-sub { margin-top: 14px; font-size: 14px; font-weight: 300; color: rgba(234,232,248,.45); max-width: 440px; line-height: 1.7; }
+.tab-bar {
+  background: #12142a; border-bottom: 1px solid #1e1f38;
+  padding: 0 40px; display: flex; overflow-x: auto;
+}
+.tab-btn {
+  font-family: monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(234,232,248,.25); background: none; border: none;
+  padding: 15px 20px; cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.tab-btn.active { color: #eae8f8; border-bottom-color: #FF6B00; }
+.legal-content { max-width: 720px; margin: 0 auto; padding: 48px 40px 80px; }
+.doc-meta { margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid #1e1f38; }
+.doc-title { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+.doc-title em { font-style: normal; color: #FF6B00; }
+.doc-date { font-family: monospace; font-size: 9px; color: rgba(234,232,248,.25); letter-spacing: .12em; }
+.doc-intro { background: #12142a; border: 1px solid #1e1f38; border-left: 3px solid #FF6B00; padding: 18px 22px; margin-bottom: 32px; font-size: 13px; font-weight: 300; color: rgba(234,232,248,.55); line-height: 1.75; border-radius: 0 4px 4px 0; }
+.doc-section { margin-bottom: 32px; }
+.doc-section-num { font-family: monospace; font-size: 9px; letter-spacing: .18em; color: #00E5C8; margin-bottom: 4px; opacity: .7; }
+.doc-section h2 { font-size: 16px; font-weight: 600; padding-bottom: 8px; border-bottom: 1px solid #1e1f38; margin-bottom: 12px; }
+.doc-section p, .doc-section li { font-size: 13px; font-weight: 300; color: rgba(234,232,248,.5); line-height: 1.8; margin-bottom: 8px; }
+.doc-section ul { margin-left: 18px; }
+.legal-footer { background: #0d0e1e; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e1f38; }
+.legal-footer-copy { font-family: monospace; font-size: 10px; color: rgba(234,232,248,.2); }
+.legal-footer-link { font-family: monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #00E5C8; }
+
+/* SPLASH */
+.splash-preview {
+  background: rgba(10,9,22,.97); padding: 48px 40px; text-align: center;
+  border: 1px solid #1e1f38; max-width: 960px; margin: 0 auto 80px;
+}
+.splash-label-txt { font-family: monospace; font-size: 10px; letter-spacing: .2em; color: rgba(255,107,0,.7); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.splash-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF6B00; display: inline-block; }
+.splash-msg { font-size: 24px; font-weight: 600; color: #fff; max-width: 520px; margin: 0 auto 32px; line-height: 1.4; }
+.splash-skip { font-family: monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.14); padding: 10px 26px; border-radius: 3px; background: none; margin-bottom: 14px; display: inline-block; }
+.splash-timer { width: 160px; height: 2px; background: rgba(255,255,255,.08); margin: 0 auto; border-radius: 2px; overflow: hidden; }
+.splash-timer-fill { width: 65%; height: 100%; background: linear-gradient(90deg, #FF6B00, #00E5C8); }
+.splash-orbs { position: relative; height: 0; overflow: visible; }
+.splash-orb { position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
+</style>
+</head>
+<body style="padding: 40px 20px;">
+
+<h1 style="font-family:monospace;font-size:11px;letter-spacing:.2em;color:#555;text-transform:uppercase;margin-bottom:8px;">PATH & PACE — VISUAL MOCKUP</h1>
+<p style="font-family:monospace;font-size:10px;color:#444;margin-bottom:40px;">2 pages: index.html &amp; legal.html</p>
+
+<!-- ══════════ PAGE 1: index.html ══════════ -->
+
+<div class="section-label" style="max-width:960px;margin:0 auto 8px;">PAGE 1 — index.html</div>
+<div class="page">
+  <!-- Browser chrome -->
+  <div class="page-title">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <div class="url-bar">🔒&nbsp;&nbsp;path-and-pace.com</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-logo"><div class="nav-dot"></div> Path &amp; Pace</div>
+    <div class="nav-links">
+      <span class="nav-link">HoneyBadger ↗</span>
+      <div class="nav-cta">Get in touch</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <!-- Geometric rings -->
+    <svg class="hero-rings" width="240" height="240" viewBox="0 0 240 240">
+      <circle cx="120" cy="120" r="112" stroke="rgba(255,24,69,0.45)" stroke-width="0.5" fill="none"/>
+      <circle cx="120" cy="120" r="84"  stroke="rgba(0,229,200,0.35)" stroke-width="0.4" fill="none"/>
+      <circle cx="120" cy="120" r="56"  stroke="rgba(255,24,69,0.3)"  stroke-width="0.5" fill="none" stroke-dasharray="3 6"/>
+      <circle cx="120" cy="120" r="30"  stroke="rgba(0,229,200,0.3)"  stroke-width="0.4" fill="none"/>
+      <circle cx="120" cy="120" r="10"  stroke="rgba(255,24,69,0.45)" stroke-width="0.5" fill="none"/>
+      <circle cx="120" cy="120" r="3"   fill="rgba(255,24,69,0.7)"/>
+      <line x1="120" y1="2" x2="120" y2="238" stroke="rgba(255,24,69,0.1)" stroke-width="0.4"/>
+      <line x1="2" y1="120" x2="238" y2="120" stroke="rgba(255,24,69,0.1)" stroke-width="0.4"/>
+    </svg>
+
+    <div class="hero-tag">Indie Product Studio &nbsp;·&nbsp; Atlanta, GA</div>
+    <div class="hero-h1">
+      We make what<br>
+      we <span class="wish">wish</span><br>
+      existed.
+    </div>
+    <p class="hero-sub">Path &amp; Pace builds tools for capable people who are tired of not shipping. Less planning. More done.</p>
+    <div class="hero-btns">
+      <div class="btn-solid">See what we're building ↓</div>
+      <div class="btn-ghost">Our story →</div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    Build &nbsp;◆&nbsp; Ship &nbsp;◆&nbsp; Repeat &nbsp;◆&nbsp; Products &nbsp;◆&nbsp; Ideas &nbsp;◆&nbsp; Systems &nbsp;◆&nbsp; Execute &nbsp;◆&nbsp; Grow &nbsp;◆&nbsp; Build &nbsp;◆&nbsp; Ship &nbsp;◆&nbsp; Repeat &nbsp;◆&nbsp; Products &nbsp;◆&nbsp; Ideas &nbsp;◆&nbsp; Systems
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="products">
+    <div class="prod-header">
+      <div>
+        <div class="eyebrow cyan">What we're building</div>
+        <div class="section-h">Real products.<br><em>Real people.</em></div>
+      </div>
+      <p class="prod-note">Every product we build solves a problem we've actually lived.</p>
+    </div>
+
+    <div class="prod-grid">
+      <!-- Card 1: HoneyBadger -->
+      <div class="pcard">
+        <div class="pcard-img" style="background:linear-gradient(135deg,#0d0e1e 0%,#1a0a00 100%);">
+          <span class="pcard-img-text" style="opacity:.5;">[ chief.png ]</span>
+          <div class="pcard-img-fade"></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-status" style="color:#FF1845;"><div class="sdot"></div> Private Beta</div>
+          <div class="pcard-name">Honey<span style="color:#FF1845;">Badger</span></div>
+          <p class="pcard-desc">Your personal AI Chief of Staff. Warm, frank, and relentlessly on your side. He doesn't let you hide from what actually matters.</p>
+          <div class="pcard-arrow" style="color:#00CCFF;">Explore <span>→</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Frequency -->
+      <div class="pcard">
+        <div class="pcard-img" style="background:#090D12;">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="opacity:.22;">
+            <circle cx="32" cy="32" r="28" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="32" cy="32" r="18" stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="32" cy="32" r="9"  stroke="#00CCFF" stroke-width="0.5" fill="none"/>
+            <circle cx="32" cy="32" r="2.5" fill="#00CCFF"/>
+            <line x1="32" y1="3" x2="32" y2="61" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
+            <line x1="3" y1="32" x2="61" y2="32" stroke="#00CCFF" stroke-width="0.3" opacity="0.4"/>
+          </svg>
+          <div class="pcard-img-fade"></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-status" style="color:#00CCFF;"><div class="sdot" style="background:#00CCFF;"></div> Live · iOS</div>
+          <div class="pcard-name">Frequency</div>
+          <p class="pcard-desc">A community-centered app for wellness, consciousness, and personal elevation. Connect with people on the same frequency.</p>
+          <div class="pcard-arrow" style="color:#FF1845;">Privacy Policy →</div>
+        </div>
+      </div>
+
+      <!-- Card 3: Empty -->
+      <div class="pcard pcard-empty">
+        <div class="empty-glyph">?_</div>
+        <p class="empty-txt">Something's brewing.<br>Check back soon.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDIO -->
+  <div class="studio">
+    <div class="studio-inner">
+      <div>
+        <div class="eyebrow red">Who we are</div>
+        <div class="studio-h">Small on<br><em>purpose.</em></div>
+      </div>
+      <div>
+        <p class="studio-p">We're not trying to be an agency. Not a startup. Not a VC-backed lab. <strong>Path &amp; Pace is an indie studio</strong> that builds things it genuinely believes in and finds the people who need them.</p>
+        <p class="studio-p">Everything starts from the same question: <strong>why doesn't this exist yet?</strong> If we can't answer that honestly, we don't build it.</p>
+        <div class="studio-rule"></div>
+        <div>
+          <div class="s-val"><div class="s-num">01</div>Build things that solve real problems — not things that look good in a pitch deck.</div>
+          <div class="s-val"><div class="s-num">02</div>Ship early, learn fast, and don't fall in love with the plan.</div>
+          <div class="s-val"><div class="s-num">03</div>Treat users like smart adults. They are.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="eyebrow cyan">Get in touch</div>
+        <div class="contact-h">Let's talk<br>about what<br>you're <em>building.</em></div>
+        <p class="contact-sub">Consulting, partnerships, ideas, or just a conversation. No intake forms. No fluff. Just a real talk.</p>
+      </div>
+      <div style="padding-top:6px;">
+        <label class="form-label">Your name</label>
+        <div class="form-field">First and last</div>
+        <label class="form-label">Email</label>
+        <div class="form-field">your@email.com</div>
+        <label class="form-label">What's on your mind?</label>
+        <div class="form-ta">Give me the short version...</div>
+        <div class="form-submit">Send it →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>
+      <div class="footer-logo">Path &amp; Pace</div>
+      <div class="footer-copy">© 2026 Path &amp; Pace LLC · Atlanta, GA</div>
+    </div>
+    <div>
+      <div class="footer-nav-label">Legal &amp; Policies</div>
+      <a class="footer-link">HoneyBadger Privacy</a>
+      <a class="footer-link">HoneyBadger Terms</a>
+      <a class="footer-link">Beta Tester NDA</a>
+      <a class="footer-link">Frequency Privacy</a>
+    </div>
+    <div class="footer-email">jeremiahglover@<br>path-and-pace.com</div>
+  </div>
+</div>
+
+<!-- ══════════ SPLASH OVERLAY ══════════ -->
+<div class="section-label" style="max-width:960px;margin:0 auto 8px;">SPLASH SCREEN — shown on first visit (auto-dismisses after 8s)</div>
+<div class="splash-preview" style="position:relative;overflow:hidden;">
+  <div style="position:absolute;border-radius:50%;filter:blur(60px);width:280px;height:280px;background:rgba(255,107,0,.22);left:-60px;top:-60px;"></div>
+  <div style="position:absolute;border-radius:50%;filter:blur(60px);width:320px;height:320px;background:rgba(0,229,200,.16);right:-80px;bottom:-80px;"></div>
+  <div style="position:relative;z-index:2;">
+    <div class="splash-label-txt"><span class="splash-dot"></span> Chief says</div>
+    <p class="splash-msg">"Ship the thing. Fix it later. Done beats perfect every single time."</p>
+    <div class="splash-skip">Got it &rarr;</div>
+    <div class="splash-timer"><div class="splash-timer-fill"></div></div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 2: legal.html ══════════ -->
+<div class="section-label" style="max-width:960px;margin:0 auto 8px;">PAGE 2 — legal.html</div>
+<div class="page">
+  <!-- Browser chrome -->
+  <div class="page-title">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <div class="url-bar">🔒&nbsp;&nbsp;path-and-pace.com/legal.html</div>
+  </div>
+
+  <!-- Legal Nav -->
+  <div class="legal-nav">
+    <div class="nav-logo" style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;">
+      <div class="nav-dot" style="background:#FF6B00;box-shadow:0 0 8px #FF6B00;"></div> Path &amp; Pace
+    </div>
+    <div class="legal-back">Back to site</div>
+  </div>
+
+  <!-- Page header -->
+  <div class="legal-page-header">
+    <div class="legal-label">Path &amp; Pace LLC</div>
+    <div class="legal-h">Legal &amp;<br><em>Notices.</em></div>
+    <p class="legal-sub">Our policies, terms, and agreements — written like humans, not lawyers trying to bill more hours.</p>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active">HB Privacy</button>
+    <button class="tab-btn">HB Terms</button>
+    <button class="tab-btn">Beta NDA</button>
+    <button class="tab-btn">Frequency Privacy</button>
+  </div>
+
+  <!-- Content -->
+  <div class="legal-content">
+    <div class="doc-meta">
+      <div class="doc-title">HoneyBadger — <em>Privacy Policy</em></div>
+      <div class="doc-date">Last Updated: June 1, 2026</div>
+    </div>
+    <div class="doc-intro">
+      This Privacy Policy explains how <strong>Path &amp; Pace, LLC</strong> handles your information in the HoneyBadger app. The App stores some data on your device and some on servers we operate, and uses a third-party AI provider to generate its features.
+    </div>
+    <div class="doc-section">
+      <div class="doc-section-num">01</div>
+      <h2>Information We Collect</h2>
+      <ul>
+        <li><strong>Account information</strong> — your name and Apple ID email, received when you sign in with Apple.</li>
+        <li><strong>Profile and project data</strong> — bio, projects, goals, energy levels, notes.</li>
+        <li><strong>Calendar information</strong> — if you grant access, we read calendar data for reminders and meeting context. We do <strong>not</strong> access your email.</li>
+        <li><strong>Audio you record</strong> — recordings of your own voice and transcriptions.</li>
+        <li><strong>Device information</strong> — basic technical data for troubleshooting.</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <div class="doc-section-num">02</div>
+      <h2>Where Your Data Lives</h2>
+      <ul>
+        <li><strong>On your device</strong> — recordings, transcriptions, and local data.</li>
+        <li><strong>On our servers</strong> — Google Cloud / Firebase for auth, database, and cloud functions.</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <div class="doc-section-num">03</div>
+      <h2>Third Parties We Share Data With</h2>
+      <ul>
+        <li><strong>Anthropic (Claude API)</strong> — generates suggestions, summaries, briefings, and transcriptions.</li>
+        <li><strong>Google / Firebase</strong> — auth, database, and cloud function infrastructure.</li>
+        <li><strong>RevenueCat</strong> — manages subscription and purchase status.</li>
+        <li><strong>Apple</strong> — Sign in with Apple, notifications, App Store.</li>
+      </ul>
+      <p>We do <strong>not</strong> sell your personal information.</p>
+    </div>
+    <p style="font-family:monospace;font-size:10px;color:#333;letter-spacing:.1em;">… 8 more sections (How We Use Information, AI Limitations, Your Rights, Retention, Security, Children, Changes, Contact)</p>
+  </div>
+
+  <!-- Legal footer -->
+  <div class="legal-footer">
+    <div class="footer-logo">Path &amp; Pace</div>
+    <div class="legal-footer-copy">© 2026 Path &amp; Pace LLC · Atlanta, GA</div>
+    <div class="legal-footer-link">Contact</div>
+  </div>
+</div>
+
+</body>
+</html>
