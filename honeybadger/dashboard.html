@@ -489,7 +489,7 @@ import { getAnalytics }    from 'https://www.gstatic.com/firebasejs/12.14.0/fire
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import {
   getFirestore, doc, getDoc,
-  collection, query, orderBy, getDocs,
+  collection, getDocs,
   addDoc, serverTimestamp, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 
@@ -608,25 +608,29 @@ function setupProjectsListener(uid) {
   if (unsubProjects) unsubProjects();
 
   const ref = collection(db, 'users', uid, 'projects');
-  const q   = query(ref, orderBy('updatedAt', 'desc'));
-
-  const handleDocs = async (docs) => {
-    projects = docs.map(d => ({ id: d.id, ...d.data() }));
-    taskMap  = await fetchAllTasks(uid);
-    renderStats(projects);
-    renderOverview(projects);
-    renderAll(projects);
-  };
 
   unsubProjects = onSnapshot(
-    q,
-    snap => handleDocs(snap.docs),
-    async () => {
-      // Index may not exist yet — fall back to unordered fetch
-      try {
-        const snap = await getDocs(ref);
-        await handleDocs(snap.docs);
-      } catch(__) {}
+    ref,
+    async snap => {
+      // Sort client-side — avoids needing a Firestore composite index on updatedAt
+      const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      docs.sort((a, b) => {
+        const ta = a.updatedAt?.toMillis?.() ?? (typeof a.updatedAt === 'number' ? a.updatedAt : 0);
+        const tb = b.updatedAt?.toMillis?.() ?? (typeof b.updatedAt === 'number' ? b.updatedAt : 0);
+        return tb - ta;
+      });
+      projects = docs;
+      taskMap  = await fetchAllTasks(uid);
+      renderStats(projects);
+      renderOverview(projects);
+      renderAll(projects);
+    },
+    err => {
+      console.error('Projects listener error:', err.code, err.message);
+      document.getElementById('overviewGrid').innerHTML =
+        `<div class="inline-loading" style="color:var(--orange)">Read error: ${esc(err.code || err.message)}</div>`;
+      document.getElementById('allProjectsGrid').innerHTML =
+        document.getElementById('overviewGrid').innerHTML;
     }
   );
 }
@@ -966,9 +970,11 @@ document.getElementById('addForm').addEventListener('submit', async e => {
     document.getElementById('addModal').style.display = 'none';
     // onSnapshot auto-refreshes the lists
   } catch(err) {
-    console.error('Save project failed:', err);
+    console.error('Save project failed:', err.code, err.message, err);
     saveBtn.textContent = 'Error — try again';
     saveBtn.disabled = false;
+    document.querySelector('#step2 .step-label').textContent =
+      `Error: ${err.code || err.message || 'unknown'}`;
   }
 });
 
