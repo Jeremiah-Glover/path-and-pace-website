@@ -425,7 +425,7 @@ select.form-input option { background: var(--surf2); }
     <div class="nav-tabs">
       <button class="nav-tab active" data-view="overview">Overview</button>
       <button class="nav-tab" data-view="projects">Projects</button>
-      <button class="nav-tab" data-view="vault">Vault</button>
+      <button class="nav-tab" data-view="vault" id="vaultTab" style="display:none">Vault</button>
       <button class="nav-tab" data-view="chief">Chief</button>
     </div>
     <div class="nav-user">
@@ -686,8 +686,9 @@ async function boot(user) {
   // Greeting — prefer name from app settings, fall back to Firebase Auth
   const hour    = new Date().getHours();
   const tod     = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-  const fullName = settings?.userBio?.fullName || settings?.userBio?.name
-                 || profile.name || user.displayName || '';
+  // Auth/profile name takes priority over userBio fields (those are AI context, not display name)
+  const fullName = profile.name || profile.displayName || user.displayName
+                 || settings?.userBio?.fullName || settings?.userBio?.name || '';
   const first = fullName.split(' ')[0];
 
   document.getElementById('greetingText').innerHTML =
@@ -1030,10 +1031,6 @@ function renderChief(user, profile, settings) {
           </span>
         </div>
       </div>
-      <div class="account-row">
-        <div class="account-key">Role</div>
-        <div class="account-val">${isAdmin ? 'Admin' : isTester ? 'Tester' : 'Member'}</div>
-      </div>
     </div>`;
 }
 
@@ -1206,14 +1203,17 @@ function setupVaultListener(uid) {
 }
 
 function renderVault(docs) {
+  // Show the vault nav tab only once there are documents
+  document.getElementById('vaultTab').style.display = docs.length ? '' : 'none';
+
   document.getElementById('vaultSub').textContent =
-    docs.length ? `${docs.length} item${docs.length === 1 ? '' : 's'}` : 'Documents, recordings, and files';
+    `${docs.length} item${docs.length === 1 ? '' : 's'}`;
   const grid = document.getElementById('vaultGrid');
   if (!docs.length) {
     grid.innerHTML = `<div class="empty-state">
       <div class="empty-icon">🔐</div>
       <div class="empty-title">Vault is empty</div>
-      <div class="empty-sub">Recordings, documents, and files from the iOS app will appear here.</div>
+      <div class="empty-sub">Recordings, documents, and files saved in the iOS app will appear here once vault and Firebase Storage are configured.</div>
     </div>`;
     return;
   }
