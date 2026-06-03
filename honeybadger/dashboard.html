@@ -148,9 +148,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
   opacity: 0; transition: opacity 0.2s;
 }
 .project-card:hover::after { opacity: 1; }
-.project-card.p-high::after  { background: var(--orange); }
+.project-card.p-high::after   { background: var(--orange); }
 .project-card.p-medium::after { background: var(--teal); }
-.project-card.p-low::after   { background: rgba(234,232,248,0.2); }
+.project-card.p-low::after    { background: rgba(234,232,248,0.2); }
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
 .card-name { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; flex: 1; }
 .card-priority-tag {
@@ -161,10 +161,18 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 .tag-medium { background: var(--teal-lo);   color: var(--teal);   border: 1px solid rgba(0,229,200,0.25); }
 .tag-low    { background: rgba(234,232,248,0.05); color: var(--dim); border: 1px solid var(--border); }
 .card-brief { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.card-meta { display: flex; align-items: center; gap: 14px; }
+.card-progress { height: 3px; background: var(--surf2); border-radius: 2px; overflow: hidden; margin-bottom: 12px; }
+.card-progress-bar { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.4s; }
+.card-blocker {
+  font-size: 11px; color: var(--orange); background: var(--orange-lo);
+  border: 1px solid rgba(255,85,0,0.20); border-radius: 4px;
+  padding: 4px 8px; margin-bottom: 10px; line-height: 1.4;
+}
+.card-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .card-phase { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
 .card-deadline { font-family: var(--mono); font-size: 9px; letter-spacing: 0.10em; color: var(--muted); }
 .card-deadline.overdue { color: var(--orange); }
+.card-task-count { font-family: var(--mono); font-size: 9px; letter-spacing: 0.10em; color: var(--teal); }
 
 /* ── EMPTY STATE ── */
 .empty-state {
@@ -280,7 +288,7 @@ select.form-input option { background: var(--surf2); }
   position: sticky; top: 0; background: var(--surf); border-bottom: 1px solid var(--border); z-index: 1;
 }
 .detail-name { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
-.detail-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.detail-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .detail-body { padding: 24px; }
 .detail-section { margin-bottom: 24px; }
 .detail-section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); margin-bottom: 10px; }
@@ -358,7 +366,7 @@ select.form-input option { background: var(--surf2); }
       </div>
       <div class="stat-card">
         <div class="stat-num" id="statHigh">—</div>
-        <div class="stat-label">High priority</div>
+        <div class="stat-label">Critical priority</div>
       </div>
       <div class="stat-card">
         <div id="statAccess" class="stat-chip chip-teal">Beta</div>
@@ -394,7 +402,7 @@ select.form-input option { background: var(--surf2); }
   <div id="viewChief" class="view">
     <div class="view-header">
       <div>
-        <div class="view-title">Chief</div>
+        <div class="view-title" id="chiefViewTitle">Chief</div>
         <div class="view-sub">Your AI executive assistant</div>
       </div>
     </div>
@@ -421,31 +429,30 @@ select.form-input option { background: var(--surf2); }
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Deadline</label>
+            <label class="form-label">Due date</label>
             <input class="form-input" type="date" id="pDeadline">
           </div>
           <div class="form-group">
             <label class="form-label">Priority</label>
             <select class="form-input" id="pPriority">
-              <option value="high">High</option>
-              <option value="medium" selected>Medium</option>
-              <option value="low">Low</option>
+              <option value="Critical">Critical</option>
+              <option value="Important" selected>Important</option>
+              <option value="Nice-to-have">Nice-to-have</option>
             </select>
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Phase</label>
           <select class="form-input" id="pPhase">
-            <option value="discovery">Discovery</option>
-            <option value="planning">Planning</option>
-            <option value="execution" selected>Execution</option>
-            <option value="review">Review</option>
-            <option value="complete">Complete</option>
+            <option value="Ideation">Ideation</option>
+            <option value="Build" selected>Build</option>
+            <option value="Launch">Launch</option>
+            <option value="Maintenance">Maintenance</option>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Context brief — What Chief needs to know</label>
-          <textarea class="form-input" id="pBrief" rows="4" placeholder="Background, constraints, goals, dependencies, risks…"></textarea>
+          <label class="form-label">Next action</label>
+          <textarea class="form-input" id="pNextAction" rows="3" placeholder="What's the immediate next step?"></textarea>
         </div>
         <button type="button" class="btn-primary full" id="toStep2">Review →</button>
       </div>
@@ -483,11 +490,11 @@ import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/fi
 import {
   getFirestore, doc, getDoc,
   collection, query, orderBy, getDocs,
-  addDoc, serverTimestamp
+  addDoc, serverTimestamp, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyB5XdbbZ620Q3r1SD2oPfc8xm9DSabwYTU",
+  apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
   authDomain:        "honeybadger---the-chief.firebaseapp.com",
   projectId:         "honeybadger---the-chief",
   storageBucket:     "honeybadger---the-chief.firebasestorage.app",
@@ -512,8 +519,11 @@ const QUOTES = [
   "Rest is part of the plan, not a reward for finishing.",
 ];
 
-let currentUser = null;
-let projects    = [];
+let currentUser   = null;
+let projects      = [];
+let taskMap       = {};
+let appSettings   = null;
+let unsubProjects = null;
 
 // ── AUTH GUARD ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async user => {
@@ -524,22 +534,27 @@ onAuthStateChanged(auth, async user => {
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
 async function boot(user) {
-  const hour = new Date().getHours();
-  const tod  = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-  const first = user.displayName ? user.displayName.split(' ')[0] : '';
+  // Fetch profile and settings in parallel
+  const [profileSnap, settings] = await Promise.all([
+    getDoc(doc(db, 'users', user.uid)).catch(() => null),
+    fetchSettings(user.uid),
+  ]);
+
+  const profile = profileSnap?.exists() ? profileSnap.data() : {};
+  appSettings = settings;
+
+  // Greeting — prefer name from app settings, fall back to Firebase Auth
+  const hour    = new Date().getHours();
+  const tod     = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+  const fullName = settings?.userBio?.fullName || settings?.userBio?.name
+                 || profile.name || user.displayName || '';
+  const first = fullName.split(' ')[0];
 
   document.getElementById('greetingText').innerHTML =
     first ? `Good ${tod}, <em>${first}.</em>` : `Good ${tod}.`;
   document.getElementById('greetingQuote').textContent =
     QUOTES[Math.floor(Math.random() * QUOTES.length)];
   document.getElementById('navUserName').textContent = first || user.email || '';
-
-  // User profile
-  let profile = {};
-  try {
-    const snap = await getDoc(doc(db, 'users', user.uid));
-    if (snap.exists()) profile = snap.data();
-  } catch(_) {}
 
   // Access badge
   if (profile.isPremium) {
@@ -548,70 +563,141 @@ async function boot(user) {
     el.className = 'stat-chip chip-orange';
   }
 
-  // Projects
-  projects = await fetchProjects(user.uid);
+  // Chief view — show real settings data
+  renderChief(user, profile, settings);
 
-  renderStats(projects);
-  renderOverview(projects);
-  renderAll(projects);
-  renderChief(user, profile);
+  // Live projects listener (also fetches task counts on each update)
+  setupProjectsListener(user.uid);
 
-  // Reveal
+  // Reveal app
   const ls = document.getElementById('loadingScreen');
   ls.classList.add('fade-out');
   setTimeout(() => ls.style.display = 'none', 400);
   document.getElementById('app').style.display = 'block';
 }
 
-// ── DATA ─────────────────────────────────────────────────────────────────────
-async function fetchProjects(uid) {
+// ── SETTINGS ─────────────────────────────────────────────────────────────────
+async function fetchSettings(uid) {
   try {
-    const ref  = collection(db, 'users', uid, 'projects');
-    const snap = await getDocs(query(ref, orderBy('createdAt', 'desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch(_) {
-    try {
-      const snap = await getDocs(collection(db, 'users', uid, 'projects'));
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch(__) { return []; }
-  }
+    const snap = await getDoc(doc(db, 'users', uid, 'settings', 'app'));
+    return snap.exists() ? snap.data() : null;
+  } catch(_) { return null; }
+}
+
+// ── TASKS ─────────────────────────────────────────────────────────────────────
+async function fetchAllTasks(uid) {
+  try {
+    const snap = await getDocs(collection(db, 'users', uid, 'tasks'));
+    const map  = {};
+    snap.docs.forEach(d => {
+      const items = d.data().items || [];
+      map[d.id] = {
+        total:      items.length,
+        done:       items.filter(t => t.status === 'done').length,
+        inProgress: items.filter(t => t.status === 'inProgress').length,
+        blocked:    items.filter(t => t.status === 'blocked').length,
+        todo:       items.filter(t => t.status === 'todo').length,
+      };
+    });
+    return map;
+  } catch(_) { return {}; }
+}
+
+// ── LIVE PROJECTS ─────────────────────────────────────────────────────────────
+function setupProjectsListener(uid) {
+  if (unsubProjects) unsubProjects();
+
+  const ref = collection(db, 'users', uid, 'projects');
+  const q   = query(ref, orderBy('updatedAt', 'desc'));
+
+  const handleDocs = async (docs) => {
+    projects = docs.map(d => ({ id: d.id, ...d.data() }));
+    taskMap  = await fetchAllTasks(uid);
+    renderStats(projects);
+    renderOverview(projects);
+    renderAll(projects);
+  };
+
+  unsubProjects = onSnapshot(
+    q,
+    snap => handleDocs(snap.docs),
+    async () => {
+      // Index may not exist yet — fall back to unordered fetch
+      try {
+        const snap = await getDocs(ref);
+        await handleDocs(snap.docs);
+      } catch(__) {}
+    }
+  );
 }
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
 function renderStats(ps) {
-  const active = ps.filter(p => (p.status || 'active') !== 'complete');
-  const high   = active.filter(p => (p.priority||'').toLowerCase() === 'high');
+  const active   = ps.filter(p => p.phase !== 'complete');
+  const critical = active.filter(p => p.priority === 'Critical');
   document.getElementById('statActive').textContent = active.length;
-  document.getElementById('statHigh').textContent   = high.length;
+  document.getElementById('statHigh').textContent   = critical.length;
   document.getElementById('projectsSub').textContent =
     `${active.length} active · ${ps.length} total`;
 }
 
+// ── PRIORITY HELPERS ──────────────────────────────────────────────────────────
+function priorityCSSClass(priority) {
+  if (priority === 'Critical')     return 'high';
+  if (priority === 'Important')    return 'medium';
+  if (priority === 'Nice-to-have') return 'low';
+  // Legacy fallback (old web-created projects)
+  if (priority === 'high')   return 'high';
+  if (priority === 'medium') return 'medium';
+  return 'low';
+}
+
 // ── PROJECT CARD ──────────────────────────────────────────────────────────────
 function cardHTML(p) {
-  const name     = esc(p.name || p.title || 'Untitled');
-  const priority = (p.priority || 'medium').toLowerCase();
-  const phase    = esc(p.phase || p.status || 'active');
-  const brief    = esc(p.brief || p.description || '');
+  const name       = esc(p.name || 'Untitled');
+  const pClass     = priorityCSSClass(p.priority);
+  const phase      = esc(p.phase || '');
+  const nextAction = p.nextAction ? esc(p.nextAction) : '';
 
-  let deadlineHTML = '';
-  if (p.deadline) {
-    const d = p.deadline.toDate ? p.deadline.toDate() : new Date(p.deadline);
-    const str = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const past = d < new Date();
-    deadlineHTML = `<span class="card-deadline${past ? ' overdue' : ''}">${str}</span>`;
+  let dueDateHTML = '';
+  if (p.dueDate) {
+    const d = p.dueDate.toDate ? p.dueDate.toDate() : new Date(p.dueDate);
+    if (!isNaN(d)) {
+      const str  = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const past = d < new Date();
+      dueDateHTML = `<span class="card-deadline${past ? ' overdue' : ''}">${str}</span>`;
+    }
+  }
+
+  let progressHTML = '';
+  if (typeof p.progress === 'number') {
+    progressHTML = `<div class="card-progress"><div class="card-progress-bar" style="width:${Math.min(100, p.progress)}%"></div></div>`;
+  }
+
+  let blockerHTML = '';
+  if (p.blocker) {
+    blockerHTML = `<div class="card-blocker">⚠ ${esc(p.blocker)}</div>`;
+  }
+
+  let taskCountHTML = '';
+  const tc = taskMap[p.id];
+  if (tc && tc.total > 0) {
+    taskCountHTML = `<span class="card-task-count">${tc.done}/${tc.total} tasks</span>`;
   }
 
   return `
-    <div class="project-card p-${priority}" data-id="${p.id}">
+    <div class="project-card p-${pClass}" data-id="${esc(p.id)}">
       <div class="card-top">
         <div class="card-name">${name}</div>
-        <div class="card-priority-tag tag-${priority}">${priority}</div>
+        <div class="card-priority-tag tag-${pClass}">${esc(p.priority || 'Important')}</div>
       </div>
-      ${brief ? `<div class="card-brief">${brief}</div>` : ''}
+      ${nextAction ? `<div class="card-brief">${nextAction}</div>` : ''}
+      ${progressHTML}
+      ${blockerHTML}
       <div class="card-meta">
-        <span class="card-phase">${phase}</span>
-        ${deadlineHTML}
+        ${phase ? `<span class="card-phase">${phase}</span>` : ''}
+        ${taskCountHTML}
+        ${dueDateHTML}
       </div>
     </div>`;
 }
@@ -620,7 +706,7 @@ function emptyHTML(msg) {
   return `<div class="empty-state">
     <div class="empty-icon">📋</div>
     <div class="empty-title">${msg}</div>
-    <div class="empty-sub">Projects you add will appear here.</div>
+    <div class="empty-sub">Projects you add in the iOS app will appear here.</div>
   </div>`;
 }
 
@@ -632,16 +718,16 @@ function attachCardListeners(containerEl) {
 
 // ── OVERVIEW ─────────────────────────────────────────────────────────────────
 function renderOverview(ps) {
-  const active = ps.filter(p => (p.status || 'active') !== 'complete').slice(0, 6);
+  const active = ps.filter(p => p.phase !== 'complete').slice(0, 6);
   const el = document.getElementById('overviewGrid');
-  el.innerHTML = active.length ? active.map(cardHTML).join('') : emptyHTML('No projects yet');
+  el.innerHTML = active.length ? active.map(cardHTML).join('') : emptyHTML('No active projects');
   attachCardListeners(el);
 }
 
 // ── ALL PROJECTS ──────────────────────────────────────────────────────────────
 function renderAll(ps) {
   const el = document.getElementById('allProjectsGrid');
-  el.innerHTML = ps.length ? ps.map(cardHTML).join('') : emptyHTML('No projects yet — add your first one');
+  el.innerHTML = ps.length ? ps.map(cardHTML).join('') : emptyHTML('No projects yet');
   attachCardListeners(el);
 }
 
@@ -650,34 +736,65 @@ function openDetail(id) {
   const p = projects.find(x => x.id === id);
   if (!p) return;
 
-  const priority = (p.priority || 'medium').toLowerCase();
-  const phase    = p.phase || p.status || 'active';
+  const pClass = priorityCSSClass(p.priority);
+  const phase  = p.phase || '';
 
-  document.getElementById('detailName').textContent = p.name || p.title || 'Untitled';
-  document.getElementById('detailBadges').innerHTML =
-    `<span class="card-priority-tag tag-${priority}">${priority}</span>
-     <span class="card-phase">${esc(phase)}</span>`;
+  document.getElementById('detailName').textContent = p.name || 'Untitled';
+
+  let badges = `<span class="card-priority-tag tag-${pClass}">${esc(p.priority || 'Important')}</span>`;
+  if (phase) badges += ` <span class="card-phase">${esc(phase)}</span>`;
+  if (typeof p.progress === 'number') badges += ` <span class="card-phase">${p.progress}%</span>`;
+  document.getElementById('detailBadges').innerHTML = badges;
 
   let body = '';
 
-  if (p.brief || p.description) {
-    body += detailSection('Context Brief', `<p class="detail-text">${esc(p.brief || p.description)}</p>`);
-  }
-  if (p.deadline) {
-    const d = p.deadline.toDate ? p.deadline.toDate() : new Date(p.deadline);
-    const str = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    body += detailSection('Deadline', `<p style="font-size:14px;font-weight:500">${str}</p>`);
-  }
-  if (p.dependencies?.length) {
-    const deps = Array.isArray(p.dependencies) ? p.dependencies : [p.dependencies];
-    body += detailSection('Dependencies',
-      `<ul style="padding-left:16px;font-size:13px;color:var(--muted);line-height:2">${deps.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`);
-  }
-  if (p.executionPlan) {
-    body += detailSection('Execution Plan', `<p class="detail-text">${esc(p.executionPlan)}</p>`);
+  if (p.nextAction) {
+    body += detailSection('Next Action',
+      `<p class="detail-text" style="color:var(--teal)">${esc(p.nextAction)}</p>`);
   }
 
-  document.getElementById('detailBody').innerHTML = body || '<p style="color:var(--dim);font-size:14px">No additional details.</p>';
+  if (p.blocker) {
+    body += detailSection('Blocker',
+      `<p class="detail-text" style="color:var(--orange)">${esc(p.blocker)}</p>`);
+  }
+
+  // Task breakdown
+  const tc = taskMap[p.id];
+  if (tc && tc.total > 0) {
+    const pct = Math.round((tc.done / tc.total) * 100);
+    body += detailSection('Tasks', `
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:0.10em;color:var(--muted);margin-bottom:10px">
+        ${tc.todo       > 0 ? `<span>Todo: ${tc.todo}</span>`                                             : ''}
+        ${tc.inProgress > 0 ? `<span>In progress: ${tc.inProgress}</span>`                               : ''}
+        ${tc.done       > 0 ? `<span style="color:var(--teal)">Done: ${tc.done}</span>`                  : ''}
+        ${tc.blocked    > 0 ? `<span style="color:var(--orange)">Blocked: ${tc.blocked}</span>`          : ''}
+      </div>
+      <div style="height:4px;background:var(--surf2);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--teal);border-radius:2px"></div>
+      </div>`);
+  }
+
+  if (p.dueDate) {
+    const d = p.dueDate.toDate ? p.dueDate.toDate() : new Date(p.dueDate);
+    if (!isNaN(d)) {
+      const str  = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const past = d < new Date();
+      body += detailSection('Due Date',
+        `<p style="font-size:14px;font-weight:500${past ? ';color:var(--orange)' : ''}">${str}</p>`);
+    }
+  }
+
+  if (p.dependencyIDs?.length) {
+    const depNames = p.dependencyIDs.map(depId => {
+      const dep = projects.find(x => x.id === depId);
+      return dep ? dep.name : depId;
+    });
+    body += detailSection('Dependencies',
+      `<ul style="padding-left:16px;font-size:13px;color:var(--muted);line-height:2">${depNames.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`);
+  }
+
+  document.getElementById('detailBody').innerHTML =
+    body || '<p style="color:var(--dim);font-size:14px">No additional details.</p>';
   document.getElementById('detailModal').style.display = 'flex';
 }
 
@@ -686,31 +803,59 @@ function detailSection(label, content) {
 }
 
 // ── CHIEF VIEW ────────────────────────────────────────────────────────────────
-function renderChief(user, profile) {
-  const isPremium = profile.isPremium;
-  const isTester  = profile.isTester;
-  const isAdmin   = profile.isAdmin;
-  const provider  = profile.provider || user.providerData?.[0]?.providerId || '—';
+function renderChief(user, profile, settings) {
+  const chief      = settings?.chief   || {};
+  const userBio    = settings?.userBio || {};
+  const chiefName  = esc(chief.displayName || 'Chief');
+  const isPremium  = profile.isPremium;
+  const isTester   = profile.isTester;
+  const isAdmin    = profile.isAdmin;
+  const provider   = profile.provider || user.providerData?.[0]?.providerId || '—';
+
+  // Update nav title to Chief's real name
+  document.getElementById('chiefViewTitle').textContent = chief.displayName || 'Chief';
+
+  let chiefFields = '';
+  if (chief.backstory) {
+    chiefFields += `<div class="chief-field">
+      <div class="chief-field-label">Backstory</div>
+      <div class="chief-field-val">${esc(chief.backstory)}</div>
+    </div>`;
+  }
+  if (chief.communicationStyle) {
+    chiefFields += `<div class="chief-field">
+      <div class="chief-field-label">Communication style</div>
+      <div class="chief-field-val" style="text-transform:capitalize">${esc(chief.communicationStyle)}</div>
+    </div>`;
+  }
+  if (typeof chief.bluntness === 'number') {
+    chiefFields += `<div class="chief-field">
+      <div class="chief-field-label">Bluntness</div>
+      <div class="chief-field-val">${chief.bluntness} / 10</div>
+    </div>`;
+  }
+  if (!chiefFields) {
+    chiefFields = `<div class="chief-field">
+      <div class="chief-field-label">Approach</div>
+      <div class="chief-field-val">Direct, opinionated, and energy-aware. Customize ${chiefName}'s name, backstory, and communication style in the iOS app.</div>
+    </div>`;
+  }
+
+  const bioSection = userBio.bio ? `
+    <div style="margin-bottom:24px">
+      <div class="account-section-label">About you</div>
+      <div style="font-size:14px;font-weight:300;color:var(--muted);line-height:1.7">${esc(userBio.bio)}</div>
+    </div>` : '';
 
   document.getElementById('chiefContent').innerHTML = `
     <div class="chief-card">
-      <div class="chief-name-big">Chief</div>
+      <div class="chief-name-big">${chiefName}</div>
       <div class="chief-role-tag">AI Executive Assistant</div>
       <div class="chief-divider"></div>
-      <div class="chief-field">
-        <div class="chief-field-label">Approach</div>
-        <div class="chief-field-val">Direct, opinionated, and energy-aware. Chief adapts to your daily check-in and holds your priorities — not just your calendar.</div>
-      </div>
-      <div class="chief-field">
-        <div class="chief-field-label">Core philosophy</div>
-        <div class="chief-field-val">A life well-lived is the actual mission. Chief pushes hard on execution and equally prescribes rest, connection, and joy as strategic necessities — not rewards.</div>
-      </div>
-      <div class="chief-field">
-        <div class="chief-field-label">Customization</div>
-        <div class="chief-field-val">Name, backstory, and communication style are set in the iOS app. Chief reads your energy check-in daily and adjusts its intensity accordingly.</div>
-      </div>
+      ${chiefFields}
     </div>
     <div class="account-card">
+      ${bioSection}
       <div class="account-section-label">Account</div>
       <div class="account-row">
         <div class="account-key">Email</div>
@@ -748,6 +893,7 @@ document.getElementById('seeAllBtn').addEventListener('click', () => switchView(
 
 // ── SIGN OUT ──────────────────────────────────────────────────────────────────
 document.getElementById('signOutBtn').addEventListener('click', async () => {
+  if (unsubProjects) unsubProjects();
   await signOut(auth);
   window.location.replace('index.html');
 });
@@ -755,6 +901,9 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 // ── ADD PROJECT ───────────────────────────────────────────────────────────────
 function openAddModal() {
   document.getElementById('addForm').reset();
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Save project';
   document.getElementById('step1').classList.add('active');
   document.getElementById('step2').classList.remove('active');
   document.getElementById('addModal').style.display = 'flex';
@@ -762,23 +911,25 @@ function openAddModal() {
 
 document.getElementById('addProjectBtn').addEventListener('click', openAddModal);
 document.getElementById('addModalClose').addEventListener('click', () => document.getElementById('addModal').style.display = 'none');
-document.getElementById('addModal').addEventListener('click', e => { if (e.target.id === 'addModal') document.getElementById('addModal').style.display = 'none'; });
+document.getElementById('addModal').addEventListener('click', e => {
+  if (e.target.id === 'addModal') document.getElementById('addModal').style.display = 'none';
+});
 
 document.getElementById('toStep2').addEventListener('click', () => {
   const name = document.getElementById('pName').value.trim();
   if (!name) { document.getElementById('pName').focus(); return; }
 
-  const deadline = document.getElementById('pDeadline').value;
-  const priority = document.getElementById('pPriority').value;
-  const phase    = document.getElementById('pPhase').value;
-  const brief    = document.getElementById('pBrief').value.trim();
+  const dueDate    = document.getElementById('pDeadline').value;
+  const priority   = document.getElementById('pPriority').value;
+  const phase      = document.getElementById('pPhase').value;
+  const nextAction = document.getElementById('pNextAction').value.trim();
 
   document.getElementById('reviewCard').innerHTML = `
     <div class="review-row"><span class="review-key">Project</span><span class="review-val">${esc(name)}</span></div>
-    ${deadline ? `<div class="review-row"><span class="review-key">Deadline</span><span class="review-val">${new Date(deadline + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span></div>` : ''}
-    <div class="review-row"><span class="review-key">Priority</span><span class="review-val" style="text-transform:capitalize">${priority}</span></div>
-    <div class="review-row"><span class="review-key">Phase</span><span class="review-val" style="text-transform:capitalize">${phase}</span></div>
-    ${brief ? `<div class="review-brief">${esc(brief)}</div>` : ''}`;
+    ${dueDate ? `<div class="review-row"><span class="review-key">Due date</span><span class="review-val">${new Date(dueDate + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span></div>` : ''}
+    <div class="review-row"><span class="review-key">Priority</span><span class="review-val">${esc(priority)}</span></div>
+    <div class="review-row"><span class="review-key">Phase</span><span class="review-val">${esc(phase)}</span></div>
+    ${nextAction ? `<div class="review-brief">${esc(nextAction)}</div>` : ''}`;
 
   document.getElementById('step1').classList.remove('active');
   document.getElementById('step2').classList.add('active');
@@ -795,24 +946,25 @@ document.getElementById('addForm').addEventListener('submit', async e => {
   saveBtn.disabled = true;
   saveBtn.textContent = 'Saving…';
 
-  const name     = document.getElementById('pName').value.trim();
-  const deadline = document.getElementById('pDeadline').value;
-  const priority = document.getElementById('pPriority').value;
-  const phase    = document.getElementById('pPhase').value;
-  const brief    = document.getElementById('pBrief').value.trim();
+  const name       = document.getElementById('pName').value.trim();
+  const dueDate    = document.getElementById('pDeadline').value;
+  const priority   = document.getElementById('pPriority').value;
+  const phase      = document.getElementById('pPhase').value;
+  const nextAction = document.getElementById('pNextAction').value.trim();
 
   try {
-    const data = { name, priority, phase, status: 'active', createdAt: serverTimestamp() };
-    if (brief)    data.brief    = brief;
-    if (deadline) data.deadline = deadline;
+    const data = {
+      name, priority, phase,
+      progress:  0,
+      editCount: 0,
+      updatedAt: serverTimestamp(),
+    };
+    if (nextAction) data.nextAction = nextAction;
+    if (dueDate)    data.dueDate    = dueDate;
 
     await addDoc(collection(db, 'users', currentUser.uid, 'projects'), data);
     document.getElementById('addModal').style.display = 'none';
-
-    projects = await fetchProjects(currentUser.uid);
-    renderStats(projects);
-    renderOverview(projects);
-    renderAll(projects);
+    // onSnapshot auto-refreshes the lists
   } catch(err) {
     console.error('Save project failed:', err);
     saveBtn.textContent = 'Error — try again';
@@ -821,8 +973,11 @@ document.getElementById('addForm').addEventListener('submit', async e => {
 });
 
 // ── DETAIL MODAL ──────────────────────────────────────────────────────────────
-document.getElementById('detailClose').addEventListener('click', () => document.getElementById('detailModal').style.display = 'none');
-document.getElementById('detailModal').addEventListener('click', e => { if (e.target.id === 'detailModal') document.getElementById('detailModal').style.display = 'none'; });
+document.getElementById('detailClose').addEventListener('click', () =>
+  document.getElementById('detailModal').style.display = 'none');
+document.getElementById('detailModal').addEventListener('click', e => {
+  if (e.target.id === 'detailModal') document.getElementById('detailModal').style.display = 'none';
+});
 
 // ── UTIL ──────────────────────────────────────────────────────────────────────
 function esc(str) {
