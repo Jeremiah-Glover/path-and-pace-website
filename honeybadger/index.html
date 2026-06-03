@@ -71,6 +71,9 @@ body {
   position: relative; z-index: 10;
   width: 100%; max-width: 420px;
   padding: 0 24px;
+  opacity: 0; /* hidden until auth state confirmed */
+}
+.portal.reveal {
   animation: up 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
 @keyframes up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
@@ -371,7 +374,7 @@ import {
 
 // ── Firebase config ──────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey:            "AIzaSyB5XdbbZ620Q3r1SD2oPfc8xm9DSabwYTU",
+  apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
   authDomain:        "honeybadger---the-chief.firebaseapp.com",
   projectId:         "honeybadger---the-chief",
   storageBucket:     "honeybadger---the-chief.firebasestorage.app",
@@ -424,6 +427,7 @@ function showSignedIn(user) {
 }
 
 function showLogin() {
+  document.querySelector('.portal').classList.add('reveal');
   loginView.style.display    = 'block';
   signedInView.style.display = 'none';
 }
