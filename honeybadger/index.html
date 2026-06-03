@@ -420,10 +420,7 @@ onAuthStateChanged(auth, user => {
 });
 
 function showSignedIn(user) {
-  const name = user.displayName ? `You're in, ${user.displayName.split(' ')[0]}.` : "You're in.";
-  signedInName.textContent = name;
-  loginView.style.display    = 'none';
-  signedInView.style.display = 'block';
+  window.location.replace('dashboard.html');
 }
 
 function showLogin() {
