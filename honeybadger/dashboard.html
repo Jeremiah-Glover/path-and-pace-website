@@ -305,6 +305,78 @@ select.form-input option { background: var(--surf2); }
 /* ── LOADING INLINE ── */
 .inline-loading { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); padding: 40px; text-align: center; grid-column: 1 / -1; }
 
+/* ── VAULT ── */
+.vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.vault-card {
+  background: var(--surf); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; transition: border-color 0.2s;
+}
+.vault-card:hover { border-color: rgba(0,229,200,0.22); }
+.vault-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.vault-card-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; flex: 1; }
+.vault-type-tag {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; flex-shrink: 0; margin-top: 2px;
+  background: var(--teal-lo); color: var(--teal); border: 1px solid rgba(0,229,200,0.25);
+}
+.vault-type-tag.file { background: rgba(234,232,248,0.05); color: var(--dim); border-color: var(--border); }
+.vault-card-meta { font-family: var(--mono); font-size: 9px; letter-spacing: 0.10em; color: var(--dim); margin-bottom: 12px; }
+.vault-audio { width: 100%; margin-top: 6px; height: 36px; }
+.vault-img { width: 100%; border-radius: 6px; margin-top: 8px; max-height: 180px; object-fit: cover; }
+.vault-file-link {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+  font-size: 12px; color: var(--teal); text-decoration: none; font-family: var(--mono);
+  letter-spacing: 0.08em; transition: text-shadow 0.2s;
+}
+.vault-file-link:hover { text-shadow: var(--glow-t); }
+.vault-notes { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.55; margin-top: 10px; }
+.vault-card-actions { display: flex; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.btn-vault-edit {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: none; border: 1px solid var(--border); border-radius: 4px;
+  color: var(--dim); padding: 6px 12px; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+}
+.btn-vault-edit:hover { color: var(--ink); border-color: rgba(255,255,255,0.15); }
+.btn-vault-del {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: none; border: 1px solid transparent; border-radius: 4px;
+  color: rgba(255,85,0,0.5); padding: 6px 12px; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+}
+.btn-vault-del:hover { color: var(--orange); border-color: rgba(255,85,0,0.4); }
+.btn-vault-del.confirming { color: #fff; background: var(--orange); border-color: var(--orange); }
+
+/* ── VAULT EDIT MODAL ── */
+#vaultEditModal .modal { max-width: 480px; }
+
+/* ── CALL MERIDIAN ── */
+.chief-talk-section { margin-top: 20px; }
+.btn-meridian {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--muted); font-family: var(--font); font-size: 13px; font-weight: 400;
+  padding: 10px 18px; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.btn-meridian:hover { color: var(--ink); border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); }
+.btn-meridian.listening {
+  color: var(--orange); border-color: rgba(255,85,0,0.5); background: var(--orange-lo);
+  animation: listen-pulse 1.5s ease-in-out infinite;
+}
+@keyframes listen-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,85,0,0.3); }
+  50%      { box-shadow: 0 0 0 8px rgba(255,85,0,0); }
+}
+.meridian-transcript {
+  min-height: 18px; margin: 10px 0 2px;
+  font-size: 13px; color: var(--dim); font-style: italic; line-height: 1.5;
+}
+.meridian-transcript.has-text { color: var(--ink); font-style: normal; }
+.meridian-response {
+  background: var(--surf2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 18px; margin-top: 10px;
+  font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.75;
+  white-space: pre-wrap;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   .view { padding: 24px 16px 60px; }
@@ -353,6 +425,7 @@ select.form-input option { background: var(--surf2); }
     <div class="nav-tabs">
       <button class="nav-tab active" data-view="overview">Overview</button>
       <button class="nav-tab" data-view="projects">Projects</button>
+      <button class="nav-tab" data-view="vault">Vault</button>
       <button class="nav-tab" data-view="chief">Chief</button>
     </div>
     <div class="nav-user">
@@ -406,6 +479,19 @@ select.form-input option { background: var(--surf2); }
     </div>
   </div>
 
+  <!-- VAULT -->
+  <div id="viewVault" class="view">
+    <div class="view-header">
+      <div>
+        <div class="view-title">Vault</div>
+        <div class="view-sub" id="vaultSub">Documents, recordings, and files</div>
+      </div>
+    </div>
+    <div class="vault-grid" id="vaultGrid">
+      <div class="inline-loading">Loading vault…</div>
+    </div>
+  </div>
+
   <!-- CHIEF -->
   <div id="viewChief" class="view">
     <div class="view-header">
@@ -416,6 +502,19 @@ select.form-input option { background: var(--surf2); }
     </div>
     <div id="chiefContent">
       <div class="inline-loading">Loading…</div>
+    </div>
+    <!-- Call Meridian — separate from chiefContent so it persists across re-renders -->
+    <div class="chief-talk-section account-card" id="chiefCallCard" style="margin-top:16px;display:none">
+      <div class="account-section-label" id="chiefCallLabel">Talk to Chief</div>
+      <button id="callChiefBtn" class="btn-meridian">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <rect x="9" y="2" width="6" height="13" rx="3"/>
+          <path d="M19 10v1a7 7 0 01-14 0v-1M12 20v3M8 23h8"/>
+        </svg>
+        <span id="callChiefBtnLabel">Talk to Chief</span>
+      </button>
+      <div class="meridian-transcript" id="meridianTranscript"></div>
+      <div class="meridian-response" id="meridianResponse" style="display:none"></div>
     </div>
   </div>
 
@@ -477,6 +576,32 @@ select.form-input option { background: var(--surf2); }
   </div>
 </div>
 
+<!-- Vault Edit Modal -->
+<div id="vaultEditModal" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Document</div>
+      <button class="modal-close" id="vaultEditClose">✕</button>
+    </div>
+    <form id="vaultEditForm">
+      <div class="step active">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="veTitle" placeholder="Document title" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="veNotes" rows="4" placeholder="Add notes or description…"></textarea>
+        </div>
+        <div class="step-actions">
+          <button type="button" class="btn-ghost" id="vaultEditCancel">Cancel</button>
+          <button type="submit" class="btn-primary" id="vaultEditSaveBtn">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Project Detail Modal -->
 <div id="detailModal" class="detail-overlay" style="display:none">
   <div class="detail-modal">
@@ -501,8 +626,9 @@ import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/fi
 import {
   getFirestore, doc, getDoc, Timestamp,
   collection, getDocs,
-  setDoc, deleteDoc, serverTimestamp, onSnapshot
+  setDoc, updateDoc, deleteDoc, serverTimestamp, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
@@ -514,10 +640,11 @@ const firebaseConfig = {
   measurementId:     "G-7HGQ02434F"
 };
 
-const app  = initializeApp(firebaseConfig);
+const app       = initializeApp(firebaseConfig);
 getAnalytics(app);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+const auth      = getAuth(app);
+const db        = getFirestore(app);
+const functions = getFunctions(app);
 
 const QUOTES = [
   "A life well-lived is the actual mission.",
@@ -535,6 +662,8 @@ let projects      = [];
 let taskMap       = {};
 let appSettings   = null;
 let unsubProjects = null;
+let vaultDocs     = [];
+let unsubVault    = null;
 
 // ── AUTH GUARD ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, async user => {
@@ -579,6 +708,12 @@ async function boot(user) {
 
   // Live projects listener (also fetches task counts on each update)
   setupProjectsListener(user.uid);
+
+  // Vault listener
+  setupVaultListener(user.uid);
+
+  // Call Meridian voice interface
+  initCallMeridian();
 
   // Reveal app
   const ls = document.getElementById('loadingScreen');
@@ -830,8 +965,12 @@ function renderChief(user, profile, settings) {
   const isAdmin    = profile.isAdmin;
   const provider   = profile.provider || user.providerData?.[0]?.providerId || '—';
 
-  // Update nav title to Chief's real name
-  document.getElementById('chiefViewTitle').textContent = chief.displayName || 'Chief';
+  // Update nav title and Call Meridian labels to Chief's real name
+  const chiefName2 = chief.displayName || 'Chief';
+  document.getElementById('chiefViewTitle').textContent = chiefName2;
+  document.getElementById('chiefCallLabel').textContent = `Talk to ${chiefName2}`;
+  document.getElementById('callChiefBtnLabel').textContent = `Talk to ${chiefName2}`;
+  document.getElementById('chiefCallCard').style.display = 'block';
 
   let chiefFields = '';
   if (chief.backstory) {
@@ -912,6 +1051,7 @@ document.getElementById('seeAllBtn').addEventListener('click', () => switchView(
 // ── SIGN OUT ──────────────────────────────────────────────────────────────────
 document.getElementById('signOutBtn').addEventListener('click', async () => {
   if (unsubProjects) unsubProjects();
+  if (unsubVault) unsubVault();
   await signOut(auth);
   window.location.replace('index.html');
 });
@@ -1046,6 +1186,226 @@ document.getElementById('deleteProjectBtn').addEventListener('click', async () =
     btn.disabled = false;
   }
 });
+
+// ── VAULT LISTENER ────────────────────────────────────────────────────────────
+function setupVaultListener(uid) {
+  if (unsubVault) unsubVault();
+  const ref = collection(db, 'users', uid, 'vault');
+  unsubVault = onSnapshot(ref, snap => {
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    docs.sort((a, b) => {
+      const ta = a.createdAt?.toMillis?.() ?? 0;
+      const tb = b.createdAt?.toMillis?.() ?? 0;
+      return tb - ta;
+    });
+    vaultDocs = docs;
+    renderVault(docs);
+  }, err => {
+    console.warn('Vault listener:', err.code, err.message);
+  });
+}
+
+function renderVault(docs) {
+  document.getElementById('vaultSub').textContent =
+    docs.length ? `${docs.length} item${docs.length === 1 ? '' : 's'}` : 'Documents, recordings, and files';
+  const grid = document.getElementById('vaultGrid');
+  if (!docs.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🔐</div>
+      <div class="empty-title">Vault is empty</div>
+      <div class="empty-sub">Recordings, documents, and files from the iOS app will appear here.</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = docs.map(vaultCardHTML).join('');
+  grid.querySelectorAll('[data-vault-edit]').forEach(btn => {
+    btn.addEventListener('click', () => openVaultEdit(btn.dataset.vaultEdit));
+  });
+  grid.querySelectorAll('[data-vault-del]').forEach(btn => {
+    btn.addEventListener('click', () => vaultDeleteTap(btn));
+  });
+}
+
+function vaultCardHTML(v) {
+  const title  = esc(v.title || 'Untitled');
+  const raw    = (v.type || '').toLowerCase();
+  const mime   = (v.mimeType || '').toLowerCase();
+  const isAudio = raw === 'recording' || mime.startsWith('audio');
+  const isImage = raw === 'image' || mime.startsWith('image');
+  const tagLabel = isAudio ? 'Recording' : raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : 'File';
+  const tagClass = isAudio ? '' : 'file';
+
+  let dateStr = '';
+  if (v.createdAt) {
+    const d = v.createdAt.toDate ? v.createdAt.toDate() : new Date(v.createdAt);
+    if (!isNaN(d)) dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+  if (v.duration) {
+    const m = Math.floor(v.duration / 60), s = Math.floor(v.duration % 60);
+    dateStr += (dateStr ? ' · ' : '') + `${m}:${String(s).padStart(2,'0')}`;
+  }
+
+  let mediaHTML = '';
+  if (isAudio && v.url) {
+    mediaHTML = `<audio class="vault-audio" controls src="${esc(v.url)}" preload="none"></audio>`;
+  } else if (isImage && v.url) {
+    mediaHTML = `<img class="vault-img" src="${esc(v.url)}" alt="${title}" loading="lazy">`;
+  } else if (v.url) {
+    mediaHTML = `<a class="vault-file-link" href="${esc(v.url)}" target="_blank" rel="noopener">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 2M14 2H6M14 2V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Open file
+    </a>`;
+  }
+
+  const notesHTML = (v.notes || v.description)
+    ? `<div class="vault-notes">${esc(v.notes || v.description)}</div>` : '';
+
+  return `<div class="vault-card">
+    <div class="vault-card-header">
+      <div class="vault-card-title">${title}</div>
+      <span class="vault-type-tag ${tagClass}">${tagLabel}</span>
+    </div>
+    ${dateStr ? `<div class="vault-card-meta">${dateStr}</div>` : ''}
+    ${mediaHTML}
+    ${notesHTML}
+    <div class="vault-card-actions">
+      <button class="btn-vault-edit" data-vault-edit="${esc(v.id)}">Edit</button>
+      <button class="btn-vault-del" data-vault-del="${esc(v.id)}">Delete</button>
+    </div>
+  </div>`;
+}
+
+// ── VAULT EDIT ────────────────────────────────────────────────────────────────
+let activeVaultId = null;
+
+function openVaultEdit(id) {
+  const v = vaultDocs.find(x => x.id === id);
+  if (!v) return;
+  activeVaultId = id;
+  document.getElementById('veTitle').value = v.title || '';
+  document.getElementById('veNotes').value = v.notes || v.description || '';
+  const btn = document.getElementById('vaultEditSaveBtn');
+  btn.disabled = false;
+  btn.textContent = 'Save changes';
+  document.getElementById('vaultEditModal').style.display = 'flex';
+}
+
+function closeVaultEdit() {
+  document.getElementById('vaultEditModal').style.display = 'none';
+  activeVaultId = null;
+}
+
+document.getElementById('vaultEditClose').addEventListener('click', closeVaultEdit);
+document.getElementById('vaultEditCancel').addEventListener('click', closeVaultEdit);
+document.getElementById('vaultEditModal').addEventListener('click', e => {
+  if (e.target.id === 'vaultEditModal') closeVaultEdit();
+});
+
+document.getElementById('vaultEditForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('vaultEditSaveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  try {
+    await updateDoc(doc(db, 'users', currentUser.uid, 'vault', activeVaultId), {
+      title:     document.getElementById('veTitle').value.trim(),
+      notes:     document.getElementById('veNotes').value.trim(),
+      updatedAt: serverTimestamp(),
+    });
+    closeVaultEdit();
+  } catch(err) {
+    btn.textContent = `Error: ${err.code || 'unknown'}`;
+    btn.disabled = false;
+  }
+});
+
+function vaultDeleteTap(btn) {
+  if (!btn.classList.contains('confirming')) {
+    btn.classList.add('confirming');
+    btn.textContent = 'Confirm?';
+    setTimeout(() => { btn.classList.remove('confirming'); btn.textContent = 'Delete'; }, 3000);
+    return;
+  }
+  const id = btn.dataset.vaultDel;
+  btn.textContent = 'Deleting…';
+  btn.disabled = true;
+  deleteDoc(doc(db, 'users', currentUser.uid, 'vault', id))
+    .catch(err => { btn.textContent = `Error`; btn.disabled = false; });
+}
+
+// ── CALL MERIDIAN ─────────────────────────────────────────────────────────────
+function initCallMeridian() {
+  const btn = document.getElementById('callChiefBtn');
+  const SR  = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    btn.textContent = 'Voice not supported in this browser';
+    btn.disabled = true;
+    return;
+  }
+
+  const recog = new SR();
+  recog.continuous    = false;
+  recog.interimResults = true;
+  recog.lang          = 'en-US';
+
+  let finalTranscript = '';
+  let listening       = false;
+
+  recog.onstart = () => {
+    listening = true;
+    finalTranscript = '';
+    btn.classList.add('listening');
+    setTranscript('Listening…', false);
+    document.getElementById('meridianResponse').style.display = 'none';
+  };
+
+  recog.onresult = event => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+      else interim += event.results[i][0].transcript;
+    }
+    setTranscript(finalTranscript || interim, !!(finalTranscript || interim));
+  };
+
+  recog.onerror = event => {
+    listening = false;
+    btn.classList.remove('listening');
+    setTranscript(`Error: ${event.error}`, false);
+  };
+
+  recog.onend = () => {
+    listening = false;
+    btn.classList.remove('listening');
+    if (finalTranscript.trim()) sendToChief(finalTranscript.trim());
+  };
+
+  btn.addEventListener('click', () => {
+    if (listening) { recog.stop(); return; }
+    recog.start();
+  });
+}
+
+function setTranscript(text, active) {
+  const el = document.getElementById('meridianTranscript');
+  el.textContent = text;
+  el.classList.toggle('has-text', active);
+}
+
+async function sendToChief(message) {
+  const resp = document.getElementById('meridianResponse');
+  resp.textContent = 'Thinking…';
+  resp.style.display = 'block';
+  try {
+    const fn     = httpsCallable(functions, 'callClaude');
+    const result = await fn({ message, uid: currentUser.uid });
+    const text   = result.data?.response ?? result.data?.text ?? result.data?.message
+                ?? result.data?.content  ?? JSON.stringify(result.data);
+    resp.textContent = text;
+  } catch(err) {
+    resp.textContent = `Error: ${err.message}`;
+  }
+}
 
 // ── UTIL ──────────────────────────────────────────────────────────────────────
 function esc(str) {
