@@ -499,7 +499,7 @@ import { initializeApp }   from 'https://www.gstatic.com/firebasejs/12.14.0/fire
 import { getAnalytics }    from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import {
-  getFirestore, doc, getDoc,
+  getFirestore, doc, getDoc, Timestamp,
   collection, getDocs,
   setDoc, deleteDoc, serverTimestamp, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
@@ -974,6 +974,7 @@ document.getElementById('addForm').addEventListener('submit', async e => {
     // Generate the doc ref first so we can store its ID inside the document
     // (iOS reads the 'id' field from document data, not just the Firestore doc ID)
     const newRef = doc(collection(db, 'users', currentUser.uid, 'projects'));
+    const now = serverTimestamp();
     const data = {
       id:            newRef.id,
       name,          priority,      phase,
@@ -982,10 +983,11 @@ document.getElementById('addForm').addEventListener('submit', async e => {
       colorHex:      '#FF5500',
       lastPhase:     phase,
       dependencyIDs: [],
-      updatedAt:     serverTimestamp(),
+      createdAt:     now,
+      updatedAt:     now,
     };
     if (nextAction) data.nextAction = nextAction;
-    if (dueDate)    data.dueDate    = dueDate;
+    if (dueDate)    data.dueDate    = Timestamp.fromDate(new Date(dueDate + 'T12:00:00'));
 
     await setDoc(newRef, data);
     document.getElementById('addModal').style.display = 'none';
@@ -1014,6 +1016,7 @@ function resetDeleteBtn() {
   const btn = document.getElementById('deleteProjectBtn');
   btn.textContent = 'Delete project';
   btn.classList.remove('confirming');
+  btn.disabled = false;
 }
 
 document.getElementById('detailClose').addEventListener('click', closeDetailModal);
