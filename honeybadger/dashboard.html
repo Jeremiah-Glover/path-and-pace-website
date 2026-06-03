@@ -490,7 +490,7 @@ import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/fi
 import {
   getFirestore, doc, getDoc,
   collection, getDocs,
-  addDoc, serverTimestamp, onSnapshot
+  setDoc, serverTimestamp, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -957,16 +957,23 @@ document.getElementById('addForm').addEventListener('submit', async e => {
   const nextAction = document.getElementById('pNextAction').value.trim();
 
   try {
+    // Generate the doc ref first so we can store its ID inside the document
+    // (iOS reads the 'id' field from document data, not just the Firestore doc ID)
+    const newRef = doc(collection(db, 'users', currentUser.uid, 'projects'));
     const data = {
-      name, priority, phase,
-      progress:  0,
-      editCount: 0,
-      updatedAt: serverTimestamp(),
+      id:            newRef.id,
+      name,          priority,      phase,
+      progress:      0,
+      editCount:     0,
+      colorHex:      '#FF5500',
+      lastPhase:     phase,
+      dependencyIDs: [],
+      updatedAt:     serverTimestamp(),
     };
     if (nextAction) data.nextAction = nextAction;
     if (dueDate)    data.dueDate    = dueDate;
 
-    await addDoc(collection(db, 'users', currentUser.uid, 'projects'), data);
+    await setDoc(newRef, data);
     document.getElementById('addModal').style.display = 'none';
     // onSnapshot auto-refreshes the lists
   } catch(err) {
