@@ -430,6 +430,11 @@ function showLogin() {
   document.querySelector('.portal').classList.add('reveal');
   loginView.style.display    = 'block';
   signedInView.style.display = 'none';
+  // Show message if user declined the NDA
+  if (new URLSearchParams(window.location.search).get('declined') === '1') {
+    showError('You must sign the Beta Access Agreement to use HoneyBadger. Sign in again to review and sign.');
+    history.replaceState(null, '', window.location.pathname);
+  }
 }
 
 // ── Error / success display ──────────────────────────────────────────────────
