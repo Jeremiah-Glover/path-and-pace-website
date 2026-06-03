@@ -7,22 +7,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #0B0C1A;
-  --surf:    #10121F;
-  --surf2:   #161828;
-  --ink:     #EAE8F8;
-  --muted:   rgba(234,232,248,0.48);
-  --dim:     rgba(234,232,248,0.20);
-  --orange:  #FF5500;
+  --bg:        #0B0C1A;
+  --surf:      #10121F;
+  --surf2:     #161828;
+  --ink:       #EAE8F8;
+  --muted:     rgba(234,232,248,0.48);
+  --dim:       rgba(234,232,248,0.20);
+  --orange:    #FF5500;
   --orange-lo: rgba(255,85,0,0.10);
-  --teal:    #00E5C8;
-  --teal-lo: rgba(0,229,200,0.10);
-  --border:  rgba(255,255,255,0.06);
-  --border-o: rgba(255,85,0,0.22);
-  --glow-o:  0 0 18px rgba(255,85,0,0.60), 0 0 56px rgba(255,85,0,0.20);
-  --glow-t:  0 0 18px rgba(0,229,200,0.55), 0 0 56px rgba(0,229,200,0.18);
-  --font: 'Space Grotesk', sans-serif;
-  --mono: 'Space Mono', monospace;
+  --teal:      #00E5C8;
+  --teal-lo:   rgba(0,229,200,0.10);
+  --border:    rgba(255,255,255,0.06);
+  --border-o:  rgba(255,85,0,0.22);
+  --glow-o:    0 0 18px rgba(255,85,0,0.60), 0 0 56px rgba(255,85,0,0.20);
+  --glow-t:    0 0 18px rgba(0,229,200,0.55), 0 0 56px rgba(0,229,200,0.18);
+  --font:  'Space Grotesk', sans-serif;
+  --mono:  'Space Mono', monospace;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -39,10 +39,7 @@ body {
 }
 
 /* ── AMBIENT ── */
-.orb {
-  position: fixed; border-radius: 50%;
-  pointer-events: none; z-index: 0; filter: blur(80px);
-}
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
 .orb-1 {
   width: 600px; height: 600px;
   background: radial-gradient(circle, rgba(255,85,0,0.20) 0%, transparent 70%);
@@ -58,16 +55,7 @@ body {
 @keyframes drift-a { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,80px)} }
 @keyframes drift-b { 0%,100%{transform:translate(0,0)} 50%{transform:translate(70px,-50px)} }
 
-/* ── LAYOUT ── */
-.portal {
-  position: relative; z-index: 10;
-  width: 100%; max-width: 420px;
-  padding: 0 24px;
-  animation: up 0.7s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
-
-/* ── BACK LINK ── */
+/* ── BACK ── */
 .back {
   position: fixed; top: 24px; left: 28px; z-index: 20;
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
@@ -78,10 +66,17 @@ body {
 .back::before { content: '←'; color: var(--teal); }
 .back:hover { color: var(--ink); }
 
-/* ── BADGE ── */
-.badge-wrap {
-  display: flex; justify-content: center; margin-bottom: 32px;
+/* ── PORTAL WRAPPER ── */
+.portal {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 420px;
+  padding: 0 24px;
+  animation: up 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
+@keyframes up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+
+/* ── BADGE ── */
+.badge-wrap { display: flex; justify-content: center; margin-bottom: 32px; }
 .badge {
   width: 72px; height: 72px;
   background: var(--surf2);
@@ -97,20 +92,15 @@ body {
 }
 
 /* ── WORDMARK ── */
-.wordmark {
-  text-align: center; margin-bottom: 8px;
-}
-.wordmark-name {
-  font-size: 32px; font-weight: 700;
-  letter-spacing: -0.03em; line-height: 1;
-}
+.wordmark { text-align: center; margin-bottom: 8px; }
+.wordmark-name { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
 .wordmark-name em { font-style: normal; color: var(--orange); }
 .wordmark-tag {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--muted); margin-top: 7px;
 }
 
-/* ── STATUS PILL ── */
+/* ── STATUS ── */
 .status-pill {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   margin: 18px 0 32px;
@@ -140,35 +130,37 @@ body {
   background: linear-gradient(90deg, transparent 10%, rgba(255,85,0,0.4) 50%, transparent 90%);
   border-radius: 8px 8px 0 0;
 }
+.card-heading { font-size: 18px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.015em; }
+.card-sub { font-size: 13px; font-weight: 300; color: var(--muted); margin-bottom: 26px; line-height: 1.6; }
 
-.card-heading {
-  font-size: 18px; font-weight: 600; color: var(--ink);
-  margin-bottom: 6px; letter-spacing: -0.015em;
+/* ── ERROR ── */
+.error-msg {
+  display: none;
+  background: rgba(255,85,0,0.08);
+  border: 1px solid rgba(255,85,0,0.25);
+  border-radius: 5px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 13px; font-weight: 300; color: #FF8855;
+  line-height: 1.5;
 }
-.card-sub {
-  font-size: 13px; font-weight: 300; color: var(--muted);
-  margin-bottom: 26px; line-height: 1.6;
-}
+.error-msg.visible { display: block; }
 
-/* ── SIGN IN WITH APPLE ── */
+/* ── APPLE BTN ── */
 .btn-apple {
   width: 100%; height: 50px;
   background: #fff; color: #000;
   border: none; border-radius: 6px;
   font-family: var(--font); font-size: 15px; font-weight: 500;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: background 0.2s, transform 0.15s;
-  margin-bottom: 20px;
-  letter-spacing: -0.01em;
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+  margin-bottom: 20px; letter-spacing: -0.01em;
 }
 .btn-apple:hover { background: #e8e8e8; transform: translateY(-1px); }
-.btn-apple:active { transform: none; }
-.apple-icon { flex-shrink: 0; }
+.btn-apple:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
 /* ── DIVIDER ── */
-.divider {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
-}
+.divider { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
 .divider-line { flex: 1; height: 1px; background: var(--border); }
 .divider-txt {
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
@@ -196,28 +188,52 @@ body {
   box-shadow: 0 0 0 3px rgba(255,85,0,0.07), 0 0 20px rgba(255,85,0,0.08);
 }
 .form-input::placeholder { color: var(--dim); }
-
 .forgot {
   display: block; text-align: right; margin-top: -6px; margin-bottom: 14px;
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--dim);
-  text-decoration: none; transition: color 0.2s;
+  text-decoration: none; cursor: pointer; transition: color 0.2s;
 }
 .forgot:hover { color: var(--teal); }
-
 .btn-submit {
   width: 100%; height: 50px;
   background: var(--orange); color: #fff;
   border: none; border-radius: 6px;
   font-family: var(--font); font-size: 11px; font-weight: 700;
   letter-spacing: 0.14em; text-transform: uppercase;
-  cursor: pointer;
-  transition: box-shadow 0.25s, transform 0.15s;
+  cursor: pointer; transition: box-shadow 0.25s, transform 0.15s, opacity 0.2s;
 }
 .btn-submit:hover { box-shadow: var(--glow-o); transform: translateY(-1px); }
-.btn-submit:active { transform: none; }
+.btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* ── FOOTER NOTE ── */
+/* ── SIGNED-IN STATE ── */
+.signed-in-card {
+  display: none; text-align: center; padding: 8px 0 4px;
+}
+.signed-in-check {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(0,229,200,0.12); border: 1px solid rgba(0,229,200,0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 22px;
+  box-shadow: var(--glow-t);
+}
+.signed-in-name {
+  font-size: 20px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.02em;
+}
+.signed-in-msg {
+  font-size: 13px; font-weight: 300; color: var(--muted);
+  line-height: 1.7; margin-bottom: 24px;
+}
+.btn-signout {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--dim);
+  background: none; border: 1px solid var(--border);
+  border-radius: 4px; padding: 9px 20px; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-signout:hover { color: var(--ink); border-color: rgba(255,255,255,0.15); }
+
+/* ── FOOTER ── */
 .portal-footer {
   margin-top: 20px; text-align: center;
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
@@ -231,6 +247,7 @@ body {
   position: fixed; bottom: 28px; left: 0; right: 0;
   display: flex; justify-content: center;
   animation: fadein 0.8s ease 0.8s both;
+  pointer-events: none;
 }
 @keyframes fadein { from{opacity:0} to{opacity:1} }
 .chief-inner {
@@ -259,71 +276,72 @@ body {
 
 <div class="portal">
 
-  <!-- Badge -->
   <div class="badge-wrap">
     <div class="badge">
       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- HoneyBadger hex-style badge icon -->
-        <path d="M19 3L33.7 11.5V28.5L19 37L4.3 28.5V11.5L19 3Z"
-              stroke="rgba(255,85,0,0.4)" stroke-width="0.8" fill="none"/>
-        <path d="M19 8L29.4 14V26L19 32L8.6 26V14L19 8Z"
-              stroke="rgba(255,85,0,0.6)" stroke-width="0.6" fill="none"/>
-        <!-- B mark -->
-        <text x="19" y="23.5" text-anchor="middle"
-              font-family="'Space Grotesk', sans-serif" font-weight="700"
-              font-size="13" fill="#FF5500" letter-spacing="-0.5">HB</text>
+        <path d="M19 3L33.7 11.5V28.5L19 37L4.3 28.5V11.5L19 3Z" stroke="rgba(255,85,0,0.4)" stroke-width="0.8" fill="none"/>
+        <path d="M19 8L29.4 14V26L19 32L8.6 26V14L19 8Z" stroke="rgba(255,85,0,0.6)" stroke-width="0.6" fill="none"/>
+        <text x="19" y="23.5" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="13" fill="#FF5500" letter-spacing="-0.5">HB</text>
       </svg>
     </div>
   </div>
 
-  <!-- Wordmark -->
   <div class="wordmark">
     <div class="wordmark-name">Honey<em>Badger</em></div>
     <div class="wordmark-tag">Your AI Chief of Staff</div>
   </div>
 
-  <!-- Status -->
   <div class="status-pill">
     <div class="status-dot"></div>
     <div class="status-text">Private Beta</div>
   </div>
 
-  <!-- Card -->
   <div class="card">
-    <div class="card-heading">Sign in to your account</div>
-    <p class="card-sub">Chief is waiting. Let's get you in.</p>
 
-    <!-- Apple SSO -->
-    <button class="btn-apple" onclick="handleAppleSignIn()">
-      <svg class="apple-icon" width="18" height="18" viewBox="0 0 814 1000" fill="#000">
-        <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-47.4-148.2-112.7C93 2 88 1 83.7 1C83.7 1 68 .8 57.6 11.1c-10.4 10.4-11.1 25.6-11.1 25.6s-.8 139.9 82.3 225.3c83.1 85.4 210.3 100.8 259.2 100.8h9.2c-19.9 52.3-52.6 98.2-85.4 141.5-45.3 59.4-99.3 113.8-163 156.8l-2.4 1.5v11.6c0 4-.2 8.3.4 12.3 15.1 125.8 128.1 196.3 248.7 196.3 94.6 0 174.8-46.4 228.5-95.9l.7-.6c.8-.8 1.9-1.2 2.7-2 6.4-6 13.2-11.7 20.4-17.1 4.8-3.7 9.5-7.4 14.3-11 2.5-1.9 4.8-3.8 7.3-5.7 26.2-20 55-36.8 87.4-44.8 32.9-8.1 68.3-7.8 101.9 2.7 40.1 12.5 73.8 38.4 95.7 75.4 5.6 9.5 10.4 19.7 13.6 30.1l.7 2.3c8.9 29 9.7 58.8 1.1 88.2-10.7 36.5-33.1 67.7-62.7 90.4-29.6 22.6-65.2 34.4-101.4 33.8-50.7-.8-100.2-21.5-134.4-57.7-5.8-6.1-11.1-12.6-15.9-19.5l-.2-.3c-3.2-4.5-6.7-8.8-10.6-12.8-5.1-5.3-10.9-9.5-17.2-12.6-3.1-1.6-6.5-2.8-9.9-3.5-13.6-2.8-28 .3-39.7 8.5-11.7 8.2-19.9 20.6-22.6 34.7-.6 3-.8 6-.7 9 .6 29.6 20 56.1 46.1 70.7C576 946.3 632 960 689.2 960c71.4 0 141.6-20.9 194.5-65.2 59.9-50.2 92.9-121.9 92.9-198.3 0-95.5-62.7-174.1-144.7-214.2C908.8 444.2 846.3 367 788.1 340.9z"/>
-      </svg>
-      Sign in with Apple
-    </button>
+    <!-- Login view -->
+    <div id="loginView">
+      <div class="card-heading">Sign in to your account</div>
+      <p class="card-sub">Chief is waiting. Let's get you in.</p>
 
-    <!-- Divider -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-txt">or email</div>
-      <div class="divider-line"></div>
+      <div class="error-msg" id="errorMsg"></div>
+
+      <button class="btn-apple" id="appleBtn">
+        <svg width="18" height="18" viewBox="0 0 814 1000" fill="#000" style="flex-shrink:0">
+          <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-47.4-148.2-112.7C93 2 88 1 83.7 1 83.7 1 68 .8 57.6 11.1c-10.4 10.4-11.1 25.6-11.1 25.6s-.8 139.9 82.3 225.3c83.1 85.4 210.3 100.8 259.2 100.8h9.2c-19.9 52.3-52.6 98.2-85.4 141.5-45.3 59.4-99.3 113.8-163 156.8l-2.4 1.5v11.6c0 4-.2 8.3.4 12.3 15.1 125.8 128.1 196.3 248.7 196.3 94.6 0 174.8-46.4 228.5-95.9l.7-.6c.8-.8 1.9-1.2 2.7-2 6.4-6 13.2-11.7 20.4-17.1 4.8-3.7 9.5-7.4 14.3-11 2.5-1.9 4.8-3.8 7.3-5.7 26.2-20 55-36.8 87.4-44.8 32.9-8.1 68.3-7.8 101.9 2.7 40.1 12.5 73.8 38.4 95.7 75.4 5.6 9.5 10.4 19.7 13.6 30.1l.7 2.3c8.9 29 9.7 58.8 1.1 88.2-10.7 36.5-33.1 67.7-62.7 90.4-29.6 22.6-65.2 34.4-101.4 33.8-50.7-.8-100.2-21.5-134.4-57.7-5.8-6.1-11.1-12.6-15.9-19.5l-.2-.3c-3.2-4.5-6.7-8.8-10.6-12.8-5.1-5.3-10.9-9.5-17.2-12.6-3.1-1.6-6.5-2.8-9.9-3.5-13.6-2.8-28 .3-39.7 8.5-11.7 8.2-19.9 20.6-22.6 34.7-.6 3-.8 6-.7 9 .6 29.6 20 56.1 46.1 70.7C576 946.3 632 960 689.2 960c71.4 0 141.6-20.9 194.5-65.2 59.9-50.2 92.9-121.9 92.9-198.3 0-95.5-62.7-174.1-144.7-214.2C908.8 444.2 846.3 367 788.1 340.9z"/>
+        </svg>
+        Sign in with Apple
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-txt">or email</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <form id="emailForm">
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input class="form-input" type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <span class="forgot" id="forgotLink">Forgot password?</span>
+        <button class="btn-submit" type="submit" id="submitBtn">Sign in →</button>
+      </form>
     </div>
 
-    <!-- Email form -->
-    <form onsubmit="handleEmailSignIn(event)">
-      <div class="form-group">
-        <label class="form-label">Email address</label>
-        <input class="form-input" type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" required>
-      </div>
-      <a href="#" class="forgot" onclick="handleForgotPassword(event)">Forgot password?</a>
-      <button class="btn-submit" type="submit" id="submitBtn">Sign in →</button>
-    </form>
+    <!-- Signed-in view -->
+    <div class="signed-in-card" id="signedInView">
+      <div class="signed-in-check">✓</div>
+      <div class="signed-in-name" id="signedInName">You're in.</div>
+      <p class="signed-in-msg">Chief is ready when you are.<br>Open HoneyBadger on your iPhone to get started.</p>
+      <button class="btn-signout" id="signOutBtn">Sign out</button>
+    </div>
+
   </div>
 
-  <!-- Footer -->
   <div class="portal-footer">
     Private beta · by <a href="../index.html">Path &amp; Pace</a><br>
     <a href="../legal.html?tab=hb-privacy">Privacy</a> &nbsp;·&nbsp;
@@ -332,13 +350,49 @@ body {
 
 </div>
 
-<!-- Chief quote at bottom -->
 <div class="chief-quote">
   <div class="chief-inner" id="chiefQuote"></div>
 </div>
 
-<script>
-// Pick a Chief quote for the bottom
+<script type="module">
+import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js';
+import { getAnalytics }                           from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js';
+import {
+  getAuth, onAuthStateChanged,
+  signInWithPopup, OAuthProvider,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail, signOut
+} from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+
+// ── Firebase config ──────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyB5XdbbZ620Q3r1SD2oPFc8xm9DSabwYTU",
+  authDomain:        "honeybadger---the-chief.firebaseapp.com",
+  projectId:         "honeybadger---the-chief",
+  storageBucket:     "honeybadger---the-chief.firebasestorage.app",
+  messagingSenderId: "991065444459",
+  appId:             "1:991065444459:web:6fce11f59691d60f1a612e",
+  measurementId:     "G-7HGQ02434F"
+};
+
+const app       = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth      = getAuth(app);
+
+// ── UI refs ──────────────────────────────────────────────────────────────────
+const loginView    = document.getElementById('loginView');
+const signedInView = document.getElementById('signedInView');
+const signedInName = document.getElementById('signedInName');
+const errorMsg     = document.getElementById('errorMsg');
+const appleBtn     = document.getElementById('appleBtn');
+const emailForm    = document.getElementById('emailForm');
+const emailInput   = document.getElementById('emailInput');
+const pwInput      = document.getElementById('pwInput');
+const submitBtn    = document.getElementById('submitBtn');
+const forgotLink   = document.getElementById('forgotLink');
+const signOutBtn   = document.getElementById('signOutBtn');
+
+// ── Chief quote ──────────────────────────────────────────────────────────────
 const QUOTES = [
   "You're more capable than you're giving yourself credit for.",
   "One thing done is worth ten things planned.",
@@ -350,38 +404,113 @@ const QUOTES = [
 document.getElementById('chiefQuote').textContent =
   QUOTES[Math.floor(Math.random() * QUOTES.length)];
 
-// ── Auth stubs ──
-// Wire these to your Firebase / backend when ready.
+// ── Auth state ───────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (user) {
+    showSignedIn(user);
+  } else {
+    showLogin();
+  }
+});
 
-function handleAppleSignIn() {
-  const btn = document.querySelector('.btn-apple');
-  btn.textContent = 'Redirecting…';
-  btn.disabled = true;
-  // TODO: firebase.auth().signInWithPopup(new firebase.auth.OAuthProvider('apple.com'))
-  console.log('Apple sign-in initiated');
+function showSignedIn(user) {
+  const name = user.displayName ? `You're in, ${user.displayName.split(' ')[0]}.` : "You're in.";
+  signedInName.textContent = name;
+  loginView.style.display    = 'none';
+  signedInView.style.display = 'block';
 }
 
-function handleEmailSignIn(e) {
+function showLogin() {
+  loginView.style.display    = 'block';
+  signedInView.style.display = 'none';
+}
+
+// ── Error display ────────────────────────────────────────────────────────────
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.classList.add('visible');
+}
+function clearError() {
+  errorMsg.classList.remove('visible');
+}
+
+function friendlyError(code) {
+  const map = {
+    'auth/invalid-credential':       'Email or password is incorrect.',
+    'auth/user-not-found':           'No account found with that email.',
+    'auth/wrong-password':           'Incorrect password.',
+    'auth/too-many-requests':        'Too many attempts. Try again in a few minutes.',
+    'auth/network-request-failed':   'Network error. Check your connection.',
+    'auth/popup-closed-by-user':     'Sign-in cancelled.',
+    'auth/cancelled-popup-request':  'Sign-in cancelled.',
+    'auth/popup-blocked':            'Pop-up was blocked. Allow pop-ups for this site and try again.',
+  };
+  return map[code] || 'Something went wrong. Try again.';
+}
+
+// ── Sign in with Apple ───────────────────────────────────────────────────────
+appleBtn.addEventListener('click', async () => {
+  clearError();
+  appleBtn.disabled = true;
+  appleBtn.textContent = 'Opening…';
+
+  const provider = new OAuthProvider('apple.com');
+  provider.addScope('name');
+  provider.addScope('email');
+
+  try {
+    await signInWithPopup(auth, provider);
+    // onAuthStateChanged handles the UI transition
+  } catch (err) {
+    showError(friendlyError(err.code));
+    appleBtn.disabled = false;
+    appleBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 814 1000" fill="#000" style="flex-shrink:0"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-47.4-148.2-112.7C93 2 88 1 83.7 1 83.7 1 68 .8 57.6 11.1c-10.4 10.4-11.1 25.6-11.1 25.6s-.8 139.9 82.3 225.3c83.1 85.4 210.3 100.8 259.2 100.8h9.2c-19.9 52.3-52.6 98.2-85.4 141.5-45.3 59.4-99.3 113.8-163 156.8l-2.4 1.5v11.6c0 4-.2 8.3.4 12.3 15.1 125.8 128.1 196.3 248.7 196.3 94.6 0 174.8-46.4 228.5-95.9l.7-.6c.8-.8 1.9-1.2 2.7-2 6.4-6 13.2-11.7 20.4-17.1 4.8-3.7 9.5-7.4 14.3-11 2.5-1.9 4.8-3.8 7.3-5.7 26.2-20 55-36.8 87.4-44.8 32.9-8.1 68.3-7.8 101.9 2.7 40.1 12.5 73.8 38.4 95.7 75.4 5.6 9.5 10.4 19.7 13.6 30.1l.7 2.3c8.9 29 9.7 58.8 1.1 88.2-10.7 36.5-33.1 67.7-62.7 90.4-29.6 22.6-65.2 34.4-101.4 33.8-50.7-.8-100.2-21.5-134.4-57.7-5.8-6.1-11.1-12.6-15.9-19.5l-.2-.3c-3.2-4.5-6.7-8.8-10.6-12.8-5.1-5.3-10.9-9.5-17.2-12.6-3.1-1.6-6.5-2.8-9.9-3.5-13.6-2.8-28 .3-39.7 8.5-11.7 8.2-19.9 20.6-22.6 34.7-.6 3-.8 6-.7 9 .6 29.6 20 56.1 46.1 70.7C576 946.3 632 960 689.2 960c71.4 0 141.6-20.9 194.5-65.2 59.9-50.2 92.9-121.9 92.9-198.3 0-95.5-62.7-174.1-144.7-214.2C908.8 444.2 846.3 367 788.1 340.9z"/></svg> Sign in with Apple`;
+  }
+});
+
+// ── Email / password sign-in ─────────────────────────────────────────────────
+emailForm.addEventListener('submit', async e => {
   e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const email = document.getElementById('emailInput').value;
-  const pw = document.getElementById('pwInput').value;
-  btn.textContent = 'Signing in…';
-  btn.disabled = true;
-  // TODO: firebase.auth().signInWithEmailAndPassword(email, pw)
-  //   .then(() => window.location.href = '/app')
-  //   .catch(err => { btn.textContent = 'Sign in →'; btn.disabled = false; showError(err.message); });
-  console.log('Email sign-in initiated for', email);
-  setTimeout(() => { btn.textContent = 'Sign in →'; btn.disabled = false; }, 2000);
-}
+  clearError();
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Signing in…';
 
-function handleForgotPassword(e) {
-  e.preventDefault();
-  const email = document.getElementById('emailInput').value;
-  if (!email) { document.getElementById('emailInput').focus(); return; }
-  // TODO: firebase.auth().sendPasswordResetEmail(email)
-  alert('If that address is in our system, a reset link is on its way.');
-}
+  try {
+    await signInWithEmailAndPassword(auth, emailInput.value.trim(), pwInput.value);
+    // onAuthStateChanged handles the UI transition
+  } catch (err) {
+    showError(friendlyError(err.code));
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign in →';
+  }
+});
+
+// ── Forgot password ──────────────────────────────────────────────────────────
+forgotLink.addEventListener('click', async () => {
+  clearError();
+  const email = emailInput.value.trim();
+  if (!email) {
+    emailInput.focus();
+    showError('Enter your email address first.');
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showError(''); // clear
+    errorMsg.style.color = '#00E5C8';
+    errorMsg.style.borderColor = 'rgba(0,229,200,0.25)';
+    errorMsg.style.background = 'rgba(0,229,200,0.06)';
+    showError('Reset link sent — check your inbox.');
+  } catch (err) {
+    showError(friendlyError(err.code));
+  }
+});
+
+// ── Sign out ─────────────────────────────────────────────────────────────────
+signOutBtn.addEventListener('click', async () => {
+  await signOut(auth);
+  // onAuthStateChanged handles the UI transition
+});
 </script>
 
 </body>
