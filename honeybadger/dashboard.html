@@ -332,8 +332,9 @@ select.form-input option { background: var(--surf2); }
 .nda-doc h2 { font-size: 11px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink); margin: 20px 0 8px; }
 .nda-doc h2:first-child { margin-top: 0; }
 .nda-doc p { margin-bottom: 10px; }
-.nda-doc ol { padding-left: 20px; }
-.nda-doc ol li { margin-bottom: 6px; }
+.nda-doc ol, .nda-doc ul { padding-left: 20px; }
+.nda-doc ol li, .nda-doc ul li { margin-bottom: 6px; }
+.nda-doc strong { font-weight: 600; }
 .nda-sign-card {
   background: var(--surf); border: 1px solid var(--border); border-radius: 12px;
   padding: 28px 32px; position: relative; overflow: hidden;
@@ -491,69 +492,88 @@ select.form-input option { background: var(--surf2); }
       </div>
       <span class="nda-wordmark">Honey<em>Badger</em></span>
     </div>
-    <div class="nda-eyebrow">Beta Access Required</div>
-    <div class="nda-title">Non-Disclosure Agreement</div>
-    <div class="nda-subtitle">Before you access HoneyBadger beta, please read and sign this agreement. Your signature is recorded securely. You will not be asked to sign again on subsequent logins.</div>
+    <div class="nda-eyebrow">Required Before Access</div>
+    <div class="nda-title">Beta Tester NDA</div>
+    <div class="nda-subtitle">Read this agreement carefully. Once signed, it applies to your account across all HoneyBadger platforms — you won't be asked again.</div>
 
     <div class="nda-doc" id="ndaDocument">
-      <h2>HoneyBadger Beta Non-Disclosure Agreement</h2>
-      <p>This Non-Disclosure Agreement ("Agreement") is entered into as of the date signed below between the owners of HoneyBadger ("Company") and you, the undersigned beta user ("Recipient").</p>
+      <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08)">
+        <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px">HoneyBadger — Beta Tester Non-Disclosure Agreement</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal)">Effective Date: June 1, 2026 · Path &amp; Pace, LLC</div>
+      </div>
 
-      <h2>1. Beta Software</h2>
-      <p>The Company is providing Recipient with access to HoneyBadger beta software, features, and related services ("Beta Software") that are pre-release, confidential, and subject to change or discontinuation at any time without notice.</p>
+      <p>This Non-Disclosure Agreement ("Agreement") is between <strong style="color:var(--ink)">Path &amp; Pace, LLC</strong> ("Company") and the individual signing below ("Tester"). It covers Tester's participation in the private beta of <strong style="color:var(--ink)">HoneyBadger</strong> (the "App").</p>
 
-      <h2>2. Confidentiality</h2>
-      <p>Recipient agrees to keep all information regarding the Beta Software strictly confidential. Recipient shall not disclose, publish, share, post, or distribute any information about the Beta Software — including its features, functionality, design, performance, pricing, or existence — to any third party without prior written consent from the Company.</p>
+      <h2>1. Purpose</h2>
+      <p>Company is giving Tester early access to the App to evaluate it and provide feedback (the "Purpose"). To do that, Company will share confidential information, and this Agreement protects it.</p>
 
-      <h2>3. Restrictions</h2>
-      <p>Recipient shall not:</p>
-      <ol>
-        <li>Screenshot, record, or share visual or audio content of the Beta Software</li>
-        <li>Reverse engineer, decompile, or attempt to extract source code</li>
-        <li>Use the Beta Software for any commercial purpose</li>
-        <li>Share login credentials or grant access to any other person</li>
-        <li>Remove, obscure, or alter any proprietary notices or labels</li>
-      </ol>
+      <h2>2. Confidential Information</h2>
+      <p>"Confidential Information" means any non-public information Tester learns through the beta, including:</p>
+      <ul style="padding-left:18px;margin-bottom:10px">
+        <li>The App itself, its features, design, screens, logo, and user experience;</li>
+        <li>Any code, prompts, architecture, data models, or technical details;</li>
+        <li>Roadmaps, plans, pricing ideas, and business strategy;</li>
+        <li>The existence and details of the beta program; and</li>
+        <li>Anything marked confidential or that a reasonable person would understand to be confidential.</li>
+      </ul>
 
-      <h2>4. Feedback</h2>
-      <p>Any feedback, bug reports, or suggestions provided by Recipient may be used by the Company without restriction, attribution, or compensation of any kind.</p>
+      <h2>3. Tester's Obligations</h2>
+      <p>Tester agrees to:</p>
+      <ul style="padding-left:18px;margin-bottom:10px">
+        <li>Keep Confidential Information secret and not disclose it to anyone;</li>
+        <li>Use it only for the Purpose;</li>
+        <li>Not publish, post, screenshot, demo, stream, or describe the App publicly (including on social media) without Company's prior written permission;</li>
+        <li>Not reverse engineer, decompile, or attempt to extract source code from the App; and</li>
+        <li>Protect it with at least reasonable care.</li>
+      </ul>
 
-      <h2>5. No Warranties</h2>
-      <p>The Beta Software is provided "as is" without warranties of any kind, express or implied. The Company makes no guarantees regarding stability, reliability, data integrity, or continued availability.</p>
+      <h2>4. Exclusions</h2>
+      <p>Confidential Information does not include information that: (a) is or becomes public through no fault of Tester; (b) Tester already lawfully knew without obligation of confidence; (c) is lawfully received from a third party free to disclose it; or (d) is independently developed without using Confidential Information.</p>
 
-      <h2>6. Data</h2>
-      <p>Recipient acknowledges that data created during the beta period may be modified, reset, or deleted at any time. The Company is not liable for any loss of data during the beta period.</p>
+      <h2>5. Feedback and Ownership</h2>
+      <p>If Tester provides feedback, suggestions, bug reports, or ideas ("Feedback"), Tester <strong style="color:var(--ink)">assigns all rights in that Feedback to Company</strong> and agrees Company may use it freely, without restriction, attribution, or compensation, to develop and commercialize the App. Tester acquires no ownership, license, or other right in the App by participating.</p>
 
-      <h2>7. Term & Termination</h2>
-      <p>This Agreement remains in effect for the duration of the beta program and for two (2) years following its conclusion. The Company may terminate Recipient's access at any time, for any reason, without notice. Upon termination, all obligations of confidentiality survive.</p>
+      <h2>6. Recording Feature Acknowledgment</h2>
+      <p>Tester understands the App's recording feature is intended to capture only the user's own voice. Tester agrees not to use it to record any other person without that person's legally required consent, and Tester is solely responsible for compliance with all recording and privacy laws.</p>
 
-      <h2>8. Intellectual Property</h2>
-      <p>All intellectual property rights in the Beta Software, including all updates, modifications, and derivative works, remain exclusively with the Company.</p>
+      <h2>7. Data Handling Acknowledgment</h2>
+      <p>Tester understands that information Tester enters or records in the App may be stored on Company's servers and sent to a third-party AI provider for processing, as described in the App's Privacy Policy. This Agreement protects <strong style="color:var(--ink)">Company's</strong> Confidential Information; it does not expand or guarantee any privacy rights in <strong style="color:var(--ink)">Tester's</strong> own data beyond what the Privacy Policy provides. Tester should not enter information into the App that Tester is not comfortable having stored and processed as described there.</p>
 
-      <h2>9. Governing Law</h2>
-      <p>This Agreement is governed by applicable law. Any disputes shall be resolved in the jurisdiction where the Company is registered.</p>
+      <h2>8. No Warranty</h2>
+      <p>The App is provided "as is" for testing. It may contain bugs, may be unreliable, and its AI-generated output may be inaccurate. Company makes no warranties and is not liable for any loss arising from Tester's use of the beta.</p>
 
-      <h2>10. Entire Agreement</h2>
-      <p>This Agreement constitutes the entire agreement between the parties with respect to its subject matter and supersedes all prior discussions and agreements.</p>
+      <h2>9. Term and Return</h2>
+      <p>This Agreement starts on the Effective Date and continues during the beta and for <strong style="color:var(--ink)">two (2) years</strong> after it ends. On Company's request or at the end of the beta, Tester will stop using the App and delete any Confidential Information in Tester's possession.</p>
+
+      <h2>10. Remedies</h2>
+      <p>Tester agrees that a breach could cause Company harm that money alone can't fix, and that Company may seek injunctive relief in addition to any other remedy available.</p>
+
+      <h2>11. General</h2>
+      <ul style="padding-left:18px;margin-bottom:10px">
+        <li><strong style="color:var(--ink)">Governing law:</strong> This Agreement is governed by the laws of the State of Georgia, and disputes will be handled in the state or federal courts located there.</li>
+        <li><strong style="color:var(--ink)">No partnership:</strong> This Agreement doesn't create any employment, partnership, or joint venture.</li>
+        <li><strong style="color:var(--ink)">Entire agreement:</strong> This is the full agreement on its subject and can only be changed in writing signed by both parties.</li>
+        <li><strong style="color:var(--ink)">Severability:</strong> If any part is unenforceable, the rest stays in effect.</li>
+      </ul>
     </div>
 
     <div class="nda-sign-card">
-      <div class="nda-sign-label">Sign to Continue</div>
+      <div class="nda-sign-label">Tester Signature</div>
       <div class="form-group">
         <label class="form-label">Full Legal Name</label>
         <input class="form-input" id="ndaFullName" placeholder="Enter your full legal name" autocomplete="name" style="font-size:15px">
       </div>
       <div class="nda-agree-row">
         <input type="checkbox" id="ndaAgreeCheck">
-        <label for="ndaAgreeCheck">I have read, understood, and agree to be legally bound by the terms of this Non-Disclosure Agreement. I understand that violation of this agreement may result in legal action.</label>
+        <label for="ndaAgreeCheck">I have read, understood, and agree to be legally bound by every term of this Beta Tester Non-Disclosure Agreement with Path &amp; Pace, LLC. I understand my obligations of confidentiality and that violation may result in legal action including injunctive relief.</label>
       </div>
       <div class="nda-actions">
-        <button id="ndaSignBtn" class="btn-primary" disabled>Sign & Enter HoneyBadger</button>
+        <button id="ndaSignBtn" class="btn-primary" disabled>Sign Agreement &amp; Enter HoneyBadger</button>
         <button id="ndaDeclineBtn" class="btn-ghost">Decline</button>
       </div>
       <div class="nda-error" id="ndaError"></div>
     </div>
-    <div class="nda-footer">Agreements are timestamped and stored securely · Version 1.0</div>
+    <div class="nda-footer">Signature is timestamped and stored securely on your account · Path &amp; Pace, LLC · Effective June 1, 2026</div>
   </div>
 </div>
 
