@@ -1044,10 +1044,13 @@ document.getElementById('formBtn').addEventListener('click', async function() {
         msgEl.style.display = 'none';
       }, 4000);
     } else {
-      throw new Error(json.message || 'send failed');
+      btn.textContent = original; btn.disabled = false;
+      console.warn('Web3Forms:', json);
+      showMsg(json.message ? ('Couldn’t send: ' + json.message) : ('Couldn’t send — email ' + CONTACT_EMAIL + ' directly.'), 'var(--red)');
     }
   } catch (err) {
     btn.textContent = original; btn.disabled = false;
+    console.warn('Contact form error:', err);
     showMsg('Couldn’t send right now — email ' + CONTACT_EMAIL + ' directly.', 'var(--red)');
   }
 });
