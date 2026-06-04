@@ -1215,10 +1215,10 @@ document.getElementById('addForm').addEventListener('submit', async e => {
       colorHex:      '#FF5500',
       lastPhase:     phase,
       dependencyIDs: [],
+      nextAction:    nextAction || '',
+      dueDate:       dueDate || '',
       updatedAt:     serverTimestamp(),
     };
-    if (nextAction) data.nextAction = nextAction;
-    if (dueDate)    data.dueDate    = dueDate;
 
     await setDoc(newRef, data);
     document.getElementById('addModal').style.display = 'none';
