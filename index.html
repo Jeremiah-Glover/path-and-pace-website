@@ -694,17 +694,18 @@ footer {
     <div class="reveal" style="padding-top:6px;">
       <div class="form-group">
         <label class="form-label">Your name</label>
-        <input class="form-field" type="text" placeholder="First and last">
+        <input class="form-field" id="cfName" type="text" placeholder="First and last">
       </div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-field" type="email" placeholder="your@email.com">
+        <input class="form-field" id="cfEmail" type="email" placeholder="your@email.com">
       </div>
       <div class="form-group">
         <label class="form-label">What's on your mind?</label>
-        <textarea class="form-ta" placeholder="Give me the short version..."></textarea>
+        <textarea class="form-ta" id="cfMessage" placeholder="Give me the short version..."></textarea>
       </div>
       <button class="form-submit" id="formBtn">Send it →</button>
+      <div id="formMsg" style="margin-top:12px; font-size:13px; color:var(--muted); display:none;"></div>
     </div>
   </div>
 </section>
@@ -976,16 +977,81 @@ const obs = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // Form
-document.getElementById('formBtn').addEventListener('click', function() {
-  this.textContent = 'Sent ✓';
-  this.style.background = '#0e9e5a';
-  this.style.boxShadow = '0 0 24px rgba(14,158,90,0.45)';
-  setTimeout(() => {
-    this.textContent = 'Send it →';
-    this.style.background = '';
-    this.style.boxShadow = '';
-  }, 3200);
+// ── CONTACT FORM ──────────────────────────────────────────────────────────────
+// Delivers messages to jeremiahglover@path-and-pace.com.
+// To send server-side (visitor needs no mail app): create a free access key at
+// https://web3forms.com for jeremiahglover@path-and-pace.com and paste it below.
+// Until then, the form falls back to opening a pre-filled email to that address.
+const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+const CONTACT_EMAIL = "jeremiahglover@path-and-pace.com";
+
+document.getElementById('formBtn').addEventListener('click', async function() {
+  const btn   = this;
+  const msgEl = document.getElementById('formMsg');
+  const name  = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const body  = document.getElementById('cfMessage').value.trim();
+
+  function showMsg(text, color) {
+    msgEl.textContent = text;
+    msgEl.style.color = color || 'var(--muted)';
+    msgEl.style.display = 'block';
+  }
+
+  // Validate
+  if (!name || !email || !body) { showMsg('Fill in your name, email, and message.', 'var(--red)'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg('That email doesn’t look right.', 'var(--red)'); return; }
+
+  const keyConfigured = WEB3FORMS_ACCESS_KEY && !WEB3FORMS_ACCESS_KEY.startsWith('YOUR_');
+
+  // Fallback: no key yet → open a pre-filled email to the contact address.
+  if (!keyConfigured) {
+    const subject = encodeURIComponent(`Path & Pace inquiry from ${name}`);
+    const mailBody = encodeURIComponent(`${body}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${mailBody}`;
+    showMsg('Opening your email app to send…', 'var(--muted)');
+    return;
+  }
+
+  // Server-side send via Web3Forms.
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = 'Sending…';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `Path & Pace inquiry from ${name}`,
+        from_name: name,
+        name: name,
+        email: email,
+        message: body,
+      }),
+    });
+    const json = await res.json();
+    if (json.success) {
+      btn.textContent = 'Sent ✓';
+      btn.style.background = '#0e9e5a';
+      btn.style.boxShadow = '0 0 24px rgba(14,158,90,0.45)';
+      showMsg('Thanks — your message is on its way.', 'var(--muted)');
+      document.getElementById('cfName').value = '';
+      document.getElementById('cfEmail').value = '';
+      document.getElementById('cfMessage').value = '';
+      setTimeout(() => {
+        btn.textContent = original; btn.style.background = ''; btn.style.boxShadow = ''; btn.disabled = false;
+        msgEl.style.display = 'none';
+      }, 4000);
+    } else {
+      throw new Error(json.message || 'send failed');
+    }
+  } catch (err) {
+    btn.textContent = original; btn.disabled = false;
+    showMsg('Couldn’t send right now — email ' + CONTACT_EMAIL + ' directly.', 'var(--red)');
+  }
 });
+
 </script>
 
 
