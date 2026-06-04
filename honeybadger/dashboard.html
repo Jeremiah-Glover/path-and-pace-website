@@ -679,7 +679,15 @@ let unsubProjects = null;
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.replace('index.html'); return; }
   currentUser = user;
-  await boot(user);
+  try {
+    await boot(user);
+  } catch (err) {
+    // Never leave the loading screen hung if boot throws — reveal the app shell.
+    console.error('boot failed', err);
+    const ls = document.getElementById('loadingScreen');
+    if (ls) { ls.classList.add('fade-out'); setTimeout(() => ls.style.display = 'none', 400); }
+    document.getElementById('app').style.display = 'block';
+  }
 });
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
@@ -709,7 +717,7 @@ async function boot(user) {
   const first = fullName.split(' ')[0];
 
   document.getElementById('greetingText').innerHTML =
-    first ? `Good ${tod}, <em>${first}.</em>` : `Good ${tod}.`;
+    first ? `Good ${tod}, <em>${esc(first)}.</em>` : `Good ${tod}.`;
   document.getElementById('greetingQuote').textContent =
     QUOTES[Math.floor(Math.random() * QUOTES.length)];
   document.getElementById('navUserName').textContent = first || user.email || '';
@@ -754,6 +762,11 @@ function showNDA(user) {
   overlay.style.display = 'block';
   overlay.scrollTop = 0;
 
+  // Bind listeners only once — showNDA can be re-entered (e.g. a transient
+  // checkNDA failure after signing), and stacked handlers would double-fire.
+  if (overlay.dataset.wired === '1') return;
+  overlay.dataset.wired = '1';
+
   function updateSignBtn() {
     signBtn.disabled = !(nameInput.value.trim() && checkbox.checked);
   }
@@ -788,7 +801,8 @@ function showNDA(user) {
 
   document.getElementById('ndaDeclineBtn').addEventListener('click', async () => {
     if (unsubProjects) unsubProjects();
-    await signOut(auth);
+    // Ensure sign-out completes even if it errors, then leave.
+    await signOut(auth).catch(() => {});
     window.location.replace('index.html?declined=1');
   });
 }
