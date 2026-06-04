@@ -690,6 +690,18 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
+// Re-sync when you return to this tab (e.g. right after adding a project in the
+// iOS app). The realtime listener can go idle while the tab is backgrounded, so
+// re-attaching it pulls the latest without a manual refresh. setupProjectsListener
+// unsubscribes the previous listener first, so this won't stack.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' &&
+      currentUser &&
+      document.getElementById('app').style.display === 'block') {
+    setupProjectsListener(currentUser.uid);
+  }
+});
+
 // ── BOOT ─────────────────────────────────────────────────────────────────────
 async function boot(user) {
   // NDA gate — every signed-in user must sign before the dashboard loads.
