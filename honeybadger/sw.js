@@ -1,12 +1,12 @@
 // ── Service worker — installable PWA + offline shell ──────────────────────────
 // Bump CACHE when shipping new assets so clients refresh the cached shell.
-const CACHE = 'hb-portal-v2';
+const CACHE = 'hb-portal-v3';
 const SHELL = [
   'dashboard.html',
   'index.html',
   'chief.png',
   'css/portal.css',
-  'js/firebase.js', 'js/util.js', 'js/store.js', 'js/nda.js', 'js/themes.js', 'js/voice.js',
+  'js/firebase.js', 'js/util.js', 'js/store.js', 'js/nda.js', 'js/themes.js', 'js/voice.js', 'js/push.js',
   'js/overview.js', 'js/projects.js', 'js/chief-chat.js',
   'js/calendar.js', 'js/burrow.js', 'js/vault.js', 'js/account.js', 'js/app.js',
 ];

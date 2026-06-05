@@ -3,6 +3,7 @@ import { auth, signOut, functions, httpsCallable } from './firebase.js';
 import { store, updateSettings, teardown } from './store.js';
 import { esc, debounce, toast } from './util.js';
 import { THEMES, chooseTheme } from './themes.js';
+import { enablePush, pushState, pushSupported } from './push.js';
 
 export function renderAccount() {
   const { settings, profile, user } = store.state;
@@ -64,6 +65,12 @@ export function renderAccount() {
     </div>
 
     <div class="account-card">
+      <div class="account-section-label">Notifications</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">Let Chief send proactive nudges to this browser — blocked projects, stalled work, and check-ins.</div>
+      <button class="btn-ghost" id="acPush">Enable notifications</button>
+    </div>
+
+    <div class="account-card">
       <div class="account-section-label">Data &amp; privacy</div>
       <div class="view-actions">
         <button class="btn-ghost" id="acInstall" style="display:none">Install app</button>
@@ -103,6 +110,22 @@ function wire() {
     await chooseTheme(b.dataset.theme);
     toast('Theme applied — syncing to your phone');
   });
+
+  // Notifications button reflects current permission state.
+  const pushBtn = document.getElementById('acPush');
+  (async () => {
+    if (!(await pushSupported())) { pushBtn.textContent = 'Not supported in this browser'; pushBtn.disabled = true; return; }
+    const st = pushState();
+    if (st === 'granted') { pushBtn.textContent = '🔔 Notifications on'; pushBtn.classList.add('on'); }
+    else if (st === 'denied') { pushBtn.textContent = 'Blocked in browser settings'; pushBtn.disabled = true; }
+  })();
+  pushBtn.onclick = async () => {
+    pushBtn.disabled = true; pushBtn.textContent = 'Enabling…';
+    const ok = await enablePush();
+    pushBtn.disabled = false;
+    pushBtn.textContent = ok ? '🔔 Notifications on' : 'Enable notifications';
+    pushBtn.classList.toggle('on', ok);
+  };
 
   document.getElementById('acExport').onclick = exportData;
   document.getElementById('acSignout').onclick = async () => { teardown(); await signOut(auth); window.location.replace('index.html'); };

@@ -57,6 +57,8 @@ async function boot(user) {
   renderOverview();
   renderCurrent();
   revealApp();
+  // Keep any existing web-push token fresh (no-op if not yet granted).
+  import('./push.js').then(m => m.refreshPushToken()).catch(() => {});
 }
 
 function renderCurrent() {

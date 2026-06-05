@@ -12,6 +12,7 @@ import {
   collection, getDocs, onSnapshot, serverTimestamp, writeBatch
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
+import { getMessaging, getToken, onMessage, isSupported as messagingSupported } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-messaging.js';
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
@@ -33,9 +34,14 @@ export const functions = getFunctions(app, 'us-central1');
 export const FUNCTIONS_BASE =
   "https://us-central1-honeybadger---the-chief.cloudfunctions.net";
 
+// Web push (FCM) — VAPID public key from Firebase Console → Cloud Messaging.
+export const VAPID_KEY =
+  "BGsufg6iFSxMS-22b3qcth-fCL0JAYfmWDhJL6MmvA8C8iSQfe3Ep4JrMV8qypyOZn952MdB1FvjE5tBpK7OZhA";
+export const firebaseConfig_ = firebaseConfig;
+
 export {
   onAuthStateChanged, signOut,
   doc, getDoc, setDoc, updateDoc, deleteDoc,
   collection, getDocs, onSnapshot, serverTimestamp, writeBatch,
-  httpsCallable
+  httpsCallable, getMessaging, getToken, onMessage, messagingSupported
 };

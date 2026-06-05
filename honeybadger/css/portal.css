@@ -384,3 +384,4 @@ select.form-input option { background: var(--surf2); }
 .chat-voice { font-family: var(--mono); font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--dim); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; cursor: pointer; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
 .chat-voice:hover { color: var(--ink); border-color: rgba(255,255,255,0.15); }
 .chat-voice.on { color: var(--teal); border-color: rgba(0,229,200,0.35); }
+.btn-ghost.on { color: var(--teal); border-color: rgba(0,229,200,0.35); }
