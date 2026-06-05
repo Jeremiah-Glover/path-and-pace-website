@@ -224,6 +224,20 @@ select.form-input option { background: var(--surf2); }
 .account-key { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
 .account-val { font-size: 13px; font-weight: 400; }
 
+/* ── VAULT ── */
+.vault-toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.vault-card { background: var(--surf); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; cursor: pointer; transition: border-color 0.15s, transform 0.12s; }
+.vault-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-2px); }
+.vault-card-top { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+.vault-icon { font-size: 16px; }
+.vault-name { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vault-preview { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 12px; min-height: 36px; }
+.vault-preview.dim { color: var(--dim); font-style: italic; }
+.vault-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.vault-tag { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); background: var(--teal-lo); border: 1px solid rgba(0,229,200,0.2); padding: 2px 7px; border-radius: 3px; }
+.vault-date { font-family: var(--mono); font-size: 9px; color: var(--dim); }
+
 /* ── THE BURROW ── */
 .burrow-nav { margin-bottom: 22px; }
 .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
