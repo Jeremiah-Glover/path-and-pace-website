@@ -128,25 +128,8 @@
     </div>
   </nav>
 
-  <!-- OVERVIEW -->
-  <div id="viewOverview" class="view active">
-    <div class="greeting-section">
-      <div class="greeting-text" id="greetingText">Good morning.</div>
-      <div class="greeting-quote" id="greetingQuote"></div>
-    </div>
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-num" id="statActive">—</div><div class="stat-label">Active projects</div></div>
-      <div class="stat-card"><div class="stat-num" id="statHigh">—</div><div class="stat-label">Critical priority</div></div>
-      <div class="stat-card"><div id="statAccess" class="stat-chip chip-teal">Beta</div><div class="stat-label" style="margin-top:4px">Access level</div></div>
-    </div>
-    <div class="section">
-      <div class="section-header">
-        <div class="section-title">Active Projects</div>
-        <button class="section-action" id="seeAllBtn">See all →</button>
-      </div>
-      <div class="projects-grid" id="overviewGrid"><div class="inline-loading">Loading projects…</div></div>
-    </div>
-  </div>
+  <!-- TODAY (built dynamically by overview.js) -->
+  <div id="viewOverview" class="view active"><div class="inline-loading">Loading…</div></div>
 
   <!-- PROJECTS -->
   <div id="viewProjects" class="view">
