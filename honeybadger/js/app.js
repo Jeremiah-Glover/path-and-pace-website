@@ -7,12 +7,14 @@ import { renderProjectsView, wireProjects } from './projects.js';
 import { renderChiefProfile } from './chief.js';
 import { renderChat } from './chief-chat.js';
 import { renderCalendar } from './calendar.js';
+import { renderBurrow } from './burrow.js';
 
 // View registry — each id maps to a render function. Feature phases register more.
 const VIEWS = {
   overview: renderOverview,
   projects: renderProjectsView,
   calendar: renderCalendar,
+  burrow:   renderBurrow,
   chief:    renderChat,
   account:  renderChiefProfile,
 };
