@@ -6,6 +6,7 @@
 import { auth, FUNCTIONS_BASE, functions, httpsCallable } from './firebase.js';
 import { store } from './store.js';
 import { esc } from './util.js';
+import { speak, stop as stopVoice, voiceOn, setVoiceOn } from './voice.js';
 
 const STREAM_URL = `${FUNCTIONS_BASE}/callClaudeStream`;
 let history = [];      // [{role:'user'|'assistant', content}]
@@ -46,8 +47,11 @@ function buildShell() {
   view.innerHTML = `
     <div class="chat-wrap">
       <div class="chat-header">
-        <div class="chat-title" id="chatTitle">Chief</div>
-        <div class="chat-sub">Same brain as your phone · conversations are remembered</div>
+        <div>
+          <div class="chat-title" id="chatTitle">Chief</div>
+          <div class="chat-sub">Same brain as your phone · conversations are remembered</div>
+        </div>
+        <button class="chat-voice ${voiceOn() ? 'on' : ''}" id="chatVoice" title="Speak Chief's replies">${voiceOn() ? '🔊' : '🔇'} Voice</button>
       </div>
       <div class="chat-scroll" id="chatScroll">
         <div class="chat-empty" id="chatEmpty">
@@ -74,6 +78,15 @@ function buildShell() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
   });
   send.addEventListener('click', doSend);
+
+  const vbtn = document.getElementById('chatVoice');
+  vbtn.addEventListener('click', () => {
+    const on = !voiceOn();
+    setVoiceOn(on);
+    vbtn.classList.toggle('on', on);
+    vbtn.innerHTML = on ? '🔊 Voice' : '🔇 Voice';
+    if (!on) stopVoice();
+  });
 
   // Re-render any existing transcript (e.g. switching away and back)
   history.forEach(m => addBubble(m.role, m.content));
@@ -165,8 +178,12 @@ async function doSend() {
   }
 
   bodyEl.parentElement.classList.remove('streaming');
-  if (full.trim()) history.push({ role: 'assistant', content: full.trim() });
-  else history.pop();   // drop the user turn that produced nothing so retry is clean
+  if (full.trim()) {
+    history.push({ role: 'assistant', content: full.trim() });
+    if (voiceOn()) speak(full.trim());
+  } else {
+    history.pop();   // drop the user turn that produced nothing so retry is clean
+  }
   finish();
 }
 
