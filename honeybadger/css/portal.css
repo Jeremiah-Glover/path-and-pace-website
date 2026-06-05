@@ -23,7 +23,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: 100%; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.6; min-height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55; min-height: 100%; }
 
 /* ── LOADING ── */
 #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; transition: opacity 0.4s; }
@@ -59,22 +59,22 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 
 /* ── APP SHELL / VIEWS ── */
 #app { padding-top: var(--nav-h); position: relative; z-index: 1; min-height: 100vh; }
-.view { display: none; padding: 40px 32px 80px; max-width: 1200px; margin: 0 auto; }
+.view { display: none; padding: 30px 40px 72px; max-width: 1340px; margin: 0 auto; }
 .view.active { display: block; animation: view-in 0.35s ease both; }
-.view.wide { max-width: 1480px; }
+.view.wide { max-width: 1560px; }
 @keyframes view-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 
 /* ── GREETING ── */
 .greeting-section { margin-bottom: 36px; }
-.greeting-text { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
+.greeting-text { font-size: 27px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 7px; }
 .greeting-text em { font-style: normal; color: var(--orange); }
 .greeting-quote { font-family: var(--mono); font-size: 12px; letter-spacing: 0.10em; color: var(--muted); max-width: 560px; line-height: 1.6; }
 
 /* ── STATS ── */
 .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 40px; }
-.stat-card { background: var(--surf); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; position: relative; overflow: hidden; }
+.stat-card { background: var(--surf); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; position: relative; overflow: hidden; }
 .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,85,0,0.3), transparent); }
-.stat-num { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; color: var(--orange); margin-bottom: 4px; }
+.stat-num { font-size: 23px; font-weight: 700; letter-spacing: -0.03em; color: var(--orange); margin-bottom: 4px; }
 .stat-num.teal { color: var(--teal); }
 .stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
 .stat-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
@@ -89,8 +89,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 .section-action:hover { text-shadow: var(--glow-t); }
 
 /* ── PROJECTS GRID + CARD ── */
-.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.project-card { background: var(--surf); border: 1px solid var(--border); border-radius: 10px; padding: 22px 20px; cursor: pointer; transition: border-color 0.2s, transform 0.15s; position: relative; overflow: hidden; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.project-card { background: var(--surf); border: 1px solid var(--border); border-radius: 10px; padding: 18px 17px; cursor: pointer; transition: border-color 0.2s, transform 0.15s; position: relative; overflow: hidden; }
 .project-card:hover { border-color: rgba(255,85,0,0.25); transform: translateY(-2px); }
 .project-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity 0.2s; }
 .project-card:hover::after { opacity: 1; }
@@ -98,7 +98,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 .project-card.p-medium::after { background: var(--teal); }
 .project-card.p-low::after    { background: rgba(234,232,248,0.2); }
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
-.card-name { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; flex: 1; }
+.card-name { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; flex: 1; }
 .card-priority-tag { font-family: var(--mono); font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
 .tag-high   { background: var(--orange-lo); color: var(--orange); border: 1px solid rgba(255,85,0,0.25); }
 .tag-medium { background: var(--teal-lo);   color: var(--teal);   border: 1px solid rgba(0,229,200,0.25); }
@@ -122,7 +122,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 
 /* ── VIEW HEADER ── */
 .view-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
-.view-title { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+.view-title { font-size: 23px; font-weight: 700; letter-spacing: -0.03em; }
 .view-sub { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 4px; }
 .view-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -355,3 +355,26 @@ select.form-input option { background: var(--surf2); }
   .form-row { grid-template-columns: 1fr; }
   .view-header { flex-direction: column; }
 }
+
+/* ── BRAIN DUMP NEGOTIATION ── */
+.nego-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.nego-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+.nego-summary { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 4px; max-width: 620px; line-height: 1.5; }
+.nego-card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+.nego-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.nego-name { font-size: 15px; font-weight: 600; }
+.nego-card .edit-label { margin-bottom: 5px; }
+
+/* ── CALENDAR DAY MENU ── */
+.cal-daymenu { position: absolute; z-index: 300; width: 244px; background: var(--surf3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; box-shadow: 0 16px 50px rgba(0,0,0,0.5); }
+.cal-daymenu-title { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+/* ── THEME PICKER ── */
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.theme-swatch { display: flex; flex-direction: column; align-items: stretch; gap: 8px; background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
+.theme-swatch:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.16); }
+.theme-swatch.on { border-color: var(--orange); box-shadow: inset 0 0 0 1px var(--orange); }
+.theme-prev { height: 42px; border-radius: 7px; border: 2px solid; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.theme-dot { width: 12px; height: 12px; border-radius: 50%; }
+.theme-name { font-size: 11px; font-weight: 500; text-align: center; color: var(--muted); }
+.theme-swatch.on .theme-name { color: var(--ink); }

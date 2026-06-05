@@ -9,6 +9,10 @@ import { renderCalendar } from './calendar.js';
 import { renderBurrow } from './burrow.js';
 import { renderVault } from './vault.js';
 import { renderAccount } from './account.js';
+import { applyCachedTheme, applyThemeFromSettings } from './themes.js';
+
+// Apply the last-used theme instantly (before settings load) to avoid a flash.
+applyCachedTheme();
 
 // View registry — each id maps to a render function. Feature phases register more.
 const VIEWS = {
@@ -48,7 +52,8 @@ async function boot(user) {
   await initStore(user);
   if (!booted) { wireProjects(); wireNav(); booted = true; }
 
-  subscribe(() => { renderOverview(); renderCurrent(); });
+  subscribe(() => { applyThemeFromSettings(); renderOverview(); renderCurrent(); });
+  applyThemeFromSettings();
   renderOverview();
   renderCurrent();
   revealApp();

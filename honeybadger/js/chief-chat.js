@@ -3,7 +3,7 @@
 // recall memory the iOS app uses (record:true), so web conversations and phone
 // conversations share one brain. Reads the text/event-stream response via fetch
 // + ReadableStream (EventSource can't POST or send auth headers).
-import { auth, FUNCTIONS_BASE } from './firebase.js';
+import { auth, FUNCTIONS_BASE, functions, httpsCallable } from './firebase.js';
 import { store } from './store.js';
 import { esc } from './util.js';
 
@@ -112,64 +112,71 @@ async function doSend() {
   bodyEl.parentElement.classList.add('streaming');
   bodyEl.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
 
+  const payload = { messages: history, system: systemPrompt(), max_tokens: 600, record: true };
   let full = '';
+  let httpError = null;   // set when the server explicitly rejected (don't retry)
+
+  // 1) Try the streaming endpoint for token-by-token output.
   try {
     const token = await auth.currentUser.getIdToken();
     const res = await fetch(STREAM_URL, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: history,
-        system: systemPrompt(),
-        max_tokens: 600,
-        record: true,
-      }),
+      body: JSON.stringify({ ...payload, fast: false }),
     });
-
-    if (!res.ok) {
-      bodyEl.parentElement.classList.remove('streaming');
-      if (res.status === 403) bodyEl.textContent = "Chief chat needs a premium or tester account.";
-      else if (res.status === 429) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
-      else bodyEl.textContent = `Couldn't reach Chief (${res.status}).`;
-      finish();
-      return;
-    }
+    if (!res.ok) { httpError = res.status; throw new Error('http ' + res.status); }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
-    let buffer = '';
-    let firstToken = true;
-
+    let buffer = '', firstToken = true;
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
-      buffer = lines.pop();   // keep partial line
+      buffer = lines.pop();
       for (const line of lines) {
         const t = line.trim();
         if (!t.startsWith('data:')) continue;
-        const payload = t.slice(5).trim();
-        if (payload === '[DONE]') continue;
+        const p = t.slice(5).trim();
+        if (p === '[DONE]') continue;
         try {
-          const obj = JSON.parse(payload);
-          if (obj.error) { full += `\n[${obj.error}]`; }
-          if (obj.text) {
-            if (firstToken) { bodyEl.textContent = ''; firstToken = false; }
-            full += obj.text;
-            bodyEl.textContent = full;
-            scroll();
-          }
-        } catch (_) { /* ignore keep-alive / partial */ }
+          const obj = JSON.parse(p);
+          if (obj.text) { if (firstToken) { bodyEl.textContent = ''; firstToken = false; } full += obj.text; bodyEl.textContent = full; scroll(); }
+        } catch (_) {}
       }
     }
     if (firstToken) bodyEl.textContent = full || '…';
-  } catch (err) {
-    bodyEl.textContent = full || 'Connection interrupted. Try again.';
+  } catch (streamErr) {
+    // 2) Streaming unavailable (CORS not deployed, network, etc.). Fall back to the
+    //    callable onCall endpoint, which needs no CORS and is always deployed.
+    if (httpError === 403) { bodyEl.textContent = "Chief chat needs a premium or tester account."; bodyEl.parentElement.classList.remove('streaming'); history.pop(); finish(); return; }
+    if (httpError === 429) { bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow."; bodyEl.parentElement.classList.remove('streaming'); history.pop(); finish(); return; }
+    try {
+      const r = await httpsCallable(functions, 'callClaude')(payload);
+      full = r?.data?.text || '';
+      bodyEl.textContent = full || '…';
+    } catch (callErr) {
+      const code = callErr?.code || '';
+      if (code.includes('permission-denied')) bodyEl.textContent = "Chief chat needs a premium or tester account.";
+      else if (code.includes('resource-exhausted')) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
+      else bodyEl.textContent = "Couldn't reach Chief. Check your connection and try again.";
+    }
   }
+
   bodyEl.parentElement.classList.remove('streaming');
   if (full.trim()) history.push({ role: 'assistant', content: full.trim() });
+  else history.pop();   // drop the user turn that produced nothing so retry is clean
   finish();
+}
+
+// Shared helper so the brain-dump (Burrow) can ask Chief without CORS too.
+export async function askChiefJSON(systemText, userText) {
+  const r = await httpsCallable(functions, 'callClaude')({
+    messages: [{ role: 'user', content: userText }],
+    system: systemText, max_tokens: 900, record: false,
+  });
+  return r?.data?.text || '';
 }
 
 function finish() {

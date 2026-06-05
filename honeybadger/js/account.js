@@ -2,11 +2,13 @@
 import { auth, signOut, functions, httpsCallable } from './firebase.js';
 import { store, updateSettings, teardown } from './store.js';
 import { esc, debounce, toast } from './util.js';
+import { THEMES, chooseTheme } from './themes.js';
 
 export function renderAccount() {
   const { settings, profile, user } = store.state;
   const chief = settings?.chief || {};
   const bio = settings?.userBio || {};
+  const activeTheme = settings?.theme?.id || 'night-ops';
   const provider = profile.provider || user?.providerData?.[0]?.providerId || '—';
   const blunt = typeof chief.bluntness === 'number' ? chief.bluntness : 5;
 
@@ -37,6 +39,20 @@ export function renderAccount() {
       </div>
       <div class="edit-field"><div class="edit-label">Bio <span class="edit-save-state" id="s6">saved ✓</span></div>
         <textarea class="form-input" id="aBio" rows="4" placeholder="Context that helps Chief help you">${esc(bio.bio || '')}</textarea></div>
+    </div>
+
+    <div class="chief-card">
+      <div class="account-section-label">Theme</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5">Pick a look — it applies here and syncs to your phone and watch.</div>
+      <div class="theme-grid">
+        ${THEMES.map(t => `<button class="theme-swatch ${t.id === activeTheme ? 'on' : ''}" data-theme="${t.id}" title="${esc(t.name)}">
+          <span class="theme-prev" style="background:${t.bgHex};border-color:${t.tabBGHex}">
+            <span class="theme-dot" style="background:${t.accentHex}"></span>
+            <span class="theme-dot" style="background:${t.secondaryHex}"></span>
+          </span>
+          <span class="theme-name">${esc(t.name)}</span>
+        </button>`).join('')}
+      </div>
     </div>
 
     <div class="account-card">
@@ -80,6 +96,13 @@ function wire() {
   document.getElementById('aFirst').oninput = debounce(e => sBio({ name: e.target.value }).then(() => flash('s4')));
   document.getElementById('aFull').oninput  = debounce(e => sBio({ fullName: e.target.value }).then(() => flash('s5')));
   document.getElementById('aBio').oninput   = debounce(e => sBio({ bio: e.target.value }).then(() => flash('s6')));
+
+  document.querySelectorAll('.theme-swatch').forEach(b => b.onclick = async () => {
+    document.querySelectorAll('.theme-swatch').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    await chooseTheme(b.dataset.theme);
+    toast('Theme applied — syncing to your phone');
+  });
 
   document.getElementById('acExport').onclick = exportData;
   document.getElementById('acSignout').onclick = async () => { teardown(); await signOut(auth); window.location.replace('index.html'); };

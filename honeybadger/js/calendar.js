@@ -128,7 +128,43 @@ function wireDragAndClicks() {
       await updateProject(id, { dueDate: cell.dataset.day });
       toast('Deadline moved');
     });
+    // Click an empty part of a day to schedule a project's deadline there.
+    cell.addEventListener('click', e => {
+      if (e.target.closest('.cal-chip')) return;
+      openDayMenu(cell, cell.dataset.day);
+    });
   });
   document.querySelectorAll('.agenda-row').forEach(r =>
     r.addEventListener('click', () => openDetail(r.dataset.id)));
+}
+
+// Lightweight popover: pick a project to set its deadline to this day.
+function openDayMenu(cell, day) {
+  document.getElementById('calDayMenu')?.remove();
+  const ps = store.state.projects;
+  if (!ps.length) { toast('Create a project first'); return; }
+  const pretty = new Date(day + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  const menu = document.createElement('div');
+  menu.id = 'calDayMenu'; menu.className = 'cal-daymenu';
+  menu.innerHTML = `
+    <div class="cal-daymenu-title">Set a deadline · ${esc(pretty)}</div>
+    <select class="form-input" id="calDayPick">
+      <option value="">Choose a project…</option>
+      ${ps.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}
+    </select>`;
+  const r = cell.getBoundingClientRect();
+  menu.style.top = `${Math.min(window.innerHeight - 130, r.bottom + window.scrollY + 4)}px`;
+  menu.style.left = `${Math.min(window.innerWidth - 260, r.left + window.scrollX)}px`;
+  document.body.appendChild(menu);
+
+  const pick = menu.querySelector('#calDayPick');
+  pick.focus();
+  pick.onchange = async () => {
+    if (!pick.value) return;
+    await updateProject(pick.value, { dueDate: day });
+    menu.remove(); toast('Deadline set');
+  };
+  setTimeout(() => document.addEventListener('click', function off(ev) {
+    if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', off); }
+  }), 0);
 }

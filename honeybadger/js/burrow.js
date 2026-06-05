@@ -3,6 +3,7 @@
 // Capture (brain-dump → projects/tasks), Export (CSV + weekly review).
 import { store, updateProject, createProject, getTasks, updateTask, addTask, taskCounts } from './store.js';
 import { openDetail } from './projects.js';
+import { askChiefJSON } from './chief-chat.js';
 import { esc, priorityClass, toast, PHASES, PRIORITIES } from './util.js';
 
 const PANELS = [
@@ -179,39 +180,137 @@ function bulkPanel(el) {
   document.getElementById('bulkArchive').onclick = () => apply({ phase: 'complete' });
 }
 
-// ── BRAIN DUMP ────────────────────────────────────────────────────────────────
+// ── BRAIN DUMP → CHIEF NEGOTIATION ────────────────────────────────────────────
+// Paste a messy brain dump; Chief summarizes it into structured projects + tasks
+// that you fine-tune in a "negotiation" step before anything is created.
+let proposal = null;   // [{name, priority, phase, nextAction, tasks:[]}]
+
+const PLANNER_SYS =
+  `You are Chief, a sharp chief of staff. Turn the user's brain dump into an organized plan. ` +
+  `Group related thoughts into PROJECTS. For each project give: a short clear name, a priority ` +
+  `(exactly one of: Critical, Important, Nice-to-have), a phase (exactly one of: Ideation, Build, Launch, Maintenance), ` +
+  `a one-line nextAction, and a list of concrete tasks. ` +
+  `Respond with STRICT JSON only — no prose, no markdown fences — in this exact shape: ` +
+  `{"summary":"one or two sentences","projects":[{"name":"","priority":"Important","phase":"Build","nextAction":"","tasks":["",""]}]}`;
+
 function capturePanel(el) {
+  if (proposal) { renderNegotiation(el); return; }
   el.innerHTML = `
-    <div class="capture-help">One project per line. Indent (or start with <code>-</code>) to add tasks under the project above. Example:<br>
-      <code style="display:block;margin-top:8px;color:var(--muted)">Launch landing page<br>&nbsp;&nbsp;- write copy<br>&nbsp;&nbsp;- pick template<br>Record demo video</code></div>
+    <div class="capture-help">Dump everything on your mind — half-thoughts, to-dos, ideas. Chief will summarize it and propose projects &amp; tasks you can fine-tune before anything is created.</div>
     <textarea class="form-input" id="dumpText" rows="12" placeholder="Type or paste your brain dump…" style="margin:16px 0"></textarea>
-    <button class="btn-primary" id="dumpBtn">Create projects &amp; tasks</button>`;
+    <button class="btn-primary" id="dumpBtn">Ask Chief to organize this →</button>`;
 
   document.getElementById('dumpBtn').onclick = async () => {
-    const lines = document.getElementById('dumpText').value.split('\n');
-    const plan = [];   // [{name, tasks:[]}]
-    for (const raw of lines) {
-      if (!raw.trim()) continue;
-      const isTask = /^\s+/.test(raw) || /^\s*-\s+/.test(raw);
-      const text = raw.replace(/^\s*-\s*/, '').trim();
-      if (isTask && plan.length) plan[plan.length - 1].tasks.push(text);
-      else plan.push({ name: text, tasks: [] });
-    }
-    if (!plan.length) { toast('Nothing to create', 'err'); return; }
+    const text = document.getElementById('dumpText').value.trim();
+    if (!text) { toast('Type a brain dump first', 'err'); return; }
     const btn = document.getElementById('dumpBtn');
-    btn.disabled = true; btn.textContent = 'Creating…';
+    btn.disabled = true; btn.textContent = 'Chief is thinking…';
     try {
-      let np = 0, nt = 0;
-      for (const item of plan) {
-        const id = await createProject({ name: item.name });
-        np++;
-        for (const t of item.tasks) { await addTask(id, t); nt++; }
-      }
-      toast(`Created ${np} project(s), ${nt} task(s)`);
-      document.getElementById('dumpText').value = '';
-    } catch (err) { toast('Error: ' + (err.code || err.message), 'err'); }
-    btn.disabled = false; btn.textContent = 'Create projects & tasks';
+      const raw = await askChiefJSON(PLANNER_SYS, text);
+      const parsed = parsePlan(raw);
+      if (!parsed?.projects?.length) throw new Error('no projects');
+      proposal = parsed.projects.map(normalizeProject);
+      proposal._summary = parsed.summary || '';
+      renderNegotiation(el);
+    } catch (err) {
+      btn.disabled = false; btn.textContent = 'Ask Chief to organize this →';
+      toast("Chief couldn't organize that — try again or add more detail.", 'err');
+    }
   };
+}
+
+function parsePlan(raw) {
+  if (!raw) return null;
+  let s = raw.trim().replace(/^```(json)?/i, '').replace(/```$/, '').trim();
+  const a = s.indexOf('{'), b = s.lastIndexOf('}');
+  if (a >= 0 && b > a) s = s.slice(a, b + 1);
+  try { return JSON.parse(s); } catch { return null; }
+}
+function normalizeProject(p) {
+  const pr = PRIORITIES.includes(p.priority) ? p.priority : 'Important';
+  const ph = PHASES.includes(p.phase) ? p.phase : 'Build';
+  return {
+    name: String(p.name || 'Untitled').slice(0, 120),
+    priority: pr, phase: ph,
+    nextAction: String(p.nextAction || ''),
+    tasks: Array.isArray(p.tasks) ? p.tasks.map(t => String(t)).filter(Boolean) : [],
+  };
+}
+
+function renderNegotiation(el) {
+  el.innerHTML = `
+    <div class="nego-head">
+      <div><div class="nego-title">Chief's proposal</div>
+        ${proposal._summary ? `<div class="nego-summary">${esc(proposal._summary)}</div>` : ''}</div>
+      <div class="view-actions">
+        <button class="btn-ghost" id="negoDiscard">Start over</button>
+        <button class="btn-primary" id="negoCreate">Create ${proposal.length} project(s)</button>
+      </div>
+    </div>
+    <div id="negoList">${proposal.map((p, i) => negoCard(p, i)).join('')}</div>`;
+
+  document.getElementById('negoDiscard').onclick = () => { proposal = null; capturePanel(el); };
+  document.getElementById('negoCreate').onclick = () => createFromProposal(el);
+  wireNego(el);
+}
+
+function negoCard(p, i) {
+  return `<div class="nego-card" data-i="${i}">
+    <div class="nego-card-top">
+      <input class="form-input nego-name" value="${esc(p.name)}" data-f="name">
+      <button class="task-del nego-remove" title="Remove project">✕</button>
+    </div>
+    <div class="form-row" style="margin-bottom:10px">
+      <div><div class="edit-label">Priority</div>
+        <select class="form-input" data-f="priority">${PRIORITIES.map(x => `<option ${x === p.priority ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+      <div><div class="edit-label">Phase</div>
+        <select class="form-input" data-f="phase">${PHASES.map(x => `<option ${x === p.phase ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+    </div>
+    <div class="edit-label">Next action</div>
+    <input class="form-input" value="${esc(p.nextAction)}" data-f="nextAction" style="margin-bottom:12px">
+    <div class="edit-label">Tasks</div>
+    <div class="task-list nego-tasks">
+      ${p.tasks.map((t, ti) => `<div class="task-row" data-ti="${ti}">
+        <input class="task-title" value="${esc(t)}" data-tf="title">
+        <button class="task-del" data-tact="del">✕</button></div>`).join('')}
+    </div>
+    <div class="task-add"><input class="form-input nego-newtask" placeholder="Add a task…"><button class="btn-ghost nego-addtask">Add</button></div>
+  </div>`;
+}
+
+function wireNego(el) {
+  el.querySelectorAll('.nego-card').forEach(card => {
+    const i = Number(card.dataset.i);
+    card.querySelectorAll('[data-f]').forEach(inp => inp.onchange = () => { proposal[i][inp.dataset.f] = inp.value; });
+    card.querySelector('.nego-remove').onclick = () => { proposal.splice(i, 1); if (!proposal.length) { proposal = null; capturePanel(el); } else renderNegotiation(el); };
+    card.querySelectorAll('.nego-tasks .task-row').forEach(row => {
+      const ti = Number(row.dataset.ti);
+      row.querySelector('[data-tf=title]').onchange = e => proposal[i].tasks[ti] = e.target.value;
+      row.querySelector('[data-tact=del]').onclick = () => { proposal[i].tasks.splice(ti, 1); renderNegotiation(el); };
+    });
+    const addTaskFn = () => { const inp = card.querySelector('.nego-newtask'); if (inp.value.trim()) { proposal[i].tasks.push(inp.value.trim()); renderNegotiation(el); } };
+    card.querySelector('.nego-addtask').onclick = addTaskFn;
+    card.querySelector('.nego-newtask').onkeydown = e => { if (e.key === 'Enter') addTaskFn(); };
+  });
+}
+
+async function createFromProposal(el) {
+  const btn = document.getElementById('negoCreate');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  try {
+    let np = 0, nt = 0;
+    for (const p of proposal) {
+      const id = await createProject({ name: p.name, priority: p.priority, phase: p.phase, nextAction: p.nextAction });
+      np++;
+      for (const t of p.tasks) { await addTask(id, t); nt++; }
+    }
+    toast(`Created ${np} project(s), ${nt} task(s)`);
+    proposal = null;
+    panel = 'board'; renderBurrow();
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Create projects';
+    toast('Error: ' + (err.code || err.message), 'err');
+  }
 }
 
 // ── EXPORT + WEEKLY REVIEW ────────────────────────────────────────────────────
