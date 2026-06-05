@@ -4,11 +4,11 @@ import { initStore, teardown, subscribe, store } from './store.js';
 import { checkNDA, showNDA } from './nda.js';
 import { renderOverview } from './overview.js';
 import { renderProjectsView, wireProjects } from './projects.js';
-import { renderChiefProfile } from './chief.js';
 import { renderChat } from './chief-chat.js';
 import { renderCalendar } from './calendar.js';
 import { renderBurrow } from './burrow.js';
 import { renderVault } from './vault.js';
+import { renderAccount } from './account.js';
 
 // View registry — each id maps to a render function. Feature phases register more.
 const VIEWS = {
@@ -18,8 +18,17 @@ const VIEWS = {
   burrow:   renderBurrow,
   vault:    renderVault,
   chief:    renderChat,
-  account:  renderChiefProfile,
+  account:  renderAccount,
 };
+
+// PWA: register the service worker + capture the install prompt.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  window.HBInstall = { prompt: () => e.prompt() };
+});
 
 let currentView = 'overview';
 let booted = false;

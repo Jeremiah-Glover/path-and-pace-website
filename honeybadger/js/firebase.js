@@ -11,6 +11,7 @@ import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
   collection, getDocs, onSnapshot, serverTimestamp, writeBatch
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
@@ -26,6 +27,7 @@ export const app  = initializeApp(firebaseConfig);
 try { getAnalytics(app); } catch (_) { /* analytics optional */ }
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
+export const functions = getFunctions(app, 'us-central1');
 
 // Cloud Functions base (matches AppConfig.functionsBaseURL on iOS).
 export const FUNCTIONS_BASE =
@@ -34,5 +36,6 @@ export const FUNCTIONS_BASE =
 export {
   onAuthStateChanged, signOut,
   doc, getDoc, setDoc, updateDoc, deleteDoc,
-  collection, getDocs, onSnapshot, serverTimestamp, writeBatch
+  collection, getDocs, onSnapshot, serverTimestamp, writeBatch,
+  httpsCallable
 };

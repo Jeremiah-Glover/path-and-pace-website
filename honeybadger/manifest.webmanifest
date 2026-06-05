@@ -1,0 +1,14 @@
+{
+  "name": "HoneyBadger Portal",
+  "short_name": "HoneyBadger",
+  "description": "Your AI chief of staff — projects, tasks, and Chief on the web.",
+  "start_url": "dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B0C1A",
+  "theme_color": "#0B0C1A",
+  "icons": [
+    { "src": "chief.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
