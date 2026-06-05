@@ -125,7 +125,8 @@ async function doSend() {
   bodyEl.parentElement.classList.add('streaming');
   bodyEl.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
 
-  const payload = { messages: history, system: systemPrompt(), max_tokens: 600, record: true };
+  // Only send the recent turns — keeps per-call cost bounded as the chat grows.
+  const payload = { messages: history.slice(-16), system: systemPrompt(), max_tokens: 600, record: true };
   let full = '';
   let httpError = null;   // set when the server explicitly rejected (don't retry)
 
