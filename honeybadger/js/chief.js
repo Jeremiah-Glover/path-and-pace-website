@@ -10,8 +10,6 @@ export function renderChiefProfile() {
   const userBio = settings?.userBio || {};
   const chiefName = esc(chief.displayName || 'Chief');
 
-  document.getElementById('chiefViewTitle').textContent = chief.displayName || 'Chief';
-
   let fields = '';
   if (chief.backstory)
     fields += field('Backstory', esc(chief.backstory));

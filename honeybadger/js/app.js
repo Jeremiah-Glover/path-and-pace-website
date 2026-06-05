@@ -5,12 +5,14 @@ import { checkNDA, showNDA } from './nda.js';
 import { renderOverview } from './overview.js';
 import { renderProjectsView, wireProjects } from './projects.js';
 import { renderChiefProfile } from './chief.js';
+import { renderChat } from './chief-chat.js';
 
 // View registry — each id maps to a render function. Feature phases register more.
 const VIEWS = {
   overview: renderOverview,
   projects: renderProjectsView,
-  chief:    renderChiefProfile,
+  chief:    renderChat,
+  account:  renderChiefProfile,
 };
 
 let currentView = 'overview';
