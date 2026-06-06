@@ -12,6 +12,13 @@ export function toDate(v) {
   if (!v) return null;
   if (typeof v.toDate === 'function') return v.toDate();
   if (typeof v === 'number') return new Date(v);
+  if (typeof v === 'string') {
+    // Bare "YYYY-MM-DD" must be parsed as LOCAL midnight, not UTC — otherwise
+    // negative-offset zones render it as the previous day (the calendar
+    // drag-drop off-by-one). Construct the date in local time explicitly.
+    const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  }
   const d = new Date(v);
   return isNaN(d) ? null : d;
 }
