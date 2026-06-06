@@ -76,6 +76,12 @@ function attachListeners(uid) {
     store.state.stats = snap.exists() ? snap.data() : {};
     emit();
   }, () => {}));
+
+  // Settings (theme + persona) — live so theme picks on the phone reflect here
+  // without a reload, and vice-versa.
+  store._unsub.push(onSnapshot(uref('settings', 'app'), snap => {
+    if (snap.exists()) { store.state.settings = snap.data(); emit(); }
+  }, () => {}));
 }
 
 async function refreshTasks(uid) {
