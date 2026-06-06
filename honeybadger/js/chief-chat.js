@@ -122,63 +122,31 @@ async function doSend() {
   sending = true;
   document.getElementById('chatSend').disabled = true;
   const bodyEl = addBubble('assistant', '');
-  bodyEl.parentElement.classList.add('streaming');
+  const bubble = bodyEl.parentElement;
+  bubble.classList.add('streaming');
   bodyEl.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
 
-  // Only send the recent turns — keeps per-call cost bounded as the chat grows.
-  const payload = { messages: history.slice(-16), system: systemPrompt(), max_tokens: 600, record: true };
+  // Agentic path: Chief can act (projects/tasks/vault) and search the web, then
+  // reply. Non-streaming because of the tool loop — worth it for real actions.
   let full = '';
-  let httpError = null;   // set when the server explicitly rejected (don't retry)
-
-  // 1) Try the streaming endpoint for token-by-token output.
   try {
-    const token = await auth.currentUser.getIdToken();
-    const res = await fetch(STREAM_URL, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, fast: false }),
+    const r = await httpsCallable(functions, 'chiefAgent')({
+      messages: history.slice(-16),
+      system: systemPrompt(),
+      max_tokens: 700,
     });
-    if (!res.ok) { httpError = res.status; throw new Error('http ' + res.status); }
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '', firstToken = true;
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-      for (const line of lines) {
-        const t = line.trim();
-        if (!t.startsWith('data:')) continue;
-        const p = t.slice(5).trim();
-        if (p === '[DONE]') continue;
-        try {
-          const obj = JSON.parse(p);
-          if (obj.text) { if (firstToken) { bodyEl.textContent = ''; firstToken = false; } full += obj.text; bodyEl.textContent = full; scroll(); }
-        } catch (_) {}
-      }
-    }
-    if (firstToken) bodyEl.textContent = full || '…';
-  } catch (streamErr) {
-    // 2) Streaming unavailable (CORS not deployed, network, etc.). Fall back to the
-    //    callable onCall endpoint, which needs no CORS and is always deployed.
-    if (httpError === 403) { bodyEl.textContent = "Chief chat needs a premium or tester account."; bodyEl.parentElement.classList.remove('streaming'); history.pop(); finish(); return; }
-    if (httpError === 429) { bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow."; bodyEl.parentElement.classList.remove('streaming'); history.pop(); finish(); return; }
-    try {
-      const r = await httpsCallable(functions, 'callClaude')(payload);
-      full = r?.data?.text || '';
-      bodyEl.textContent = full || '…';
-    } catch (callErr) {
-      const code = callErr?.code || '';
-      if (code.includes('permission-denied')) bodyEl.textContent = "Chief chat needs a premium or tester account.";
-      else if (code.includes('resource-exhausted')) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
-      else bodyEl.textContent = "Couldn't reach Chief. Check your connection and try again.";
-    }
+    full = r?.data?.text || '';
+    const actions = r?.data?.actions || [];
+    bodyEl.textContent = full || '…';
+    if (actions.length) renderActions(bubble, actions);
+  } catch (err) {
+    const code = err?.code || '';
+    if (code.includes('permission-denied')) bodyEl.textContent = "Chief chat needs a premium or tester account.";
+    else if (code.includes('resource-exhausted')) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
+    else bodyEl.textContent = "Couldn't reach Chief. Check your connection and try again.";
   }
 
-  bodyEl.parentElement.classList.remove('streaming');
+  bubble.classList.remove('streaming');
   if (full.trim()) {
     history.push({ role: 'assistant', content: full.trim() });
     if (voiceOn()) speak(full.trim());
@@ -186,6 +154,15 @@ async function doSend() {
     history.pop();   // drop the user turn that produced nothing so retry is clean
   }
   finish();
+}
+
+// Render "Chief did X" confirmation chips under the reply (own row in the scroll).
+function renderActions(bubble, actions) {
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-actions';
+  wrap.innerHTML = actions.map(a => `<span class="chat-action">✓ ${esc(a)}</span>`).join('');
+  bubble.insertAdjacentElement('afterend', wrap);
+  scroll();
 }
 
 // Shared helper so the brain-dump (Burrow) can ask Chief without CORS too.
