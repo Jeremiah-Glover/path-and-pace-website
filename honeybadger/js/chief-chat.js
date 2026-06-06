@@ -141,9 +141,11 @@ async function doSend() {
     if (actions.length) renderActions(bubble, actions);
   } catch (err) {
     const code = err?.code || '';
+    console.error('chiefAgent call failed', code, err?.message, err?.details, err);
     if (code.includes('permission-denied')) bodyEl.textContent = "Chief chat needs a premium or tester account.";
     else if (code.includes('resource-exhausted')) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
-    else bodyEl.textContent = "Couldn't reach Chief. Check your connection and try again.";
+    // Surface the real reason so we can diagnose instead of a generic message.
+    else bodyEl.textContent = `Chief error — ${code || 'unknown'}: ${err?.message || 'no message'}`;
   }
 
   bubble.classList.remove('streaming');
