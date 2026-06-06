@@ -389,3 +389,8 @@ select.form-input option { background: var(--surf2); }
 /* ── CHAT ACTION CHIPS (agentic Chief confirmations) ── */
 .chat-actions { align-self: flex-start; display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 2px 2px; max-width: 86%; }
 .chat-action { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--teal); background: var(--teal-lo); border: 1px solid rgba(0,229,200,0.25); border-radius: 5px; padding: 3px 9px; }
+
+/* ── CALENDAR EVENTS ── */
+.cal-chip-event { background: rgba(139,124,246,0.14); color: #b4a8f6; border-color: rgba(139,124,246,0.3); }
+.cal-daymenu .cal-daymenu-title { margin-bottom: 8px; }
+.cal-daymenu .btn-primary.full { width: 100%; }

@@ -22,6 +22,7 @@ export const store = {
     tasks: {},     // projectID -> [ items ]
     vault: [],
     stats: {},
+    events: [],    // unified calendar events (shared with the phone)
   },
   _subs: new Set(),
   _unsub: [],
@@ -81,6 +82,12 @@ function attachListeners(uid) {
   // without a reload, and vice-versa.
   store._unsub.push(onSnapshot(uref('settings', 'app'), snap => {
     if (snap.exists()) { store.state.settings = snap.data(); emit(); }
+  }, () => {}));
+
+  // Unified calendar events (created on web or mirrored from the phone).
+  store._unsub.push(onSnapshot(ucol('events'), snap => {
+    store.state.events = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    emit();
   }, () => {}));
 }
 
@@ -178,6 +185,32 @@ export async function moveTask(fromPID, taskId, toPID) {
   if (!task) return;
   await writeTasks(fromPID, getTasks(fromPID).filter(t => t.id !== taskId));
   await writeTasks(toPID, [...getTasks(toPID), task]);
+}
+
+// ── CALENDAR EVENTS (unified, shared with the phone) ──────────────────────────
+export async function createEvent(fields) {
+  const ref = doc(ucol('events'));
+  const data = {
+    id: ref.id,
+    title: fields.title || 'Untitled',
+    day: fields.day,                       // "YYYY-MM-DD"
+    startMinute: fields.startMinute ?? -1, // -1 = all-day
+    durationMin: fields.durationMin ?? 0,
+    notes: fields.notes || '',
+    projectId: fields.projectId || '',
+    projectName: fields.projectName || '',
+    source: 'web',
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  };
+  await setDoc(ref, data);
+  return ref.id;
+}
+export async function updateEvent(id, patch) {
+  await updateDoc(uref('events', id), { ...patch, updatedAt: serverTimestamp() });
+}
+export async function deleteEvent(id) {
+  await deleteDoc(uref('events', id));
 }
 
 // ── VAULT ───────────────────────────────────────────────────────────────────
