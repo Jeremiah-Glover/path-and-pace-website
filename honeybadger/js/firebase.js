@@ -17,7 +17,7 @@ import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com
 
 // App Check (reCAPTCHA v3). Paste the site key from Firebase Console → App Check
 // → register this web app. Left blank = App Check stays off (no breakage).
-const APP_CHECK_SITE_KEY = "";
+const APP_CHECK_SITE_KEY = "6Lf9ehEtAAAAADBmvxjsQpYSCekfQyEgNam7U7Ha";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
