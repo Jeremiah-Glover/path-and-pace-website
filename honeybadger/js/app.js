@@ -63,14 +63,15 @@ async function boot(user) {
   import('./push.js').then(m => m.refreshPushToken()).catch(() => {});
 }
 
-// After the Google OAuth bounce-back (?gcal=connected) land on the calendar and
-// confirm. Clean the param so a refresh doesn't repeat the toast.
+// After a calendar OAuth bounce-back (?cal=connected; legacy ?gcal=connected)
+// land on the calendar and confirm. Clean the param so refresh doesn't repeat it.
 function handleGcalLanding() {
-  const g = new URLSearchParams(location.search).get('gcal');
-  if (!g) return;
+  const q = new URLSearchParams(location.search);
+  const c = q.get('cal') || q.get('gcal');
+  if (!c) return;
   history.replaceState(null, '', location.pathname);
-  if (g === 'connected') { switchView('calendar'); toast('Google Calendar connected ✓'); }
-  else toast('Google connection was cancelled or failed');
+  if (c === 'connected') { switchView('calendar'); toast('Calendar connected ✓'); }
+  else toast('Calendar connection was cancelled or failed');
 }
 
 function renderCurrent() {

@@ -13,8 +13,16 @@ const MONTHS = ['January','February','March','April','May','June','July','August
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 // Events mirrored from a device calendar are read-only on the web (edit them at
 // the source). Everything else can be dragged/edited here.
-const MIRRORED = new Set(['apple', 'google']);
-const mirrorLabel = src => src === 'google' ? 'From Google Calendar — edit it there.' : 'From your Apple Calendar — edit it on your phone.';
+const MIRRORED = new Set(['apple', 'google', 'outlook']);
+const mirrorLabel = src =>
+  src === 'google'  ? 'From Google Calendar — edit it there.' :
+  src === 'outlook' ? 'From Outlook — edit it there.' :
+  'From your Apple Calendar — edit it on your phone.';
+// Provider config drives the connect/sync/disconnect buttons.
+const CAL_PROVIDERS = {
+  google:  { label: 'Google',  connectFn: 'googleCalendarConnectUrl',  syncFn: 'syncGoogleCalendar',  disconnectFn: 'disconnectGoogleCalendar',  flag: 'googleCalendarConnectedAt' },
+  outlook: { label: 'Outlook', connectFn: 'outlookCalendarConnectUrl', syncFn: 'syncOutlookCalendar', disconnectFn: 'disconnectOutlookCalendar', flag: 'outlookCalendarConnectedAt' },
+};
 
 // day -> [{kind:'deadline'|'event', id, label, cls, time}]
 function itemsByDay() {
@@ -49,6 +57,7 @@ export function renderCalendar() {
       <div><div class="view-title">Calendar</div><div class="view-sub">Deadlines &amp; events · click a day to add · drag to reschedule</div></div>
       <div class="view-actions">
         <button class="btn-ghost" id="calGoogle">${store.state.profile?.googleCalendarConnectedAt ? 'Google ✓' : 'Connect Google'}</button>
+        <button class="btn-ghost" id="calOutlook">${store.state.profile?.outlookCalendarConnectedAt ? 'Outlook ✓' : 'Connect Outlook'}</button>
         <button class="btn-ghost" id="calToday">Today</button>
         <button class="btn-ghost" id="calPrev">←</button>
         <button class="btn-ghost" id="calNext">→</button>
@@ -62,25 +71,27 @@ export function renderCalendar() {
   document.getElementById('calToday').onclick = () => { viewMonth = startOfMonth(new Date()); renderCalendar(); };
   document.getElementById('calPrev').onclick  = () => { viewMonth = new Date(year, month - 1, 1); renderCalendar(); };
   document.getElementById('calNext').onclick  = () => { viewMonth = new Date(year, month + 1, 1); renderCalendar(); };
-  document.getElementById('calGoogle').onclick = onGoogleClick;
+  document.getElementById('calGoogle').onclick  = e => onCalConnect('google', e);
+  document.getElementById('calOutlook').onclick = e => onCalConnect('outlook', e);
   wireDragAndClicks();
 }
 
-// Connect / sync / disconnect Google Calendar. Connecting opens Google's consent
-// in a popup; once authorized the backend mirrors events into the shared feed.
-async function onGoogleClick(e) {
-  const connected = !!store.state.profile?.googleCalendarConnectedAt;
+// Connect / sync / disconnect a calendar provider. Connecting does a full-page
+// redirect to the provider's consent (no pop-up); the callback bounces back here
+// and the backend mirrors events into the shared feed.
+async function onCalConnect(provider, e) {
+  const cfg = CAL_PROVIDERS[provider];
+  const connected = !!store.state.profile?.[cfg.flag];
   if (!connected) {
-    // Full-page redirect to Google (no pop-up, so nothing for iPad Safari to
-    // block). The callback bounces back to the dashboard when done.
-    toast('Opening Google…');
+    toast(`Opening ${cfg.label}…`);
     try {
-      const r = await httpsCallable(functions, 'googleCalendarConnectUrl')();
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const r = await httpsCallable(functions, cfg.connectFn)({ timeZone: tz });
       const url = r?.data?.url;
       if (url) window.location.href = url;
-      else toast('Could not start Google sign-in');
+      else toast(`Could not start ${cfg.label} sign-in`);
     } catch (err) {
-      toast(`Google connect failed — ${err?.code || err?.message || 'error'}`);
+      toast(`${cfg.label} connect failed — ${err?.code || err?.message || 'error'}`);
     }
     return;
   }
@@ -89,19 +100,19 @@ async function onGoogleClick(e) {
   const menu = document.createElement('div');
   menu.id = 'calDayMenu'; menu.className = 'cal-daymenu';
   menu.innerHTML = `
-    <div class="cal-daymenu-title">Google Calendar</div>
-    <button class="btn-primary full sm" id="gcalSync" style="margin-bottom:8px">Sync now</button>
-    <button class="btn-ghost full sm" id="gcalDisc">Disconnect</button>`;
+    <div class="cal-daymenu-title">${cfg.label} Calendar</div>
+    <button class="btn-primary full sm" id="calSyncNow" style="margin-bottom:8px">Sync now</button>
+    <button class="btn-ghost full sm" id="calDisc">Disconnect</button>`;
   positionMenu(menu, e.target);
   document.body.appendChild(menu);
-  menu.querySelector('#gcalSync').onclick = async () => {
+  menu.querySelector('#calSyncNow').onclick = async () => {
     menu.remove(); toast('Syncing…');
-    try { const r = await httpsCallable(functions, 'syncGoogleCalendar')(); toast(`Synced ${r?.data?.count ?? 0} events`); }
+    try { const r = await httpsCallable(functions, cfg.syncFn)(); toast(`Synced ${r?.data?.count ?? 0} events`); }
     catch (err) { toast(`Sync failed — ${err?.code || 'error'}`); }
   };
-  menu.querySelector('#gcalDisc').onclick = async () => {
+  menu.querySelector('#calDisc').onclick = async () => {
     menu.remove();
-    try { await httpsCallable(functions, 'disconnectGoogleCalendar')(); toast('Disconnected'); }
+    try { await httpsCallable(functions, cfg.disconnectFn)(); toast('Disconnected'); }
     catch (err) { toast(`Disconnect failed — ${err?.code || 'error'}`); }
   };
   dismissOnOutside(menu);
