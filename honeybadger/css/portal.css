@@ -291,8 +291,32 @@ select.form-input option { background: var(--surf2); }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
 .cal-dow { margin-bottom: 6px; }
 .cal-dow-cell { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); text-align: center; padding: 4px 0; }
-.cal-cell { min-height: 96px; background: var(--surf); border: 1px solid var(--border); border-radius: 8px; padding: 6px 7px; display: flex; flex-direction: column; gap: 4px; transition: border-color 0.15s, background 0.15s; }
+.cal-cell { position: relative; overflow: hidden; min-height: 96px; background: var(--surf); border: 1px solid var(--border); border-radius: 8px; padding: 6px 7px; display: flex; flex-direction: column; gap: 4px; transition: border-color 0.15s, background 0.15s; }
 .cal-cell.dim { opacity: 0.4; }
+
+/* ── Weather backdrop (subtle, animated, behind the cell content) ─────────── */
+.cal-wx { position: absolute; inset: 0; z-index: 0; opacity: 0.16; pointer-events: none; }
+.cal-cell > .cal-date, .cal-cell > .cal-chips { position: relative; z-index: 1; }
+.wx-clear .cal-wx   { background: radial-gradient(circle at 75% 22%, #ffcf3d, transparent 60%); animation: wxPulse 5s ease-in-out infinite; }
+.wx-partly .cal-wx  { background: radial-gradient(circle at 78% 20%, #ffcf3d, transparent 45%),
+                        radial-gradient(46px 20px at 25% 60%, #fff, transparent 70%); background-repeat: no-repeat;
+                        animation: wxDrift 16s linear infinite; }
+.wx-cloudy .cal-wx  { background: radial-gradient(44px 19px at 20% 42%, #fff, transparent 70%),
+                        radial-gradient(54px 23px at 62% 60%, #fff, transparent 70%); background-repeat: no-repeat;
+                        animation: wxDrift 14s linear infinite; }
+.wx-fog .cal-wx     { background: linear-gradient(0deg, transparent, rgba(205,205,215,0.9), transparent); background-size: 100% 55%; background-repeat: no-repeat; animation: wxFog 8s ease-in-out infinite alternate; }
+.wx-drizzle .cal-wx { background: repeating-linear-gradient(110deg, rgba(150,190,255,0.8) 0 1px, transparent 1px 9px); animation: wxRain 1.4s linear infinite; }
+.wx-rain .cal-wx    { background: repeating-linear-gradient(115deg, rgba(120,170,255,0.95) 0 1px, transparent 1px 7px); animation: wxRain 0.7s linear infinite; }
+.wx-snow .cal-wx    { background-image: radial-gradient(2px 2px at 20% 10%, #fff, transparent), radial-gradient(2px 2px at 55% 25%, #fff, transparent), radial-gradient(2px 2px at 80% 15%, #fff, transparent), radial-gradient(2px 2px at 35% 60%, #fff, transparent), radial-gradient(2px 2px at 70% 75%, #fff, transparent); animation: wxSnow 6s linear infinite; }
+.wx-storm .cal-wx   { background: repeating-linear-gradient(115deg, rgba(120,170,255,0.95) 0 1px, transparent 1px 7px); animation: wxRain 0.6s linear infinite; }
+.wx-storm .cal-wx::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,200,0.95); opacity: 0; animation: wxFlash 5s steps(1) infinite; }
+@keyframes wxPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+@keyframes wxDrift { from { background-position: -25% 0, 0 0; } to { background-position: 125% 0, 130% 0; } }
+@keyframes wxFog   { from { background-position: 0 20%; } to { background-position: 0 80%; } }
+@keyframes wxRain  { from { background-position: 0 0; } to { background-position: -14px 28px; } }
+@keyframes wxSnow  { from { background-position: 0 -20px; } to { background-position: 0 120%; } }
+@keyframes wxFlash { 0%, 92%, 100% { opacity: 0; } 93%, 95% { opacity: 0.6; } 94% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cal-wx, .cal-wx::after { animation: none !important; } }
 .cal-cell.today { border-color: var(--border-o); box-shadow: inset 0 0 0 1px rgba(255,85,0,0.2); }
 .cal-cell.drop { border-color: var(--teal); background: var(--teal-lo); }
 .cal-date { font-family: var(--mono); font-size: 10px; color: var(--muted); }

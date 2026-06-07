@@ -6,6 +6,7 @@ import { store, updateProject, createEvent, updateEvent, deleteEvent } from './s
 import { openDetail } from './projects.js';
 import { esc, toDate, dayKey, isPast, priorityClass, toast } from './util.js';
 import { functions, httpsCallable } from './firebase.js';
+import { ensureWeather, weatherClassFor } from './weather.js';
 
 let viewMonth = startOfMonth(new Date());
 function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
@@ -78,6 +79,8 @@ export function renderCalendar() {
   document.getElementById('calGoogle').onclick  = e => onCalConnect('google', e);
   document.getElementById('calOutlook').onclick = e => onCalConnect('outlook', e);
   wireDragAndClicks();
+  // Load the weather forecast once, then re-render so the day cells get backdrops.
+  ensureWeather(renderCalendar);
 }
 
 // Connect / sync / disconnect a calendar provider. Connecting does a full-page
@@ -131,7 +134,9 @@ function dayCell(d, byDay, todayKey, dim) {
     return `<div class="cal-chip cal-chip-${it.cls === 'event' ? 'event' : it.cls}${mirror ? ' cal-chip-mirror' : ''}" draggable="${mirror ? 'false' : 'true'}"
           data-kind="${it.kind}" data-id="${esc(it.id)}" data-src="${esc(it.src || '')}" title="${esc(it.label)}">${esc(it.label)}</div>`;
   }).join('');
-  return `<div class="cal-cell ${dim ? 'dim' : ''} ${isToday ? 'today' : ''}" data-day="${k}">
+  const wx = weatherClassFor(k);
+  return `<div class="cal-cell ${dim ? 'dim' : ''} ${isToday ? 'today' : ''} ${wx}" data-day="${k}">
+    ${wx ? '<div class="cal-wx"></div>' : ''}
     <div class="cal-date">${d.getDate()}</div><div class="cal-chips">${chips}</div></div>`;
 }
 
