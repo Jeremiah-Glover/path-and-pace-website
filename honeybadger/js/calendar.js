@@ -5,11 +5,16 @@
 import { store, updateProject, createEvent, updateEvent, deleteEvent } from './store.js';
 import { openDetail } from './projects.js';
 import { esc, toDate, dayKey, isPast, priorityClass, toast } from './util.js';
+import { functions, httpsCallable } from './firebase.js';
 
 let viewMonth = startOfMonth(new Date());
 function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+// Events mirrored from a device calendar are read-only on the web (edit them at
+// the source). Everything else can be dragged/edited here.
+const MIRRORED = new Set(['apple', 'google']);
+const mirrorLabel = src => src === 'google' ? 'From Google Calendar — edit it there.' : 'From your Apple Calendar — edit it on your phone.';
 
 // day -> [{kind:'deadline'|'event', id, label, cls, time}]
 function itemsByDay() {
@@ -21,7 +26,7 @@ function itemsByDay() {
   }
   for (const e of store.state.events) {
     if (!e.day) continue;
-    (map[dayKey(e.day)] ||= []).push({ kind: 'event', id: e.id, label: e.title, cls: 'event', min: e.startMinute });
+    (map[dayKey(e.day)] ||= []).push({ kind: 'event', id: e.id, label: e.title, cls: 'event', min: e.startMinute, src: e.source });
   }
   return map;
 }
@@ -43,6 +48,7 @@ export function renderCalendar() {
     <div class="view-header">
       <div><div class="view-title">Calendar</div><div class="view-sub">Deadlines &amp; events · click a day to add · drag to reschedule</div></div>
       <div class="view-actions">
+        <button class="btn-ghost" id="calGoogle">${store.state.profile?.googleCalendarConnectedAt ? 'Google ✓' : 'Connect Google'}</button>
         <button class="btn-ghost" id="calToday">Today</button>
         <button class="btn-ghost" id="calPrev">←</button>
         <button class="btn-ghost" id="calNext">→</button>
@@ -56,16 +62,56 @@ export function renderCalendar() {
   document.getElementById('calToday').onclick = () => { viewMonth = startOfMonth(new Date()); renderCalendar(); };
   document.getElementById('calPrev').onclick  = () => { viewMonth = new Date(year, month - 1, 1); renderCalendar(); };
   document.getElementById('calNext').onclick  = () => { viewMonth = new Date(year, month + 1, 1); renderCalendar(); };
+  document.getElementById('calGoogle').onclick = onGoogleClick;
   wireDragAndClicks();
+}
+
+// Connect / sync / disconnect Google Calendar. Connecting opens Google's consent
+// in a popup; once authorized the backend mirrors events into the shared feed.
+async function onGoogleClick(e) {
+  const connected = !!store.state.profile?.googleCalendarConnectedAt;
+  if (!connected) {
+    toast('Opening Google…');
+    try {
+      const r = await httpsCallable(functions, 'googleCalendarConnectUrl')();
+      const url = r?.data?.url;
+      if (url) window.open(url, '_blank', 'width=520,height=640');
+      else toast('Could not start Google sign-in');
+    } catch (err) { toast(`Google connect failed — ${err?.code || err?.message || 'error'}`); }
+    return;
+  }
+  // Connected → small menu: Sync now / Disconnect.
+  document.getElementById('calDayMenu')?.remove();
+  const menu = document.createElement('div');
+  menu.id = 'calDayMenu'; menu.className = 'cal-daymenu';
+  menu.innerHTML = `
+    <div class="cal-daymenu-title">Google Calendar</div>
+    <button class="btn-primary full sm" id="gcalSync" style="margin-bottom:8px">Sync now</button>
+    <button class="btn-ghost full sm" id="gcalDisc">Disconnect</button>`;
+  positionMenu(menu, e.target);
+  document.body.appendChild(menu);
+  menu.querySelector('#gcalSync').onclick = async () => {
+    menu.remove(); toast('Syncing…');
+    try { const r = await httpsCallable(functions, 'syncGoogleCalendar')(); toast(`Synced ${r?.data?.count ?? 0} events`); }
+    catch (err) { toast(`Sync failed — ${err?.code || 'error'}`); }
+  };
+  menu.querySelector('#gcalDisc').onclick = async () => {
+    menu.remove();
+    try { await httpsCallable(functions, 'disconnectGoogleCalendar')(); toast('Disconnected'); }
+    catch (err) { toast(`Disconnect failed — ${err?.code || 'error'}`); }
+  };
+  dismissOnOutside(menu);
 }
 
 function dayCell(d, byDay, todayKey, dim) {
   const k = dayKey(d);
   const items = byDay[k] || [];
   const isToday = k === todayKey;
-  const chips = items.map(it =>
-    `<div class="cal-chip cal-chip-${it.cls === 'event' ? 'event' : it.cls}" draggable="true"
-          data-kind="${it.kind}" data-id="${esc(it.id)}" title="${esc(it.label)}">${esc(it.label)}</div>`).join('');
+  const chips = items.map(it => {
+    const mirror = it.kind === 'event' && MIRRORED.has(it.src);
+    return `<div class="cal-chip cal-chip-${it.cls === 'event' ? 'event' : it.cls}${mirror ? ' cal-chip-mirror' : ''}" draggable="${mirror ? 'false' : 'true'}"
+          data-kind="${it.kind}" data-id="${esc(it.id)}" data-src="${esc(it.src || '')}" title="${esc(it.label)}">${esc(it.label)}</div>`;
+  }).join('');
   return `<div class="cal-cell ${dim ? 'dim' : ''} ${isToday ? 'today' : ''}" data-day="${k}">
     <div class="cal-date">${d.getDate()}</div><div class="cal-chips">${chips}</div></div>`;
 }
@@ -74,11 +120,11 @@ function agendaHTML() {
   const now = new Date(); now.setHours(0, 0, 0, 0);
   const rows = [];
   store.state.projects.forEach(p => { const d = toDate(p.dueDate); if (d) rows.push({ d, label: p.name, kind: 'deadline', id: p.id, p }); });
-  store.state.events.forEach(e => { const d = toDate(e.day); if (d) rows.push({ d, label: e.title, kind: 'event', id: e.id }); });
+  store.state.events.forEach(e => { const d = toDate(e.day); if (d) rows.push({ d, label: e.title, kind: 'event', id: e.id, src: e.source }); });
   rows.sort((a, b) => a.d - b.d);
   const future = rows.filter(x => x.d >= now).slice(0, 10);
   const overdue = rows.filter(x => x.d < now && (x.kind !== 'deadline' || x.p?.phase !== 'complete'));
-  const row = (x, over) => `<div class="agenda-row" data-kind="${x.kind}" data-id="${esc(x.id)}">
+  const row = (x, over) => `<div class="agenda-row" data-kind="${x.kind}" data-id="${esc(x.id)}" data-src="${esc(x.src || '')}">
     <div class="agenda-date ${over ? 'overdue' : ''}">${x.d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
     <div class="agenda-name">${esc(x.label)}</div>
     <span class="card-priority-tag ${x.kind === 'event' ? 'tag-medium' : 'tag-' + priorityClass(x.p?.priority)}">${x.kind === 'event' ? 'Event' : esc(x.p?.priority || 'Important')}</span>
@@ -94,14 +140,17 @@ function reschedule(kind, id, day) {
   if (kind === 'event') return updateEvent(id, { day });
   return updateProject(id, { dueDate: day });
 }
-function openItem(kind, id) {
+function openItem(kind, id, src) {
+  if (kind === 'event' && MIRRORED.has(src)) { toast(mirrorLabel(src)); return; }
   if (kind === 'event') editEvent(id);
   else openDetail(id);
 }
 
 function wireDragAndClicks() {
   document.querySelectorAll('.cal-chip').forEach(chip => {
-    chip.addEventListener('click', e => { e.stopPropagation(); openItem(chip.dataset.kind, chip.dataset.id); });
+    const mirror = MIRRORED.has(chip.dataset.src);
+    chip.addEventListener('click', e => { e.stopPropagation(); openItem(chip.dataset.kind, chip.dataset.id, chip.dataset.src); });
+    if (mirror) return; // read-only: no drag
     chip.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', `${chip.dataset.kind}:${chip.dataset.id}`); chip.classList.add('dragging'); });
     chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
   });
@@ -117,7 +166,7 @@ function wireDragAndClicks() {
     });
     cell.addEventListener('click', e => { if (e.target.closest('.cal-chip')) return; openDayMenu(cell, cell.dataset.day); });
   });
-  document.querySelectorAll('.agenda-row').forEach(r => r.addEventListener('click', () => openItem(r.dataset.kind, r.dataset.id)));
+  document.querySelectorAll('.agenda-row').forEach(r => r.addEventListener('click', () => openItem(r.dataset.kind, r.dataset.id, r.dataset.src)));
 }
 
 // Day popover: add an event, or set a project's deadline to this day.
