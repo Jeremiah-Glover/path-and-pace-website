@@ -71,17 +71,15 @@ export function renderCalendar() {
 async function onGoogleClick(e) {
   const connected = !!store.state.profile?.googleCalendarConnectedAt;
   if (!connected) {
-    // Open the window synchronously with the tap so Safari/iPad don't block it as
-    // a non-user-initiated pop-up, then point it at the URL once we have it.
-    const w = window.open('about:blank', '_blank');
+    // Full-page redirect to Google (no pop-up, so nothing for iPad Safari to
+    // block). The callback bounces back to the dashboard when done.
     toast('Opening Google…');
     try {
       const r = await httpsCallable(functions, 'googleCalendarConnectUrl')();
       const url = r?.data?.url;
-      if (!url) { if (w) w.close(); toast('Could not start Google sign-in'); return; }
-      if (w) w.location.href = url; else window.location.href = url; // popup blocked → same tab
+      if (url) window.location.href = url;
+      else toast('Could not start Google sign-in');
     } catch (err) {
-      if (w) w.close();
       toast(`Google connect failed — ${err?.code || err?.message || 'error'}`);
     }
     return;
