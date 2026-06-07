@@ -71,13 +71,19 @@ export function renderCalendar() {
 async function onGoogleClick(e) {
   const connected = !!store.state.profile?.googleCalendarConnectedAt;
   if (!connected) {
+    // Open the window synchronously with the tap so Safari/iPad don't block it as
+    // a non-user-initiated pop-up, then point it at the URL once we have it.
+    const w = window.open('about:blank', '_blank');
     toast('Opening Google…');
     try {
       const r = await httpsCallable(functions, 'googleCalendarConnectUrl')();
       const url = r?.data?.url;
-      if (url) window.open(url, '_blank', 'width=520,height=640');
-      else toast('Could not start Google sign-in');
-    } catch (err) { toast(`Google connect failed — ${err?.code || err?.message || 'error'}`); }
+      if (!url) { if (w) w.close(); toast('Could not start Google sign-in'); return; }
+      if (w) w.location.href = url; else window.location.href = url; // popup blocked → same tab
+    } catch (err) {
+      if (w) w.close();
+      toast(`Google connect failed — ${err?.code || err?.message || 'error'}`);
+    }
     return;
   }
   // Connected → small menu: Sync now / Disconnect.
