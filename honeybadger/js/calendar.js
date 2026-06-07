@@ -130,6 +130,7 @@ function openDayMenu(cell, day) {
   menu.innerHTML = `
     <div class="cal-daymenu-title">${esc(pretty)}</div>
     <input class="form-input" id="calNewEvent" placeholder="New event…" style="margin-bottom:8px">
+    <input class="form-input" id="calNewTime" type="time" style="margin-bottom:8px" title="Optional time — set one to get a reminder on all your devices">
     <button class="btn-primary full sm" id="calAddEvent" style="margin-bottom:12px">Add event</button>
     ${ps.length ? `<div class="cal-daymenu-title">Set a deadline</div>
       <select class="form-input" id="calDayPick"><option value="">Choose a project…</option>
@@ -141,8 +142,11 @@ function openDayMenu(cell, day) {
   titleEl.focus();
   const add = async () => {
     const t = titleEl.value.trim(); if (!t) return;
-    await createEvent({ title: t, day });
-    menu.remove(); toast('Event added');
+    const timeStr = menu.querySelector('#calNewTime')?.value || '';
+    let startMinute = -1;
+    if (timeStr) { const [h, mn] = timeStr.split(':').map(Number); startMinute = h * 60 + mn; }
+    await createEvent({ title: t, day, startMinute });
+    menu.remove(); toast(startMinute >= 0 ? 'Event added · reminder set' : 'Event added');
   };
   menu.querySelector('#calAddEvent').onclick = add;
   titleEl.onkeydown = e => { if (e.key === 'Enter') add(); };
