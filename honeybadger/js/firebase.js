@@ -13,6 +13,11 @@ import {
 } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 import { getMessaging, getToken, onMessage, isSupported as messagingSupported } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-messaging.js';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-app-check.js';
+
+// App Check (reCAPTCHA v3). Paste the site key from Firebase Console → App Check
+// → register this web app. Left blank = App Check stays off (no breakage).
+const APP_CHECK_SITE_KEY = "";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCOAKaCwGGJbq3r0CmdPk7_tn72IkCyBvc",
@@ -25,6 +30,14 @@ const firebaseConfig = {
 };
 
 export const app  = initializeApp(firebaseConfig);
+if (APP_CHECK_SITE_KEY) {
+  try {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider(APP_CHECK_SITE_KEY),
+      isTokenAutoRefreshEnabled: true,
+    });
+  } catch (_) { /* App Check optional until enforced */ }
+}
 try { getAnalytics(app); } catch (_) { /* analytics optional */ }
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
