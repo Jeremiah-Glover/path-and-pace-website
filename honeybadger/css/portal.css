@@ -392,5 +392,6 @@ select.form-input option { background: var(--surf2); }
 
 /* ── CALENDAR EVENTS ── */
 .cal-chip-event { background: rgba(139,124,246,0.14); color: #b4a8f6; border-color: rgba(139,124,246,0.3); }
+.cal-chip-mirror { cursor: default; border-style: dashed; opacity: 0.85; }
 .cal-daymenu .cal-daymenu-title { margin-bottom: 8px; }
 .cal-daymenu .btn-primary.full { width: 100%; }

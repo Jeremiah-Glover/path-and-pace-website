@@ -7,6 +7,7 @@
 //   users/{uid}/settings/app           chief personality + userBio
 //   users/{uid}/vault/{fileId}         vault documents  (added this release)
 //   users/{uid}/stats/summary          energy + streak  (added this release)
+//   users/{uid}/reminders/{id}         cross-device reminders (fired server-side)
 import {
   db, doc, getDoc, setDoc, updateDoc, deleteDoc,
   collection, getDocs, onSnapshot, serverTimestamp
@@ -204,13 +205,45 @@ export async function createEvent(fields) {
     updatedAt: serverTimestamp(),
   };
   await setDoc(ref, data);
+  await syncEventReminder(ref.id, data);
   return ref.id;
 }
 export async function updateEvent(id, patch) {
   await updateDoc(uref('events', id), { ...patch, updatedAt: serverTimestamp() });
+  const ev = { ...(store.state.events.find(e => e.id === id) || {}), ...patch };
+  await syncEventReminder(id, ev);
 }
 export async function deleteEvent(id) {
   await deleteDoc(uref('events', id));
+  await deleteDoc(uref('reminders', id)).catch(() => {});
+}
+
+// ── CROSS-DEVICE REMINDERS ────────────────────────────────────────────────────
+// A timed event writes an absolute fireAt (in THIS browser's timezone) so the
+// fireReminders Cloud Function can alert every device — including the phone — when
+// it's due. All-day / past events carry no reminder.
+function eventFireAt(day, startMinute) {
+  if (startMinute == null || startMinute < 0 || !day) return null;
+  const [y, m, d] = String(day).split('-').map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d, Math.floor(startMinute / 60), startMinute % 60, 0, 0);
+}
+
+export async function syncEventReminder(id, ev) {
+  const fireAt = eventFireAt(ev.day, ev.startMinute);
+  if (!fireAt || fireAt.getTime() < Date.now() - 60000) {
+    await deleteDoc(uref('reminders', id)).catch(() => {});  // no time / in the past
+    return;
+  }
+  const hh = fireAt.getHours(), mm = fireAt.getMinutes();
+  const pretty = `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, '0')} ${hh < 12 ? 'AM' : 'PM'}`;
+  await setDoc(uref('reminders', id), {
+    id, title: ev.title || 'Reminder', body: `Starts at ${pretty}.`,
+    fireAt, sent: false,
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    sourceType: 'event', sourceId: id,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
 }
 
 // ── VAULT ───────────────────────────────────────────────────────────────────

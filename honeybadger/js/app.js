@@ -10,6 +10,7 @@ import { renderBurrow } from './burrow.js';
 import { renderVault } from './vault.js';
 import { renderAccount } from './account.js';
 import { applyCachedTheme, applyThemeFromSettings } from './themes.js';
+import { toast } from './util.js';
 
 // Apply the last-used theme instantly (before settings load) to avoid a flash.
 applyCachedTheme();
@@ -57,8 +58,19 @@ async function boot(user) {
   renderOverview();
   renderCurrent();
   revealApp();
+  handleGcalLanding();
   // Keep any existing web-push token fresh (no-op if not yet granted).
   import('./push.js').then(m => m.refreshPushToken()).catch(() => {});
+}
+
+// After the Google OAuth bounce-back (?gcal=connected) land on the calendar and
+// confirm. Clean the param so a refresh doesn't repeat the toast.
+function handleGcalLanding() {
+  const g = new URLSearchParams(location.search).get('gcal');
+  if (!g) return;
+  history.replaceState(null, '', location.pathname);
+  if (g === 'connected') { switchView('calendar'); toast('Google Calendar connected ✓'); }
+  else toast('Google connection was cancelled or failed');
 }
 
 function renderCurrent() {
