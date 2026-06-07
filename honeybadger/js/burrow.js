@@ -102,7 +102,7 @@ function tasksPanel(el) {
   el.querySelectorAll('.seg button').forEach(b => b.onclick = () => { taskFilter = b.dataset.f; tasksPanel(el); });
   el.querySelectorAll('.task-row').forEach(row => {
     row.querySelector('.task-check').onclick = async () => {
-      const cur = getTasks(row.dataset.pid).find(t => t.id === row.dataset.tid)?.status;
+      const cur = getTasks(row.dataset.pid).find(t => String(t.id) === row.dataset.tid)?.status;
       await updateTask(row.dataset.pid, row.dataset.tid, { status: cur === 'done' ? 'todo' : 'done' });
       tasksPanel(el);
     };

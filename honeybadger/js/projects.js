@@ -202,12 +202,12 @@ function renderTasks(id) {
   el.querySelectorAll('.task-row').forEach(row => {
     const tid = row.dataset.tid;
     row.querySelector('[data-act=check]').onclick = async () => {
-      const cur = getTasks(id).find(t => t.id === tid)?.status;
+      const cur = getTasks(id).find(t => String(t.id) === tid)?.status;
       await updateTask(id, tid, { status: cur === 'done' ? 'todo' : 'done' });
       renderTasks(id);
     };
     row.querySelector('[data-act=status]').onclick = async () => {
-      const cur = getTasks(id).find(t => t.id === tid)?.status || 'todo';
+      const cur = getTasks(id).find(t => String(t.id) === tid)?.status || 'todo';
       await updateTask(id, tid, { status: NEXT_STATUS[cur] });
       renderTasks(id);
     };

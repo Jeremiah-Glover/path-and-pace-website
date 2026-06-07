@@ -151,7 +151,7 @@ async function doSend() {
   bubble.classList.remove('streaming');
   if (full.trim()) {
     history.push({ role: 'assistant', content: full.trim() });
-    if (voiceOn()) speak(full.trim());
+    if (voiceOn()) speak(full.trim(), store.state.settings?.voiceId || 'amy');
   } else {
     history.pop();   // drop the user turn that produced nothing so retry is clean
   }
