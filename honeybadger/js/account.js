@@ -1,7 +1,7 @@
 // ── Account — editable Chief personality + profile, data export, delete ───────
 import { auth, signOut, functions, httpsCallable } from './firebase.js';
 import { store, updateSettings, teardown } from './store.js';
-import { esc, debounce, toast } from './util.js';
+import { esc, debounce, toast, bluntness01 } from './util.js';
 import { THEMES, chooseTheme } from './themes.js';
 import { enablePush, pushState, pushSupported } from './push.js';
 
@@ -11,7 +11,8 @@ export function renderAccount() {
   const bio = settings?.userBio || {};
   const activeTheme = settings?.theme?.id || 'night-ops';
   const provider = profile.provider || user?.providerData?.[0]?.providerId || '—';
-  const blunt = typeof chief.bluntness === 'number' ? chief.bluntness : 5;
+  // Stored 0.0–1.0 (canonical, shared with iOS); the slider shows 0–10.
+  const blunt = Math.round(bluntness01(chief.bluntness) * 10);
 
   const view = document.getElementById('viewAccount');
   view.innerHTML = `
@@ -98,7 +99,7 @@ function wire() {
   document.getElementById('aStyle').oninput = debounce(e => sChief({ communicationStyle: e.target.value }).then(() => flash('s3')));
   const blunt = document.getElementById('aBlunt');
   blunt.oninput  = () => document.getElementById('bVal').textContent = blunt.value + '/10';
-  blunt.onchange = () => sChief({ bluntness: Number(blunt.value) }).then(() => toast('Saved'));
+  blunt.onchange = () => sChief({ bluntness: Number(blunt.value) / 10 }).then(() => toast('Saved'));
 
   document.getElementById('aFirst').oninput = debounce(e => sBio({ name: e.target.value }).then(() => flash('s4')));
   document.getElementById('aFull').oninput  = debounce(e => sBio({ fullName: e.target.value }).then(() => flash('s5')));

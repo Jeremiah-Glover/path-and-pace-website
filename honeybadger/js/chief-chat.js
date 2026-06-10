@@ -5,7 +5,7 @@
 // + ReadableStream (EventSource can't POST or send auth headers).
 import { auth, FUNCTIONS_BASE, functions, httpsCallable } from './firebase.js';
 import { store } from './store.js';
-import { esc } from './util.js';
+import { esc, bluntness01 } from './util.js';
 import { speak, stop as stopVoice, voiceOn, setVoiceOn } from './voice.js';
 
 const STREAM_URL = `${FUNCTIONS_BASE}/callClaudeStream`;
@@ -24,7 +24,7 @@ function systemPrompt() {
   let p = `You are ${name}, ${userName}'s AI chief of staff. At your core you carry honey-badger energy: fearless, unbothered, and you call things exactly as they are. You're warm and genuinely funny — real, observational, well-timed humor, never cheesy and never a pun machine. You're sharp and confident, you keep a clean mouth (no crude language or vulgarity), and when you tease it's playful, never mean. Never sand yourself down to bland 'nice': you still have bite and you still tell the hard truth — you just deliver it like the friend who's unmistakably on their side. Funny first, kind underneath, honest always. Keep replies concise and action-oriented; you help manage projects, tasks, and momentum.`;
   if (c.backstory) p += ` Backstory: ${c.backstory}`;
   if (c.communicationStyle) p += ` Communication style: ${c.communicationStyle}.`;
-  if (typeof c.bluntness === 'number') p += ` Bluntness level: ${c.bluntness}/10.`;
+  if (typeof c.bluntness === 'number') p += ` Bluntness level: ${Math.round(bluntness01(c.bluntness) * 10)}/10.`;
   if (bio.bio) p += ` About ${userName}: ${bio.bio}`;
 
   // Give Chief light awareness of current work so web chat is grounded.
