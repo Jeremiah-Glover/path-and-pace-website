@@ -5,7 +5,7 @@
 // + ReadableStream (EventSource can't POST or send auth headers).
 import { auth, FUNCTIONS_BASE, functions, httpsCallable } from './firebase.js';
 import { store } from './store.js';
-import { esc, bluntness01 } from './util.js';
+import { esc } from './util.js';
 import { speak, stop as stopVoice, voiceOn, setVoiceOn } from './voice.js';
 
 const STREAM_URL = `${FUNCTIONS_BASE}/callClaudeStream`;
@@ -13,27 +13,13 @@ let history = [];      // [{role:'user'|'assistant', content}]
 let built = false;
 let sending = false;
 
-// Build a compact persona from the user's Chief settings so the web Chief sounds
-// identical to the phone. Recall is prepended server-side.
+// Identity, voice charter, backstory, and tone are server-authored (buildPersona
+// in the Cloud Functions, shared with iOS) and prepended there when the request
+// carries serverPersona:true. chiefAgent also injects the live project list
+// server-side, so this sends only the web chat surface framing.
 function systemPrompt() {
-  const s = store.state.settings || {};
-  const c = s.chief || {};
-  const bio = s.userBio || {};
-  const name = c.displayName || 'Chief';
-  const userName = bio.fullName || bio.name || store.state.user?.displayName || 'the user';
-  let p = `You are ${name}, ${userName}'s AI chief of staff. At your core you carry honey-badger energy: fearless, unbothered, and you call things exactly as they are. You're warm and genuinely funny — real, observational, well-timed humor, never cheesy and never a pun machine. You're sharp and confident, you keep a clean mouth (no crude language or vulgarity), and when you tease it's playful, never mean. Never sand yourself down to bland 'nice': you still have bite and you still tell the hard truth — you just deliver it like the friend who's unmistakably on their side. Funny first, kind underneath, honest always. Keep replies concise and action-oriented; you help manage projects, tasks, and momentum.`;
-  if (c.backstory) p += ` Backstory: ${c.backstory}`;
-  if (c.communicationStyle) p += ` Communication style: ${c.communicationStyle}.`;
-  if (typeof c.bluntness === 'number') p += ` Bluntness level: ${Math.round(bluntness01(c.bluntness) * 10)}/10.`;
-  if (bio.bio) p += ` About ${userName}: ${bio.bio}`;
-
-  // Give Chief light awareness of current work so web chat is grounded.
-  const active = store.state.projects.filter(x => x.phase !== 'complete').slice(0, 12);
-  if (active.length) {
-    p += ` Current active projects: ` +
-      active.map(x => `${x.name}${x.nextAction ? ` (next: ${x.nextAction})` : ''}`).join('; ') + '.';
-  }
-  return p;
+  return 'This is the user\'s chat with you in the web portal. ' +
+    'Keep replies concise and action-oriented; you help manage projects, tasks, and momentum.';
 }
 
 export function renderChat() {
@@ -133,6 +119,7 @@ async function doSend() {
     const r = await httpsCallable(functions, 'chiefAgent')({
       messages: history.slice(-16),
       system: systemPrompt(),
+      serverPersona: true,
       max_tokens: 700,
     });
     full = r?.data?.text || '';
