@@ -13,27 +13,13 @@ let history = [];      // [{role:'user'|'assistant', content}]
 let built = false;
 let sending = false;
 
-// Build a compact persona from the user's Chief settings so the web Chief sounds
-// identical to the phone. Recall is prepended server-side.
+// Identity, voice charter, backstory, and tone are server-authored (buildPersona
+// in the Cloud Functions, shared with iOS) and prepended there when the request
+// carries serverPersona:true. chiefAgent also injects the live project list
+// server-side, so this sends only the web chat surface framing.
 function systemPrompt() {
-  const s = store.state.settings || {};
-  const c = s.chief || {};
-  const bio = s.userBio || {};
-  const name = c.displayName || 'Chief';
-  const userName = bio.fullName || bio.name || store.state.user?.displayName || 'the user';
-  let p = `You are ${name}, ${userName}'s AI chief of staff. You are direct, opinionated, warm, and energy-aware. Keep replies concise and action-oriented. You help manage projects, tasks, and momentum.`;
-  if (c.backstory) p += ` Backstory: ${c.backstory}`;
-  if (c.communicationStyle) p += ` Communication style: ${c.communicationStyle}.`;
-  if (typeof c.bluntness === 'number') p += ` Bluntness level: ${c.bluntness}/10.`;
-  if (bio.bio) p += ` About ${userName}: ${bio.bio}`;
-
-  // Give Chief light awareness of current work so web chat is grounded.
-  const active = store.state.projects.filter(x => x.phase !== 'complete').slice(0, 12);
-  if (active.length) {
-    p += ` Current active projects: ` +
-      active.map(x => `${x.name}${x.nextAction ? ` (next: ${x.nextAction})` : ''}`).join('; ') + '.';
-  }
-  return p;
+  return 'This is the user\'s chat with you in the web portal. ' +
+    'Keep replies concise and action-oriented; you help manage projects, tasks, and momentum.';
 }
 
 export function renderChat() {
@@ -133,6 +119,7 @@ async function doSend() {
     const r = await httpsCallable(functions, 'chiefAgent')({
       messages: history.slice(-16),
       system: systemPrompt(),
+      serverPersona: true,
       max_tokens: 700,
     });
     full = r?.data?.text || '';

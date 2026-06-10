@@ -7,6 +7,14 @@ export function esc(str) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// Chief bluntness is canonically 0.0–1.0 in Firestore (the iOS scale).
+// Older web builds wrote 0–10; accept either form and return 0–1.
+export function bluntness01(raw) {
+  if (typeof raw !== 'number' || Number.isNaN(raw)) return 0.5;
+  const v = raw > 1 ? raw / 10 : raw;
+  return Math.min(1, Math.max(0, v));
+}
+
 // Coerce Firestore Timestamp | number | ISO string | '' into a Date or null.
 export function toDate(v) {
   if (!v) return null;
