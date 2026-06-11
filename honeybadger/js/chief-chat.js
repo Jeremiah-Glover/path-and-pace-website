@@ -120,6 +120,7 @@ async function doSend() {
       messages: history.slice(-16),
       system: systemPrompt(),
       serverPersona: true,
+      clientNow: new Date().toString(),
       max_tokens: 700,
     });
     full = r?.data?.text || '';
