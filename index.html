@@ -7,26 +7,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #0D0E1E;
-  --surf:    #12142A;
-  --surf2:   #181B36;
-  --ink:     #EAE8F8;
-  --muted:   rgba(234,232,248,0.42);
-  --dim:     rgba(234,232,248,0.17);
-  --red:     #FF5500;
-  --red-lo:  rgba(255,85,0,0.12);
-  --cyan:    #00E5C8;
-  --cyan-lo: rgba(0,229,200,0.10);
-  --border:  rgba(255,255,255,0.055);
-  --border-r:rgba(255,85,0,0.22);
-  --teal:    #00E5C8;
-  --teal-lo: rgba(0,229,200,0.10);
-  --glow-r:  0 0 14px rgba(255,85,0,0.55), 0 0 48px rgba(255,85,0,0.18);
-  --glow-c:  0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
-  --glow-t:  0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
+  /* Path & Pace — the parent brand. Deliberately NEUTRAL: a calm, near-monochrome
+     slate so that clicking through to HoneyBadger (full orange→teal) lands as a
+     deliberate burst of color. The brand pop lives only on the HoneyBadger gateway. */
+  --bg:      #101215;
+  --surf:    #16191d;
+  --surf2:   #1d2126;
+  --ink:     #E9EBEE;
+  --muted:   rgba(233,235,238,0.46);
+  --dim:     rgba(233,235,238,0.18);
+  --red:     #aab1ba;   /* was Badger orange — neutralized to cool gray */
+  --red-lo:  rgba(170,177,186,0.10);
+  --cyan:    #9aa2ac;   /* was cyan — neutralized */
+  --cyan-lo: rgba(154,162,172,0.09);
+  --border:  rgba(255,255,255,0.06);
+  --border-r:rgba(255,255,255,0.14);
+  --teal:    #9aa2ac;   /* neutralized */
+  --teal-lo: rgba(154,162,172,0.09);
+  --glow-r:  none;
+  --glow-c:  none;
+  --glow-t:  none;
+  /* The HoneyBadger gateway keeps the real brand color — the one pop on the page. */
+  --hb-orange: #FF5500;
+  --hb-teal:   #00E5C8;
+  --hb-glow:   0 0 16px color-mix(in oklab, var(--hb-orange) 55%, transparent), 0 0 50px color-mix(in oklab, var(--hb-teal) 18%, transparent);
   --font: 'Inter', sans-serif;
   --mono: 'Inter', sans-serif;
 }
+/* --- HoneyBadger gateway: the lone colorful element on the neutral parent page.
+   Uses var()/color-mix (not raw rgba) so the neutralizing sweep leaves it alone. --- */
+.nav-link.hb-gate { color: var(--hb-orange); font-weight: 700; }
+.nav-link.hb-gate:hover { color: var(--hb-orange); text-shadow: 0 0 14px color-mix(in oklab, var(--hb-orange) 50%, transparent); }
+.pcard.hb-gate { border-color: var(--hb-orange); box-shadow: var(--hb-glow); position: relative; }
+.pcard.hb-gate::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, color-mix(in oklab, var(--hb-orange) 12%, transparent), color-mix(in oklab, var(--hb-teal) 10%, transparent));
+}
+.pcard.hb-gate:hover { box-shadow: 0 0 22px color-mix(in oklab, var(--hb-orange) 65%, transparent), 0 0 64px color-mix(in oklab, var(--hb-teal) 22%, transparent); }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -46,19 +63,19 @@ body {
 }
 .orb-1 {
   width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(170,177,186,0.07) 0%, transparent 70%);
   top: -160px; right: -120px;
   animation: drift-a 20s ease-in-out infinite;
 }
 .orb-2 {
   width: 540px; height: 540px;
-  background: radial-gradient(circle, rgba(0,229,200,0.14) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(154,162,172,0.06) 0%, transparent 70%);
   bottom: 5%; left: -80px;
   animation: drift-b 26s ease-in-out infinite;
 }
 .orb-3 {
   width: 440px; height: 440px;
-  background: radial-gradient(circle, rgba(122,255,212,0.10) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(154,162,172,0.05) 0%, transparent 70%);
   top: 40%; right: 20%;
   animation: drift-a 32s ease-in-out infinite reverse;
 }
@@ -70,7 +87,7 @@ body {
   left: -320px; top: -320px;
   width: 640px; height: 640px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,85,0,0.055) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(170,177,186,0.04) 0%, transparent 65%);
   pointer-events: none; z-index: 0;
   will-change: transform;
 }
@@ -112,7 +129,7 @@ nav.scrolled {
   font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--red); text-decoration: none;
   padding: 9px 22px;
-  border: 1px solid rgba(255,85,0,0.28); border-radius: 3px;
+  border: 1px solid rgba(170,177,186,0.28); border-radius: 3px;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .nav-cta:hover {
@@ -133,7 +150,7 @@ nav.scrolled {
 .hero::before {
   content: '';
   position: absolute; left: 0; right: 0; height: 1px; top: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,85,0,0.25) 40%, rgba(0,229,200,0.2) 60%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(170,177,186,0.25) 40%, rgba(154,162,172,0.2) 60%, transparent 100%);
   animation: scan 9s linear infinite;
   pointer-events: none;
 }
@@ -173,7 +190,7 @@ nav.scrolled {
 }
 .hi {
   color: var(--red);
-  text-shadow: 0 0 40px rgba(255,85,0,0.45), 0 0 90px rgba(255,85,0,0.18);
+  text-shadow: 0 0 40px rgba(170,177,186,0.45), 0 0 90px rgba(170,177,186,0.18);
 }
 
 .hero-sub {
@@ -236,7 +253,7 @@ nav.scrolled {
 }
 .m-item::after {
   content: '◆'; font-size: 5px; color: var(--red);
-  filter: drop-shadow(0 0 5px rgba(255,85,0,0.9));
+  filter: drop-shadow(0 0 5px rgba(170,177,186,0.9));
 }
 @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
@@ -290,8 +307,8 @@ nav.scrolled {
 .pcard-glow {
   position: absolute; inset: 0; pointer-events: none; opacity: 0;
   transition: opacity 0.35s;
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,85,0,0.06) 0%, transparent 100%);
-  border: 1px solid rgba(255,85,0,0.18);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(170,177,186,0.06) 0%, transparent 100%);
+  border: 1px solid rgba(170,177,186,0.18);
 }
 .pcard:hover .pcard-glow { opacity: 1; }
 
@@ -404,8 +421,8 @@ nav.scrolled {
   transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
 }
 .form-field:focus {
-  border-color: rgba(255,85,0,0.4);
-  box-shadow: 0 0 0 3px rgba(255,85,0,0.07), 0 0 18px rgba(255,85,0,0.08);
+  border-color: rgba(170,177,186,0.4);
+  box-shadow: 0 0 0 3px rgba(170,177,186,0.07), 0 0 18px rgba(170,177,186,0.08);
 }
 .form-field::placeholder { color: var(--dim); }
 .form-ta {
@@ -416,8 +433,8 @@ nav.scrolled {
   transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
 }
 .form-ta:focus {
-  border-color: rgba(255,85,0,0.4);
-  box-shadow: 0 0 0 3px rgba(255,85,0,0.07), 0 0 18px rgba(255,85,0,0.08);
+  border-color: rgba(170,177,186,0.4);
+  box-shadow: 0 0 0 3px rgba(170,177,186,0.07), 0 0 18px rgba(170,177,186,0.08);
 }
 .form-ta::placeholder { color: var(--dim); }
 .form-submit {
@@ -557,7 +574,7 @@ footer {
     Path &amp; Pace
   </a>
   <div class="nav-links">
-    <a href="honeybadger/index.html" target="_blank" class="nav-link">HoneyBadger ↗</a>
+    <a href="honeybadger/index.html" target="_blank" class="nav-link hb-gate">HoneyBadger ↗</a>
     <a href="#contact" class="nav-cta">Get in touch</a>
   </div>
 </nav>
@@ -567,15 +584,15 @@ footer {
 
   <!-- Geometric rings accent -->
   <svg class="hero-rings" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="170" cy="170" r="160" stroke="rgba(255,85,0,0.5)" stroke-width="0.6" fill="none"/>
-    <circle cx="170" cy="170" r="126" stroke="rgba(0,229,200,0.4)" stroke-width="0.4" fill="none"/>
-    <circle cx="170" cy="170" r="92"  stroke="rgba(255,85,0,0.35)" stroke-width="0.5" fill="none" stroke-dasharray="4 8"/>
-    <circle cx="170" cy="170" r="58"  stroke="rgba(0,229,200,0.3)" stroke-width="0.4" fill="none"/>
-    <circle cx="170" cy="170" r="26"  stroke="rgba(255,85,0,0.45)" stroke-width="0.6" fill="none"/>
-    <circle cx="170" cy="170" r="4"   fill="rgba(255,85,0,0.7)"/>
+    <circle cx="170" cy="170" r="160" stroke="rgba(170,177,186,0.5)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="126" stroke="rgba(154,162,172,0.4)" stroke-width="0.4" fill="none"/>
+    <circle cx="170" cy="170" r="92"  stroke="rgba(170,177,186,0.35)" stroke-width="0.5" fill="none" stroke-dasharray="4 8"/>
+    <circle cx="170" cy="170" r="58"  stroke="rgba(154,162,172,0.3)" stroke-width="0.4" fill="none"/>
+    <circle cx="170" cy="170" r="26"  stroke="rgba(170,177,186,0.45)" stroke-width="0.6" fill="none"/>
+    <circle cx="170" cy="170" r="4"   fill="rgba(170,177,186,0.7)"/>
     <!-- Crosshairs -->
-    <line x1="170" y1="4"   x2="170" y2="336" stroke="rgba(255,85,0,0.12)" stroke-width="0.5"/>
-    <line x1="4"   y1="170" x2="336" y2="170" stroke="rgba(255,85,0,0.12)" stroke-width="0.5"/>
+    <line x1="170" y1="4"   x2="170" y2="336" stroke="rgba(170,177,186,0.12)" stroke-width="0.5"/>
+    <line x1="4"   y1="170" x2="336" y2="170" stroke="rgba(170,177,186,0.12)" stroke-width="0.5"/>
   </svg>
 
   <div class="hero-tag">Indie Product Studio &nbsp;·&nbsp; Atlanta, GA</div>
@@ -616,7 +633,7 @@ footer {
     </div>
     <div class="p-grid">
 
-      <a href="honeybadger/index.html" target="_blank" class="pcard reveal">
+      <a href="honeybadger/index.html" target="_blank" class="pcard reveal hb-gate">
         <div class="pcard-glow"></div>
         <div class="pcard-img">
           <img src="honeybadger/chief.png" alt="HoneyBadger">
@@ -631,15 +648,15 @@ footer {
       </a>
 
       <a href="legal.html?tab=freq-privacy" class="pcard reveal">
-        <div class="pcard-glow" style="background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,229,200,0.06) 0%, transparent 100%); border-color: rgba(0,229,200,0.18);"></div>
+        <div class="pcard-glow" style="background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(154,162,172,0.06) 0%, transparent 100%); border-color: rgba(154,162,172,0.18);"></div>
         <div class="pcard-img" style="background:#090D12;">
           <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2">
-            <circle cx="36" cy="36" r="32" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="22" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="12" stroke="#00E5C8" stroke-width="0.5" fill="none"/>
-            <circle cx="36" cy="36" r="3"  fill="#00E5C8"/>
-            <line x1="36" y1="4"  x2="36" y2="68" stroke="#00E5C8" stroke-width="0.3" opacity="0.4"/>
-            <line x1="4"  y1="36" x2="68" y2="36" stroke="#00E5C8" stroke-width="0.3" opacity="0.4"/>
+            <circle cx="36" cy="36" r="32" stroke="#9aa2ac" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="22" stroke="#9aa2ac" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="12" stroke="#9aa2ac" stroke-width="0.5" fill="none"/>
+            <circle cx="36" cy="36" r="3"  fill="#9aa2ac"/>
+            <line x1="36" y1="4"  x2="36" y2="68" stroke="#9aa2ac" stroke-width="0.3" opacity="0.4"/>
+            <line x1="4"  y1="36" x2="68" y2="36" stroke="#9aa2ac" stroke-width="0.3" opacity="0.4"/>
           </svg>
           <div class="pcard-fade"></div>
         </div>
