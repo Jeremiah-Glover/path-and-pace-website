@@ -2,14 +2,24 @@
 import { auth, signOut, functions, httpsCallable } from './firebase.js';
 import { store, updateSettings, teardown } from './store.js';
 import { esc, debounce, toast, bluntness01 } from './util.js';
-import { THEMES, chooseTheme } from './themes.js';
+import { THEMES, chooseTheme, chooseCustomTheme } from './themes.js';
 import { enablePush, pushState, pushSupported } from './push.js';
+
+// A labelled native color picker for the custom-theme builder.
+function customColorField(label, id, val) {
+  const v = /^#[0-9a-fA-F]{6}$/.test(val || '') ? val : '#000000';
+  return `<label style="display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)">
+    <input type="color" id="${id}" value="${v}" style="width:34px;height:30px;border:none;background:none;cursor:pointer;border-radius:6px">
+    ${esc(label)}
+  </label>`;
+}
 
 export function renderAccount() {
   const { settings, profile, user } = store.state;
   const chief = settings?.chief || {};
   const bio = settings?.userBio || {};
-  const activeTheme = settings?.theme?.id || 'night-ops';
+  const activeTheme = settings?.theme?.id || 'hb-warm-white';
+  const th = settings?.theme || {};
   const provider = profile.provider || user?.providerData?.[0]?.providerId || '—';
   // Stored 0.0–1.0 (canonical, shared with iOS); the slider shows 0–10.
   const blunt = Math.round(bluntness01(chief.bluntness) * 10);
@@ -55,6 +65,25 @@ export function renderAccount() {
           <span class="theme-name">${esc(t.name)}</span>
         </button>`).join('')}
       </div>
+
+      <!-- Custom theme — mirrors the app's custom-theme option; syncs to phone/watch. -->
+      <details class="theme-custom" ${activeTheme === 'custom' ? 'open' : ''} style="margin-top:18px">
+        <summary class="account-section-label" style="cursor:pointer;list-style:none">＋ Build a custom theme</summary>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px">
+          ${customColorField('Background', 'cBg', th.bgHex || '#0b0c1a')}
+          ${customColorField('Surface / tab bar', 'cTab', th.tabBGHex || '#10121f')}
+          ${customColorField('Accent', 'cAccent', th.accentHex || '#ff5500')}
+          ${customColorField('Secondary', 'cSecondary', th.secondaryHex || '#00e5c8')}
+          ${customColorField('Text', 'cText', th.textHex || '#eae8f8')}
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)">
+            <input type="checkbox" id="cDark" ${(th.isDark ?? true) ? 'checked' : ''}> Dark theme
+          </label>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:14px">
+          <input class="form-input" id="cName" placeholder="Name your theme" value="${esc(th.id === 'custom' ? (th.name || '') : '')}" style="flex:1">
+          <button class="btn-ghost" id="cApply">Apply custom</button>
+        </div>
+      </details>
     </div>
 
     <div class="account-card">
@@ -111,6 +140,22 @@ function wire() {
     await chooseTheme(b.dataset.theme);
     toast('Theme applied — syncing to your phone');
   });
+
+  // Custom theme builder — apply + sync a user-built palette (same as the app's option).
+  const cApply = document.getElementById('cApply');
+  if (cApply) cApply.onclick = async () => {
+    await chooseCustomTheme({
+      name:         document.getElementById('cName').value,
+      bgHex:        document.getElementById('cBg').value,
+      tabBGHex:     document.getElementById('cTab').value,
+      accentHex:    document.getElementById('cAccent').value,
+      secondaryHex: document.getElementById('cSecondary').value,
+      textHex:      document.getElementById('cText').value,
+      isDark:       document.getElementById('cDark').checked,
+    });
+    document.querySelectorAll('.theme-swatch').forEach(x => x.classList.remove('on'));
+    toast('Custom theme applied — syncing to your phone');
+  };
 
   // Notifications button reflects current permission state.
   const pushBtn = document.getElementById('acPush');

@@ -6,6 +6,14 @@
 import { updateSettings, store } from './store.js';
 
 export const THEMES = [
+  // Honeybadger brand palettes — the orange→teal arc, shared 1:1 with the iOS app
+  // (OKLCH source converted to sRGB hex). App default = Deep Teal Ink; web = Clean Warm White.
+  { id: 'hb-teal-ink',   name: 'Deep Teal Ink',    bgHex: '#00131b', tabBGHex: '#021e27', accentHex: '#e25d1d', secondaryHex: '#00c4c4', textHex: '#eef7f9', isDark: true },
+  { id: 'hb-near-black', name: 'Near-Black',        bgHex: '#050201', tabBGHex: '#090503', accentHex: '#db5612', secondaryHex: '#00a0a2', textHex: '#faf3f1', isDark: true },
+  { id: 'hb-espresso',   name: 'Warm Espresso',     bgHex: '#150a05', tabBGHex: '#21150f', accentHex: '#e15f0a', secondaryHex: '#00adae', textHex: '#f7f1e9', isDark: true },
+  { id: 'hb-warm-white', name: 'Clean Warm White',  bgHex: '#f8f5ef', tabBGHex: '#ffffff', accentHex: '#cd4900', secondaryHex: '#008082', textHex: '#1e130e', isDark: false },
+  { id: 'hb-sand',       name: 'Warm Sand',         bgHex: '#eee3d3', tabBGHex: '#fbf4ea', accentHex: '#c64100', secondaryHex: '#007a7c', textHex: '#302017', isDark: false },
+  { id: 'hb-slate',      name: 'Cool Slate',        bgHex: '#e7ecf0', tabBGHex: '#ffffff', accentHex: '#cd4900', secondaryHex: '#007982', textHex: '#141b24', isDark: false },
   { id: 'night-ops', name: 'Night Ops', bgHex: '#04080a', tabBGHex: '#111a1c', accentHex: '#bf4b17', secondaryHex: '#2a6b78', textHex: '#f0ede8', isDark: true },
   { id: 'slate',     name: 'Slate',     bgHex: '#28333b', tabBGHex: '#313e47', accentHex: '#e0843c', secondaryHex: '#6fa6b3', textHex: '#eef2f4', isDark: true },
   { id: 'dusk',      name: 'Dusk',      bgHex: '#2c2738', tabBGHex: '#363046', accentHex: '#b487d6', secondaryHex: '#6b8ca0', textHex: '#ece8f2', isDark: true },
@@ -17,7 +25,8 @@ export const THEMES = [
   { id: 'fog',       name: 'Fog',       bgHex: '#dadee1', tabBGHex: '#ced3d7', accentHex: '#4a6b85', secondaryHex: '#6f7d86', textHex: '#262b30', isDark: false },
   { id: 'solar',     name: 'Solar',     bgHex: '#faf6f0', tabBGHex: '#f0ebe2', accentHex: '#c84a12', secondaryHex: '#1a6b7a', textHex: '#1c1712', isDark: false },
 ];
-const DEFAULT = THEMES[0];
+// Web default is Clean Warm White (the iOS app defaults to Deep Teal Ink natively).
+const DEFAULT = THEMES.find(t => t.id === 'hb-warm-white') || THEMES[0];
 const CACHE_KEY = 'hb.theme';
 
 export function themeById(id) { return THEMES.find(t => t.id === id) || DEFAULT; }
@@ -78,4 +87,17 @@ export async function chooseTheme(id) {
   const t = themeById(id);
   applyTheme(t);
   await updateSettings({ theme: { ...t } });
+}
+
+// Persist a user-built custom theme — mirrors the app's custom-theme option, so a
+// custom palette made on web carries to the phone (and vice-versa) via settings.theme.
+export async function chooseCustomTheme(c) {
+  const theme = {
+    id: 'custom', name: (c.name || 'Custom').trim() || 'Custom',
+    bgHex: c.bgHex, tabBGHex: c.tabBGHex, accentHex: c.accentHex,
+    secondaryHex: c.secondaryHex, textHex: c.textHex, isDark: !!c.isDark,
+  };
+  applyTheme(theme);
+  await updateSettings({ theme: { ...theme } });
+  return theme;
 }
