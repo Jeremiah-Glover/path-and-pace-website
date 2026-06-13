@@ -7,31 +7,50 @@
 
 ## 0. The foundational decision (read this first)
 
-Today's app is a **single 1.8MB HTML file** exported from a no-code tool. It uses a
-custom `<sc-*>` template format with the entire app — markup, styles, and the
-controller logic — packed into one escaped JavaScript string. That was perfect for a
-prototype. It is **the wrong foundation for what these notes describe.**
+**UPDATED:** This is now a **native mobile app — iOS first, Android later** (not a website).
 
-What the notes ask for is a real product:
-- user accounts + first-time-only sign-up (auth)
-- "how others voted," live chapter-room headcount, an open forum (multi-user, real-time)
-- remembering reading position, saved highlights, chapter progress (persistence)
-- social-shareable cards, two distinct experience modes, killing the whole pop-up system
+Today's app is a **single 1.8MB HTML file** exported from a no-code tool (a custom
+`<sc-*>` template format with all markup, styles, and logic packed into one escaped JS
+string). It was perfect for a prototype. **A bundled no-code web export cannot become a
+quality native app**, so "rebuild on a proper foundation" is no longer a question — it's
+required. The current file becomes our **approved design/prototype reference.**
 
-**Recommendation: treat the current file as the approved design/prototype reference, and
-rebuild on a maintainable foundation we control.** Proposed stack:
+The real decision is now **which cross-platform stack**, so that shipping iOS first does
+**not** mean an Android rewrite later:
 
-- **Frontend:** a small modern app (Vite + vanilla TS or lightweight React) — same look,
-  same soft themes/colors, but editable like a normal codebase.
-- **Backend:** **Firebase** — Auth, Firestore (data), Realtime Database (presence),
-  Storage (videos later), Security Rules.
-- **Hosting:** stay on **Cloudflare Pages** (Firebase web SDK works anywhere). The
-  hidden `/tonymart` route and "unlisted" behavior carry over unchanged.
+- **React Native (Expo) + Firebase — recommended.** One codebase → iOS now, Android
+  later; first-class Firebase SDKs; over-the-air updates; matches this team's JS/web
+  background.
+- **Flutter + Firebase — strong alternative.** Single codebase iOS+Android; superb for
+  the premium reading typography/animations.
+- **Native Swift now / Kotlin later — not recommended.** Best iOS polish, but ~doubles
+  the work for Android, which contradicts "Android down the road."
+- **Capacitor (wrap a web app) — cheap but compromised.** Reuses web work, but the
+  premium reading feel and App Store quality suffer; only if speed/cost trumps polish.
 
-> If we instead keep editing the bundle, every feature below gets 3–5× harder and more
-> fragile, and real-time/auth is impractical. Flagging clearly so it's a conscious call.
+**Backend unchanged and reinforced:** Firebase has native iOS/Android SDKs for Auth,
+Firestore, Realtime Database, Storage, and **Push notifications (FCM)** — the HoneyBadger
+app already uses FCM, so there's in-house precedent.
 
-**Open decision D0:** Re-platform (recommended) vs. keep extending the bundle.
+### What this means for the website
+The hidden `/tonymart` web page stays as an **optional landing/teaser** (or a web
+fallback reader). The *product* is the app, distributed via **App Store / TestFlight**.
+
+### iOS / App Store considerations to bake in now
+- **Apple Developer account** ($99/yr) required; **TestFlight** is ideal for a *private
+  early-access* beta — a cleaner version of the "unlisted/hidden" goal than a secret URL.
+- **Auth:** if we offer any social login, Apple requires **Sign in with Apple** as an
+  option. Anonymous auth is fine.
+- **Payments:** any *digital* "premium unlock" must use **Apple In-App Purchase** (30%
+  cut). The notes already lean toward removing paywalls/pop-ups — if there's no paid
+  content, we sidestep IAP entirely. Needs a decision (see D7).
+- **Privacy:** collecting audience info triggers **App Privacy labels**, a **privacy
+  policy** (we have `legal.html` to build on), and **ATT** consent if we track across
+  apps. Push needs a notification-permission prompt.
+- **Offline reading** is natural on native — a real win for the elevated e-reader.
+
+**Open decision D0 (revised):** Which native stack — Expo/React Native (recommended),
+Flutter, native Swift+Kotlin, or Capacitor?
 
 ---
 
@@ -159,7 +178,8 @@ its own:
 
 ## 7. Open questions for Tony / Jeremiah
 
-- **D0** — Re-platform (recommended) or keep editing the bundle?
+- **D0 (revised)** — Native stack: Expo/React Native (recommended), Flutter, native
+  Swift+Kotlin, or Capacitor?
 - **D1** — Exact audience-info fields to collect at sign-up? (name, email, age band,
   location, "how did you hear," consent to contact?)
 - **D2** — New Firebase project, or reuse HoneyBadger's?
@@ -168,6 +188,9 @@ its own:
 - **D4** — Final in-world name for the Extras tab?
 - **D5** — Does E-reader mode require an account, or is it the no-commitment path?
 - **D6** — E-reader: paginated page-turns or continuous scroll?
+- **D7** — Any paid/premium content? (yes → Apple IAP + 30%; no → no paywall, simpler review)
+- **D8** — Distribution: TestFlight private beta first, or straight to public App Store?
+- **D9** — Who holds the Apple Developer account / App Store Connect org?
 - **Content** — How many decision points per chapter, and are the vote options written?
 - **Rooms** — When a user advances and gets locked out, can they still *read* the old
   room, or fully removed? Are rooms permanent or do they expire?
@@ -176,8 +199,9 @@ its own:
 
 ## 8. Proposed phased roadmap (each phase = reviewable chunk)
 
-0. **Foundation** — re-platform scaffold + Firebase project, auth, hosting, theme system
-   ported. *(blocks everything)*
+0. **Foundation** — native app scaffold (chosen stack) + Firebase project, auth, push
+   setup, theme system ported, Apple Developer account + TestFlight pipeline.
+   *(blocks everything)*
 1. **Onboarding** — thank-you video (placeholder) → mode fork → first-time sign-up +
    audience capture.
 2. **Home** — Today's Shift rework: banner-as-memo, move chapter box, breathing-words bg,
