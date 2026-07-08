@@ -7,26 +7,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Path & Pace — the parent brand. Deliberately NEUTRAL: a calm, near-monochrome
-     slate so that clicking through to HoneyBadger (full orange→teal) lands as a
-     deliberate burst of color. The brand pop lives only on the HoneyBadger gateway. */
+  /* Path & Pace — parent brand. Brand accent colors (orange / cyan / teal) drive the
+     highlights, buttons, and hero; the ambient background orbs stay muted so the color
+     reads as accent, not wallpaper. */
   --bg:      #101215;
   --surf:    #16191d;
   --surf2:   #1d2126;
   --ink:     #E9EBEE;
   --muted:   rgba(233,235,238,0.46);
   --dim:     rgba(233,235,238,0.18);
-  --red:     #aab1ba;   /* was Badger orange — neutralized to cool gray */
-  --red-lo:  rgba(170,177,186,0.10);
-  --cyan:    #9aa2ac;   /* was cyan — neutralized */
-  --cyan-lo: rgba(154,162,172,0.09);
+  --red:     #FF5500;   /* brand orange */
+  --red-lo:  rgba(255,85,0,0.10);
+  --cyan:    #00CCFF;   /* brand cyan */
+  --cyan-lo: rgba(0,204,255,0.10);
   --border:  rgba(255,255,255,0.06);
   --border-r:rgba(255,255,255,0.14);
-  --teal:    #9aa2ac;   /* neutralized */
-  --teal-lo: rgba(154,162,172,0.09);
-  --glow-r:  none;
-  --glow-c:  none;
-  --glow-t:  none;
+  --teal:    #00E5C8;   /* brand teal */
+  --teal-lo: rgba(0,229,200,0.10);
+  --glow-r:  0 0 16px rgba(255,85,0,0.50), 0 0 48px rgba(255,85,0,0.18);
+  --glow-c:  0 0 16px rgba(0,204,255,0.50), 0 0 48px rgba(0,204,255,0.18);
+  --glow-t:  0 0 16px rgba(0,229,200,0.50), 0 0 48px rgba(0,229,200,0.18);
   /* The HoneyBadger gateway keeps the real brand color — the one pop on the page. */
   --hb-orange: #FF5500;
   --hb-teal:   #00E5C8;
@@ -744,156 +744,7 @@ footer {
   <a href="mailto:jeremiahglover@path-and-pace.com" class="footer-email">jeremiahglover@<br>path-and-pace.com</a>
 </footer>
 
-<!-- SPLASH -->
-<div id="splash" class="splash">
-  <canvas id="splashCanvas"></canvas>
-  <div class="splash-content">
-    <div class="splash-from"><span class="splash-from-dot"></span>Chief says</div>
-    <p class="splash-msg" id="splashMsg"></p>
-    <div class="splash-footer">
-      <button class="splash-skip" id="splashSkip">Got it &rarr;</button>
-      <div class="splash-timer"><div class="splash-timer-fill" id="splashFill"></div></div>
-    </div>
-  </div>
-</div>
-
 <script>
-const CHIEF_MSGS = [
-  "Today's the day you do that thing you've been putting off. You already know what it is.",
-  "You've got more in the tank than you're using. Let's change that.",
-  "One thing done is worth ten things planned. What's your one thing today?",
-  "You're more capable than you're giving yourself credit for. Act like it.",
-  "Whatever you've been overthinking — make the call. You already know the answer.",
-  "Progress isn't always pretty. But it's yours. Keep moving.",
-  "Don't shrink today. Take up the space you've earned.",
-  "You're not behind. You're exactly where you need to be to take the next step.",
-  "Big wins come from small, consistent moves. Pick one and make it.",
-  "Your future self is counting on what you do right now. Don't let 'em down.",
-  "The doubt in your head is louder than the truth. The truth? You've got this.",
-  "Nothing good happens from the sidelines. Get in the game.",
-  "You've solved harder problems than this one. Same energy.",
-  "Ship the thing. Fix it later. Done beats perfect every single time.",
-  "Less noise, more signal. What actually matters today?",
-  "You didn't come this far to play small.",
-  "The best time to level up is before you feel ready.",
-  "Today's a good day to be the version of yourself you actually respect.",
-  "Trust the work. Not the worry.",
-  "One conversation you've been avoiding is worth ten you've already had. Make the call.",
-  "You're building something real. That matters — even when it doesn't feel like it.",
-  "Momentum is just discipline with a head start. Get started.",
-  "The answer to your biggest problem is usually the simplest one you keep ignoring.",
-  "What's actually true today — not what you're afraid might be true?",
-  "Clear eyes. Full effort. No excuses.",
-  "You know what to do. Now go do it.",
-  "Rest is part of the work. But right now? Time to get after it.",
-  "The gap between where you are and where you want to be closes one action at a time.",
-  "Stop explaining yourself to people who aren't in the arena with you.",
-  "Every version of you that succeeded started by deciding to. Decide.",
-  "Nobody's coming to save you. Good — that means it's yours to take.",
-  "Don't let perfect be the enemy of shipped.",
-  "The energy you bring to today is the energy today gives back. Choose wisely.",
-  "You've been through harder. This is manageable. Go.",
-  "Less overthinking. More doing. Analyze the results later.",
-];
-(function initSplash() {
-  const el     = document.getElementById('splash');
-  const msg    = document.getElementById('splashMsg');
-  const fill   = document.getElementById('splashFill');
-  const skip   = document.getElementById('splashSkip');
-  const canvas = document.getElementById('splashCanvas');
-  const ctx    = canvas.getContext('2d');
-  const RECENT_KEY = 'pp_chief_seen_v3';
-  const DURATION   = 8000;
-
-  // Message selection
-  let seen = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
-  const unseen = CHIEF_MSGS.map((_,i)=>i).filter(i=>!seen.includes(i));
-  const pool = unseen.length > 0 ? unseen : CHIEF_MSGS.map((_,i)=>i);
-  const pick = pool[Math.floor(Math.random() * pool.length)];
-  seen = [pick, ...seen].slice(0, 12);
-  localStorage.setItem(RECENT_KEY, JSON.stringify(seen));
-  msg.textContent = CHIEF_MSGS[pick];
-
-  // Canvas setup
-  let cw, ch, startTs = null, animId;
-  function resize() { cw = canvas.width = window.innerWidth; ch = canvas.height = window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
-
-  const ORANGE = [255, 107, 0];
-  const TEAL   = [0, 229, 200];
-  function eio(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
-
-  function drawOrb(x, y, r, rgb, a) {
-    if (r <= 0 || a <= 0) return;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0,    `rgba(${rgb},${(a*0.55).toFixed(3)})`);
-    g.addColorStop(0.45, `rgba(${rgb},${(a*0.22).toFixed(3)})`);
-    g.addColorStop(1,    `rgba(${rgb},0)`);
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
-  }
-
-  function frame(ts) {
-    if (!startTs) startTs = ts;
-    const t = (ts - startTs) / 1000;
-    ctx.clearRect(0, 0, cw, ch);
-    ctx.fillStyle = 'rgba(10,9,22,0.95)';
-    ctx.fillRect(0, 0, cw, ch);
-
-    const cx = cw/2, cy = ch/2;
-    const base = Math.min(cw, ch) * 0.30;
-
-    // 14s story cycle
-    const ph = (t % 14) / 14;
-    let ot = 0;
-    if (ph > 0.58 && ph < 0.86) ot = eio((ph-0.58)/0.28);
-    else if (ph >= 0.86)         ot = 1 - eio((ph-0.86)/0.14);
-
-    // WORK — orange, steady orbit
-    const wA = t * 0.38;
-    const wX = cx + Math.cos(wA)       * base * 0.62 * (1 - ot*0.75);
-    const wY = cy + Math.sin(wA*0.65)  * base * 0.42 * (1 - ot*0.75);
-    const wR = base * Math.max(0.05, 0.80 - ot*0.72);
-    const wAl = Math.max(0, 1 - ot*0.93);
-
-    // PLAY — teal, orbits opposite, surges toward work
-    const pA  = wA + Math.PI*(1 + ot);
-    const pXn = cx + Math.cos(pA)      * base * 0.62 * (1 - ot*0.65);
-    const pYn = cy + Math.sin(pA*0.65) * base * 0.42 * (1 - ot*0.65);
-    const pX  = pXn + (wX - pXn) * ot * 0.92;
-    const pY  = pYn + (wY - pYn) * ot * 0.92;
-    const pR  = base * (0.78 + ot*0.80);
-    const pAl = 0.72 + ot*0.28;
-
-    const ORG = ORANGE.join(',');
-    const TEL = TEAL.join(',');
-
-    drawOrb(wX, wY, wR, ORG, wAl);
-    if (wAl > 0.05) drawOrb(wX, wY, wR*0.38, ORG, wAl*0.7);
-    drawOrb(pX, pY, pR, TEL, pAl);
-    drawOrb(pX, pY, pR*0.38, TEL, pAl*0.5);
-
-    animId = requestAnimationFrame(frame);
-  }
-  animId = requestAnimationFrame(frame);
-
-  // Timer bar
-  requestAnimationFrame(() => {
-    fill.style.transition = `width ${DURATION}ms linear`;
-    fill.style.width = '100%';
-  });
-
-  function dismiss() {
-    cancelAnimationFrame(animId);
-    el.classList.add('hiding');
-    setTimeout(() => el.remove(), 950);
-  }
-  const timer = setTimeout(dismiss, DURATION);
-  skip.addEventListener('click', () => { clearTimeout(timer); dismiss(); });
-  el.addEventListener('click', e => { if (e.target === el) { clearTimeout(timer); dismiss(); } });
-})();
-
 // Wish — unified slow color fade
 const wishEl = document.querySelector('.hi');
 function hexToRgbArr(h) { const n=parseInt(h.trim().replace('#',''),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
