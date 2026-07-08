@@ -208,14 +208,24 @@ footer {
 </div>
 
 <div class="tab-bar" role="tablist">
-  <button class="tab-btn active" role="tab" data-tab="hb-privacy">HB Privacy</button>
+  <button class="tab-btn active" role="tab" data-tab="boss-privacy">Boss Up Privacy</button>
+  <button class="tab-btn" role="tab" data-tab="hb-privacy">HB Privacy</button>
   <button class="tab-btn" role="tab" data-tab="hb-terms">HB Terms</button>
   <button class="tab-btn" role="tab" data-tab="hb-nda">Beta NDA</button>
   <button class="tab-btn" role="tab" data-tab="freq-privacy">Frequency Privacy</button>
 </div>
 
 <div class="content-area">
-  <div class="tab-panel active" id="panel-hb-privacy" role="tabpanel">
+  <div class="tab-panel active" id="panel-boss-privacy" role="tabpanel">
+    <div class="doc-meta">
+      <div class="doc-title">Boss Up — The App — <em>Privacy Policy</em></div>
+      <div class="doc-date">Last Updated: July 7, 2026</div>
+    </div>
+    <div class="doc-intro">The Privacy Policy for <strong>Boss Up — The App</strong>, published and distributed by <strong>Path &amp; Pace LLC</strong>, is maintained as a single standalone page so there's one authoritative, always-current version.</div>
+    <div id="boss-privacy-content"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-hb-privacy" role="tabpanel">
     <div class="doc-meta">
       <div class="doc-title">HoneyBadger — <em>Privacy Policy</em></div>
       <div class="doc-date">Last Updated: June 5, 2026</div>
@@ -291,6 +301,11 @@ function renderSections(targetId, sections) {
     </div>
   `).join('');
 }
+
+// ─── BOSS UP PRIVACY ───
+renderSections('boss-privacy-content', [
+  { title: 'Read the Full Policy', body: `<p>The complete, current <strong>Boss Up — The App</strong> Privacy Policy lives on its own page, so there's a single authoritative version to keep updated:</p><p style="margin:10px 0 4px;"><a href="privacy-policy.html" style="font-weight:600;font-size:15px;">Open the Boss Up Privacy Policy →</a></p><p style="margin-top:16px;"><strong>In short:</strong> an account is required; by default nothing leaves your device; cloud sync — and the community "Break Room" chat — is opt-in and off by default; we use no ads, no third-party tracking SDKs, and never sell your data; and you can delete your account in-app under <strong>Settings › Delete account</strong>. See the full policy for everything else.</p>` }
+]);
 
 // ─── HB PRIVACY ───
 renderSections('hb-privacy-content', [

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Boss Up — The App</title>
+<meta name="description" content="Privacy Policy for Boss Up — The App, published and distributed by Path & Pace LLC.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!--
+================================================================================
+  OWNER CHECKLIST — CONFIRM BEFORE PUBLISHING
+  Values below were filled to match the rest of this site (legal.html). Confirm:
+    • Entity/controller: Path & Pace LLC (confirmed distributor of the app)
+    • Contact email:      jeremiahglover@path-and-pace.com
+                          (consider a dedicated privacy@ / support@ address)
+    • Last updated:       July 7, 2026  (appears at top AND bottom)
+    • Governing law:      Georgia, United States
+    • Address:            Atlanta, Georgia
+  NOTE: This is a drafting aid, not legal advice. Have counsel review it first.
+================================================================================
+-->
+
+<style>
+:root {
+  --bg:     #0D0E1E;
+  --surf:   #12142A;
+  --surf2:  #181B36;
+  --ink:    #EAE8F8;
+  --muted:  rgba(234,232,248,0.62);
+  --soft:   rgba(234,232,248,0.48);
+  --dim:    rgba(234,232,248,0.20);
+  --orange: #FF5500;
+  --teal:   #00E5C8;
+  --cyan:   #00CCFF;
+  --border: rgba(255,255,255,0.06);
+  --glow-o: 0 0 14px rgba(255,85,0,0.55), 0 0 48px rgba(255,85,0,0.18);
+  --glow-t: 0 0 14px rgba(0,229,200,0.55), 0 0 48px rgba(0,229,200,0.18);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Inter', -apple-system, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 16px; line-height: 1.65;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 22px 56px; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(13,14,30,0.82); backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.01em;
+}
+.logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--orange); box-shadow: var(--glow-o);
+  animation: dot-pulse 2.8s ease-in-out infinite; flex-shrink: 0;
+}
+@keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+.nav-back {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--soft); text-decoration: none;
+  display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+}
+.nav-back::before { content: '←'; color: var(--teal); }
+.nav-back:hover { color: var(--ink); }
+
+/* ── HEADER ── */
+.page-header {
+  padding: 136px 56px 56px;
+  background: var(--surf); position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,85,0,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-header::after {
+  content: 'PRIVACY';
+  position: absolute; right: 40px; bottom: -22px;
+  font-family: var(--font); font-size: 128px; font-weight: 700;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,85,0,0.08);
+  line-height: 1; pointer-events: none; white-space: nowrap; letter-spacing: -0.04em;
+}
+.header-inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
+.header-label {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+}
+.header-label::before { content: ''; width: 28px; height: 1px; background: var(--orange); box-shadow: var(--glow-o); }
+.header-title {
+  font-size: clamp(38px,6vw,68px); font-weight: 700;
+  color: var(--ink); line-height: 0.98; letter-spacing: -0.03em;
+}
+.header-title em { font-style: normal; color: var(--orange); }
+.header-sub {
+  margin-top: 18px; font-size: 15px; font-weight: 300;
+  color: var(--muted); max-width: 560px; line-height: 1.7;
+}
+.header-date {
+  margin-top: 22px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; color: var(--soft); text-transform: uppercase;
+}
+.header-date strong { color: var(--teal); font-weight: 500; }
+
+/* ── LAYOUT ── */
+.wrap { max-width: 820px; margin: 0 auto; padding: 56px 56px 40px; }
+
+/* ── TL;DR / SUMMARY CARD ── */
+.tldr {
+  background: linear-gradient(180deg, var(--surf2), var(--surf));
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 28px 32px; margin-bottom: 44px;
+}
+.tldr h2 {
+  font-size: 13px; font-family: var(--mono); font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange);
+  margin-bottom: 16px;
+}
+.tldr ul { list-style: none; margin: 0; }
+.tldr li {
+  position: relative; padding-left: 24px; margin-bottom: 12px;
+  font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.7;
+}
+.tldr li::before { content: '›'; position: absolute; left: 4px; top: -1px; color: var(--teal); font-weight: 700; }
+.tldr li strong { color: var(--ink); font-weight: 600; }
+
+/* ── TABLE OF CONTENTS ── */
+.toc {
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: 6px; padding: 26px 30px; margin-bottom: 52px;
+}
+.toc h2 {
+  font-size: 12px; font-family: var(--mono); font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--soft); margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 40px; }
+.toc li { counter-increment: toc; margin-bottom: 9px; break-inside: avoid; }
+.toc a {
+  font-size: 13.5px; color: var(--muted); text-decoration: none;
+  display: flex; gap: 10px; align-items: baseline; transition: color 0.2s;
+}
+.toc a::before {
+  content: counter(toc,decimal-leading-zero);
+  font-family: var(--mono); font-size: 10px; color: var(--dim);
+  flex-shrink: 0; padding-top: 1px;
+}
+.toc a:hover { color: var(--teal); }
+
+/* ── SECTIONS ── */
+section.doc { margin-bottom: 44px; scroll-margin-top: 96px; }
+.sec-num {
+  font-family: var(--mono); font-size: 10px; font-weight: 400;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 6px; opacity: 0.8;
+}
+section.doc h2 {
+  font-size: 22px; font-weight: 600; color: var(--ink);
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  margin-bottom: 18px; letter-spacing: -0.01em; line-height: 1.2;
+}
+section.doc h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin: 22px 0 10px; letter-spacing: -0.005em; }
+section.doc p { font-size: 14.5px; font-weight: 300; color: var(--muted); line-height: 1.85; margin-bottom: 14px; }
+section.doc ul, section.doc ol { margin: 10px 0 16px 22px; }
+section.doc li { font-size: 14.5px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 9px; }
+section.doc strong { color: var(--ink); font-weight: 600; }
+section.doc a { color: var(--teal); text-decoration: none; transition: text-shadow 0.2s; word-break: break-word; }
+section.doc a:hover { text-shadow: var(--glow-t); }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--surf); border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  padding: 18px 22px; margin: 18px 0; border-radius: 0 4px 4px 0;
+}
+.callout p { margin-bottom: 0; }
+.callout p + p { margin-top: 10px; }
+
+/* ── TABLE ── */
+.table-scroll { overflow-x: auto; margin: 16px 0; -webkit-overflow-scrolling: touch; }
+table.rights { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 460px; }
+table.rights th, table.rights td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.rights th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--soft); font-weight: 500; }
+table.rights td { color: var(--muted); font-weight: 300; line-height: 1.6; }
+table.rights td strong { color: var(--ink); }
+
+/* ── FOOTER META ── */
+.doc-footer-meta {
+  max-width: 820px; margin: 0 auto; padding: 0 56px 24px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--soft); text-transform: uppercase;
+}
+.doc-footer-meta strong { color: var(--teal); font-weight: 500; }
+.back-top {
+  display: inline-block; margin-top: 8px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--teal); text-decoration: none;
+}
+.back-top:hover { text-shadow: var(--glow-t); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg); padding: 36px 56px;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  border-top: 1px solid var(--border);
+}
+.footer-logo { font-size: 15px; font-weight: 700; color: var(--dim); }
+.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.footer-link {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); text-decoration: none; transition: text-shadow 0.2s;
+}
+.footer-link:hover { text-shadow: var(--glow-t); }
+
+@media (max-width: 768px) {
+  nav { padding: 18px 22px; }
+  .page-header { padding: 108px 24px 44px; }
+  .page-header::after { font-size: 84px; right: 20px; }
+  .wrap { padding: 44px 24px 32px; }
+  .doc-footer-meta { padding: 0 24px 24px; }
+  .toc ol { columns: 1; }
+  .tldr, .toc { padding: 22px 22px; }
+  footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="logo-dot"></span>
+    Path &amp; Pace
+  </a>
+  <a href="legal.html" class="nav-back">All legal documents</a>
+</nav>
+
+<header class="page-header">
+  <div class="header-inner">
+    <div class="header-label">Boss Up — The App</div>
+    <h1 class="header-title">Privacy <em>Policy.</em></h1>
+    <p class="header-sub">How <strong>Path &amp; Pace LLC</strong> collects, uses, and protects your information in Boss Up — The App. Written for humans, not billed by the hour.</p>
+    <p class="header-date">Last updated: <strong>July 7, 2026</strong></p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ── TL;DR ── -->
+  <div class="tldr">
+    <h2>The short version</h2>
+    <ul>
+      <li><strong>You need an account</strong> to use the app — just an email and a password (the password is handled by our sign-in provider; we never see it).</li>
+      <li><strong>By default, nothing leaves your device.</strong> Reading the book, your progress, highlights, and preferences all work fully on-device without sharing anything to the cloud.</li>
+      <li><strong>Cloud sync is opt-in.</strong> You have to switch on a "data sharing" setting (off by default) before we sync your profile and reading progress — and that's also what unlocks the community "Break Room" chat. Turn it off and we purge the synced copy from our servers.</li>
+      <li><strong>No ads. No tracking SDKs. No selling your data.</strong> We don't use third-party advertising networks or analytics trackers, and we never sell or rent your personal information.</li>
+      <li><strong>You can delete your account in the app</strong> — Settings → Delete account — or by emailing us.</li>
+      <li><strong>Who we share with:</strong> Google Firebase (our backend) and Apple (the app platform). That's it.</li>
+    </ul>
+  </div>
+
+  <!-- ── TOC ── -->
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#intro">Who we are</a></li>
+      <li><a href="#summary">Summary — the short version</a></li>
+      <li><a href="#collect">Information we collect</a></li>
+      <li><a href="#use">How we use your information</a></li>
+      <li><a href="#consent">Your consent &amp; the data-sharing setting</a></li>
+      <li><a href="#community">Community chat &amp; user content</a></li>
+      <li><a href="#third-parties">Third parties &amp; service providers</a></li>
+      <li><a href="#push">Push notifications</a></li>
+      <li><a href="#permissions">Device permissions</a></li>
+      <li><a href="#storage">Storage, security, retention &amp; transfers</a></li>
+      <li><a href="#deletion">Account deletion &amp; your choices</a></li>
+      <li><a href="#rights">Your privacy rights (GDPR/UK, CCPA/CPRA)</a></li>
+      <li><a href="#children">Children's privacy</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </nav>
+
+  <!-- ── 1. INTRO ── -->
+  <section class="doc" id="intro">
+    <div class="sec-num">01</div>
+    <h2>Who we are</h2>
+    <p>This Privacy Policy explains how <strong>Path &amp; Pace LLC</strong> ("we," "us," or "our") handles your information when you use <strong>Boss Up — The App</strong> (the "App"), our native mobile app for iOS (with Android planned). Path &amp; Pace LLC is the publisher and distributor of the App.</p>
+    <p>The App delivers the book <em>Boss Up</em> plus an interactive, gamified "employee onboarding" experience set in a fictional store called <strong>TonyMart</strong> — including reading, a community chat, stats, and saved highlights. An account is required to use the App.</p>
+    <p>For the purposes of data-protection law (including the GDPR), <strong>Path &amp; Pace LLC</strong> is the "data controller" for the App. If you have any questions about this policy or your data, contact us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>.</p>
+    <div class="callout">
+      <p><strong>One clarification about brands.</strong> The <em>Boss Up</em> book and brand website (bossupthebook.com) are operated by a separate company, Tony Talks Media LLC. <strong>This policy covers only the App</strong>, which is published and distributed by Path &amp; Pace LLC. It does not cover the book website or any purchases made there.</p>
+    </div>
+  </section>
+
+  <!-- ── 2. SUMMARY ── -->
+  <section class="doc" id="summary">
+    <div class="sec-num">02</div>
+    <h2>Summary — the short version</h2>
+    <p>Here's the whole thing in plain English. The sections below add the detail.</p>
+    <ul>
+      <li>You create an account with an <strong>email and password</strong>. Our sign-in provider (Google Firebase Authentication) handles the password — we never store or see it in readable form.</li>
+      <li><strong>By default, the App keeps your data on your device.</strong> You can read the book, track progress, save highlights, and set preferences without any of it leaving your phone.</li>
+      <li>If you want cloud features — syncing your profile across devices and joining the community "Break Room" chat — you <strong>opt in</strong> with a data-sharing setting that's <strong>off by default</strong>. Turn it back off and we delete the synced copy from our servers.</li>
+      <li>We use <strong>Google Firebase</strong> for our backend and <strong>Apple</strong> as the app platform. We do <strong>not</strong> use advertising networks, third-party analytics/tracking SDKs, and we do <strong>not</strong> sell or rent your data.</li>
+      <li>The App has <strong>no in-app purchases</strong> and processes <strong>no payment data</strong>.</li>
+      <li>You can <strong>delete your account right inside the App</strong>, and you have privacy rights you can exercise any time by emailing us.</li>
+    </ul>
+  </section>
+
+  <!-- ── 3. INFORMATION WE COLLECT ── -->
+  <section class="doc" id="collect">
+    <div class="sec-num">03</div>
+    <h2>Information we collect</h2>
+
+    <h3>Information you provide</h3>
+    <ul>
+      <li><strong>Email address</strong> — used for your account login.</li>
+      <li><strong>Password</strong> — handled by our authentication provider, Google Firebase Authentication. The App never stores or sees your password in readable form.</li>
+      <li><strong>Display name</strong> — the name shown on your profile and in the community chat.</li>
+      <li><strong>Phone number</strong> — optional.</li>
+      <li><strong>Profile picture</strong> — optional. You can pick a built-in icon, or choose a photo from your device's photo library using your operating system's photo picker. We only ask for photo-library access at the moment you choose to add a photo.</li>
+      <li><strong>Age attestation</strong> — you confirm you are at least 13 years old. We store the fact that you confirmed and when. The App is not directed to children under 13.</li>
+    </ul>
+
+    <h3>Usage &amp; content</h3>
+    <ul>
+      <li><strong>Reading progress</strong> — which chapters and assignments you've completed.</li>
+      <li><strong>Reading preferences</strong> — theme, text size, and page-turn settings.</li>
+      <li><strong>Saved highlights &amp; quotes</strong> — passages you mark while reading. These are stored on your device.</li>
+      <li><strong>Community messages</strong> — content you post in the in-app community chat (the "Break Room"), which is visible to other eligible users. If you report or block another user, we use those reports and blocks for safety and moderation.</li>
+    </ul>
+
+    <h3>Created automatically</h3>
+    <ul>
+      <li><strong>Anonymous sign-in identity</strong> — on first launch, the App creates an anonymous authentication identity so it works before you sign up. When you register, this is upgraded to your email account.</li>
+      <li><strong>Push token</strong> — if you enable notifications, a device push token is generated to deliver messages (see <a href="#push">Push notifications</a>).</li>
+    </ul>
+
+    <div class="callout">
+      <p>We do <strong>not</strong> collect your camera, precise location, contacts, or microphone data. We do <strong>not</strong> use advertising IDs or third-party tracking SDKs.</p>
+    </div>
+  </section>
+
+  <!-- ── 4. HOW WE USE IT ── -->
+  <section class="doc" id="use">
+    <div class="sec-num">04</div>
+    <h2>How we use your information</h2>
+    <p>We use your information only to run the App and its features:</p>
+    <ul>
+      <li><strong>To create and secure your account</strong> — authenticating your login and keeping your account safe.</li>
+      <li><strong>To deliver the book and your experience</strong> — showing content, tracking your reading progress, remembering your preferences, and saving your highlights.</li>
+      <li><strong>To sync your data across devices</strong> — but only if you've turned on the data-sharing setting (see <a href="#consent">below</a>).</li>
+      <li><strong>To run the community chat</strong> — showing your messages and display name to other eligible users, and handling reports and blocks for safety.</li>
+      <li><strong>To send notifications</strong> — only if you've enabled them.</li>
+      <li><strong>To keep the App safe and working</strong> — moderating content, preventing abuse, and fixing problems.</li>
+      <li><strong>To meet legal obligations</strong> — where the law requires it.</li>
+    </ul>
+  </section>
+
+  <!-- ── 5. CONSENT ── -->
+  <section class="doc" id="consent">
+    <div class="sec-num">05</div>
+    <h2>Your consent &amp; the data-sharing setting</h2>
+    <p>This is the heart of how the App treats your privacy, so we want to be clear about it.</p>
+    <ul>
+      <li><strong>By default, the App does not sync your personal data to the cloud.</strong> Reading the book and using your library work fully on your device without sharing anything.</li>
+      <li><strong>You must explicitly opt in.</strong> There's a <strong>"data sharing" setting that is OFF by default.</strong> Only when you switch it on do we sync your profile (like your name and reading progress) to our backend.</li>
+      <li><strong>Opting in is also what unlocks the community "Break Room" chat</strong>, which is a cloud feature.</li>
+      <li><strong>You can withdraw consent any time.</strong> Turning the setting back OFF purges the synced copy of your data from our servers.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Legal basis (GDPR).</strong> For users in the EU and UK, the lawful basis for this cloud processing is your <strong>consent</strong>, which you give by switching on data sharing and can withdraw at any time. Withdrawing consent doesn't affect processing that already happened before you withdrew it.</p>
+    </div>
+  </section>
+
+  <!-- ── 6. COMMUNITY ── -->
+  <section class="doc" id="community">
+    <div class="sec-num">06</div>
+    <h2>Community chat &amp; user content</h2>
+    <p>The community chat — the "Break Room" — is a shared, cloud-based space that becomes available when you turn on data sharing.</p>
+    <ul>
+      <li><strong>What's visible:</strong> messages you post in the Break Room, along with your display name and profile picture, are visible to other eligible users of the App. Please don't share anything there you wouldn't want others to see.</li>
+      <li><strong>Moderation:</strong> you can report or block other users. We use reports and blocks to keep the community safe — for example, to review content and take action against abuse or violations.</li>
+      <li><strong>Your responsibility:</strong> you're responsible for the content you post. Keep it lawful and respectful of others.</li>
+    </ul>
+  </section>
+
+  <!-- ── 7. THIRD PARTIES ── -->
+  <section class="doc" id="third-parties">
+    <div class="sec-num">07</div>
+    <h2>Third parties &amp; service providers</h2>
+    <p>We keep our list of third parties short. These providers process data on our behalf to make the App work — they're our "data processors" (GDPR) / "service providers" (CCPA), and they're not permitted to use your data for their own purposes.</p>
+
+    <h3>Google Firebase (Google LLC)</h3>
+    <p>We use Google Firebase for our core backend:</p>
+    <ul>
+      <li><strong>Authentication</strong> — email/password and anonymous sign-in.</li>
+      <li><strong>Cloud Firestore (database)</strong> — your profile and reading progress (when you've opted into data sharing), and community chat messages.</li>
+      <li><strong>Cloud Storage</strong> — delivering book content.</li>
+      <li><strong>Cloud Messaging</strong> — delivering push notifications.</li>
+    </ul>
+    <p>Google acts as a data processor / service provider for us. You can read Google's privacy policy at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a>.</p>
+
+    <h3>Apple</h3>
+    <p>Apple is the platform and distributor channel for the App (the App Store) and handles push-notification delivery to Apple devices through the Apple Push Notification service (APNs).</p>
+
+    <div class="callout">
+      <p><strong>What we don't do.</strong> The App uses <strong>no third-party advertising networks</strong> and <strong>no third-party analytics or tracking SDKs</strong>. We do <strong>not sell or rent</strong> your personal information.</p>
+      <p><strong>Payments.</strong> The App currently has <strong>no in-app purchases</strong> and processes <strong>no payment data</strong>. (The physical book and e-book may be sold separately on the book website — that's outside this App and this policy.)</p>
+    </div>
+  </section>
+
+  <!-- ── 8. PUSH ── -->
+  <section class="doc" id="push">
+    <div class="sec-num">08</div>
+    <h2>Push notifications</h2>
+    <p>The App can send push notifications using Firebase Cloud Messaging. Notifications are optional.</p>
+    <ul>
+      <li>If you enable notifications, a <strong>device push token</strong> is processed by Google and Apple so we can deliver messages to your device.</li>
+      <li>You can turn notifications off at any time in your device settings. If you turn them off, we stop sending them.</li>
+    </ul>
+  </section>
+
+  <!-- ── 9. PERMISSIONS ── -->
+  <section class="doc" id="permissions">
+    <div class="sec-num">09</div>
+    <h2>Device permissions</h2>
+    <p>The App only asks for a permission at the moment it's needed, and only for these two things:</p>
+    <ul>
+      <li><strong>Photo Library</strong> — requested only when you choose to set a profile photo, so you can pick one from your library.</li>
+      <li><strong>Notifications</strong> — requested only if you choose to enable push notifications.</li>
+    </ul>
+    <div class="callout">
+      <p>The App does <strong>not</strong> request access to your <strong>camera, location, contacts, or microphone.</strong></p>
+    </div>
+  </section>
+
+  <!-- ── 10. STORAGE ── -->
+  <section class="doc" id="storage">
+    <div class="sec-num">10</div>
+    <h2>How we store, secure, and retain data; international transfers</h2>
+
+    <h3>Where your data lives</h3>
+    <ul>
+      <li><strong>On your device:</strong> your reading progress, saved highlights, preferences, and your profile before you opt into data sharing all stay on your device.</li>
+      <li><strong>In the cloud (only after you opt in):</strong> your synced profile, reading progress, and community chat messages are stored on Google Firebase.</li>
+    </ul>
+
+    <h3>Retention</h3>
+    <p>We keep cloud data for as long as your account exists. It's deleted or purged when you delete your account, or when you withdraw data-sharing consent (turning the setting off purges the synced copy from the server). Device-local data stays on your device until you delete it or uninstall the App.</p>
+
+    <h3>Security</h3>
+    <p>We use reasonable measures to protect your data: it's <strong>encrypted in transit</strong>, and backend access is restricted by security rules so users can only read and write their own data (plus the shared community chat). No method of transmission or storage is 100% secure, so we can't guarantee absolute security — but we work to protect your information.</p>
+
+    <h3>International transfers</h3>
+    <p>We process data on Google Firebase infrastructure, which may store and process data in the <strong>United States</strong>. If you use the App from outside the U.S., your information may be transferred to, stored in, and processed in the U.S. and other countries where our providers operate. Where required, such transfers rely on appropriate safeguards (for example, standard contractual clauses). By using the App and opting into cloud features, you understand your data may be processed in these locations.</p>
+  </section>
+
+  <!-- ── 11. DELETION ── -->
+  <section class="doc" id="deletion">
+    <div class="sec-num">11</div>
+    <h2>Account deletion &amp; your choices</h2>
+    <div class="callout">
+      <p><strong>Delete your account right inside the App.</strong> Go to <strong>Settings → Delete account.</strong> This deletes your authentication record and associated profile data.</p>
+    </div>
+    <p>You can also email us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a> to request deletion, and we'll take care of it.</p>
+    <p>Other choices you have:</p>
+    <ul>
+      <li><strong>Turn off data sharing</strong> — stops cloud sync and purges the synced copy from our servers.</li>
+      <li><strong>Manage permissions</strong> — grant or revoke photo-library and notification access any time in your device settings.</li>
+      <li><strong>Edit your profile</strong> — update your display name, phone number, or profile picture in the App.</li>
+    </ul>
+  </section>
+
+  <!-- ── 12. RIGHTS ── -->
+  <section class="doc" id="rights">
+    <div class="sec-num">12</div>
+    <h2>Your privacy rights</h2>
+    <p>Depending on where you live, you have rights over your personal information. We honor these rights for all users where we can, and you can exercise any of them by emailing <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>. We won't discriminate against you for exercising your rights.</p>
+
+    <div class="table-scroll">
+      <table class="rights">
+        <thead>
+          <tr><th>Right</th><th>What it means</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Access</strong></td><td>Ask for a copy of the personal information we hold about you.</td></tr>
+          <tr><td><strong>Correction</strong></td><td>Ask us to fix information that's inaccurate or incomplete.</td></tr>
+          <tr><td><strong>Deletion</strong></td><td>Ask us to delete your information (also available in-app via Settings → Delete account).</td></tr>
+          <tr><td><strong>Portability</strong></td><td>Ask for a copy of your data in a portable, machine-readable format.</td></tr>
+          <tr><td><strong>Withdraw consent</strong></td><td>Turn off data sharing at any time to stop cloud processing and purge synced data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>For users in the EU &amp; UK (GDPR / UK GDPR)</h3>
+    <p>You have the rights above, plus the right to object to or restrict certain processing, and the right to lodge a complaint with your local data protection authority. As explained in <a href="#consent">Section 5</a>, our legal basis for cloud processing is your consent, which you can withdraw at any time.</p>
+
+    <h3>For California residents (CCPA / CPRA)</h3>
+    <p>You have the right to know what personal information we collect and how we use it, to access and delete it, to correct it, and to be free from discrimination for exercising these rights. <strong>We do not sell your personal information, and we do not "share" it for cross-context behavioral advertising.</strong> We don't use your data for targeted advertising at all. To exercise your rights, email <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a>.</p>
+
+    <p>We may need to verify your identity before acting on a request, and we'll respond within the timeframe required by law.</p>
+  </section>
+
+  <!-- ── 13. CHILDREN ── -->
+  <section class="doc" id="children">
+    <div class="sec-num">13</div>
+    <h2>Children's privacy</h2>
+    <p>The App is <strong>not directed to children under 13</strong>, and it age-gates at 13 (you confirm you're at least 13 to use it). We do not knowingly collect personal information from anyone under 13.</p>
+    <p>If you're a parent or guardian and you believe a child under 13 has provided us with personal information, please contact us at <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a> and we'll delete it.</p>
+  </section>
+
+  <!-- ── 14. CHANGES ── -->
+  <section class="doc" id="changes">
+    <div class="sec-num">14</div>
+    <h2>Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we'll revise the "Last updated" date at the top and bottom of this page. If we make material changes, we'll provide a more prominent notice where appropriate (for example, in the App). Your continued use of the App after an update means you accept the revised policy.</p>
+  </section>
+
+  <!-- ── 15. CONTACT ── -->
+  <section class="doc" id="contact">
+    <div class="sec-num">15</div>
+    <h2>Contact us</h2>
+    <p>Questions, requests, or concerns about your privacy? We're happy to help.</p>
+    <ul>
+      <li><strong>Company:</strong> Path &amp; Pace LLC</li>
+      <li><strong>Email:</strong> <a href="mailto:jeremiahglover@path-and-pace.com">jeremiahglover@path-and-pace.com</a></li>
+      <li><strong>Address:</strong> Atlanta, Georgia, United States</li>
+      <li><strong>Governing law:</strong> This policy is governed by the laws of the State of Georgia, United States.</li>
+    </ul>
+  </section>
+
+</div>
+
+<div class="doc-footer-meta">
+  Last updated: <strong>July 7, 2026</strong>
+  · Published and distributed by Path &amp; Pace LLC for Boss Up — The App
+  <br>
+  <a href="#" class="back-top">↑ Back to top</a>
+</div>
+
+<footer>
+  <div class="footer-logo">Path &amp; Pace</div>
+  <div class="footer-copy">© 2026 Path &amp; Pace LLC · Atlanta, GA</div>
+  <a href="mailto:jeremiahglover@path-and-pace.com" class="footer-link">Contact</a>
+</footer>
+
+</body>
+</html>
