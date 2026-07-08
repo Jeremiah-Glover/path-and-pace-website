@@ -1,3 +1,4 @@
-# Old privacy policy path → new named page
-/privacy-policy    /BossUpTheApp-Privacy-Policy    301
+# Fallback redirects (the functions/_middleware.js handles arbitrary casing).
+# Canonical proper-case path for the Boss Up privacy policy:
+/privacy-policy         /BossUpTheApp-Privacy-Policy    301
 /privacy-policy.html    /BossUpTheApp-Privacy-Policy    301
