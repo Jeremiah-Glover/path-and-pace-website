@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boss Up — The App</title>
+<meta name="description" content="Boss Up — The App: the bestselling book, Boss Up: The Musical, and a reader community — a gamified mobile app for iOS.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#140720; --bg2:#1C0B2E; --surf:#241038; --surf2:#2E1547;
+  --ink:#F5ECFB; --muted:rgba(245,236,251,0.66); --dim:rgba(245,236,251,0.4);
+  --magenta:#E6198B; --pink:#FF48B0; --violet:#C77DFF; --gold:#FFC24B;
+  --border:rgba(255,255,255,0.09);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+
+/* ambient glow */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 82% 8%, rgba(230,25,139,0.20), transparent 70%),
+    radial-gradient(50% 45% at 8% 30%, rgba(199,125,255,0.14), transparent 70%);}
+.page{position:relative;z-index:1}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);
+  background:rgba(20,7,32,0.72);border-bottom:1px solid var(--border)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{font-weight:900;letter-spacing:.02em;font-size:19px;display:flex;align-items:center;gap:10px}
+.brand b{background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(150deg,#3A0E5C,#E6198B 70%);
+  display:grid;place-items:center;font-size:13px;font-weight:900;color:#fff;box-shadow:0 6px 20px rgba(230,25,139,.4)}
+.nav-links{display:flex;gap:34px;align-items:center;font-size:14px;font-weight:500;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:linear-gradient(90deg,var(--magenta),var(--pink));color:#fff;font-weight:700;font-size:13px;
+  padding:10px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(230,25,139,.35)}
+@media(max-width:760px){.nav-links a:not(.nav-cta){display:none}}
+
+/* HERO */
+.hero{padding:76px 0 40px;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--violet);background:rgba(199,125,255,.1);border:1px solid rgba(199,125,255,.22);
+  padding:7px 14px;border-radius:999px;margin-bottom:24px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink)}
+h1{font-size:clamp(42px,6vw,72px);line-height:.98;font-weight:900;letter-spacing:-.03em}
+h1 .grad{background:linear-gradient(100deg,var(--violet),var(--pink) 55%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:22px;font-size:18px;color:var(--muted);max-width:500px}
+.badges{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.badge{display:flex;align-items:center;gap:12px;background:#000;border:1px solid var(--border);
+  border-radius:14px;padding:11px 20px;min-width:200px;transition:transform .15s,box-shadow .15s}
+.badge:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.badge svg{width:26px;height:26px;flex-shrink:0}
+.badge .t{line-height:1.15}
+.badge .t small{display:block;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.badge .t b{display:block;font-size:17px;font-weight:700;line-height:1.15}
+.badge.soon{opacity:.72}
+.badge.soon .tag{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--gold);
+  border:1px solid rgba(255,194,75,.4);padding:3px 7px;border-radius:6px;text-transform:uppercase}
+.microcopy{margin-top:16px;font-size:13px;color:var(--dim)}
+
+/* phone */
+.phone-wrap{display:flex;justify-content:center;perspective:1200px}
+.phone{width:290px;height:590px;border-radius:42px;background:linear-gradient(160deg,#2A1244,#150720);
+  border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 10px rgba(255,255,255,.02);
+  padding:14px;transform:rotateY(-14deg) rotateX(5deg) rotate(1deg)}
+.screen{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative;
+  background:radial-gradient(120% 80% at 50% 0%,#3A0E5C,#160823 60%)}
+.screen .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#000;border-radius:12px;z-index:3}
+.screen-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 22px;text-align:center}
+.logo-big{font-size:52px;font-weight:900;letter-spacing:-.02em;line-height:.9;
+  background:linear-gradient(120deg,#B96BFF,#E6198B 60%,#FF7AC4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-big .o{color:var(--pink);-webkit-text-fill-color:var(--pink)}
+.screen-tag{margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:.04em}
+.screen-card{margin-top:24px;width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:left}
+.screen-card .lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);font-weight:700}
+.screen-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;font-weight:600}
+.bar{height:7px;border-radius:99px;background:rgba(255,255,255,.1);margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--magenta),var(--pink))}
+.pill{margin-top:16px;display:inline-block;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(90deg,var(--magenta),var(--pink));padding:8px 16px;border-radius:999px}
+
+/* STATS strip */
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:26px 0 8px}
+.stat{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:16px 26px;text-align:center;min-width:150px}
+.stat b{display:block;font-size:26px;font-weight:900;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+/* SECTION */
+section{padding:64px 0;position:relative}
+.sec-head{text-align:center;max-width:640px;margin:0 auto 44px}
+.sec-head .kick{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--magenta)}
+.sec-head h2{font-size:clamp(30px,4vw,44px);font-weight:900;letter-spacing:-.02em;margin-top:12px;line-height:1.05}
+.sec-head p{margin-top:16px;color:var(--muted);font-size:17px}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat{background:linear-gradient(180deg,var(--surf),var(--bg2));border:1px solid var(--border);border-radius:20px;padding:28px;transition:transform .16s,border-color .16s}
+.feat:hover{transform:translateY(-5px);border-color:rgba(230,25,139,.4)}
+.feat .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:24px;margin-bottom:18px;
+  background:linear-gradient(150deg,rgba(230,25,139,.22),rgba(199,125,255,.18));border:1px solid rgba(230,25,139,.3)}
+.feat h3{font-size:19px;font-weight:700;margin-bottom:9px}
+.feat p{color:var(--muted);font-size:14.5px}
+@media(max-width:900px){.features{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.features{grid-template-columns:1fr}}
+
+/* QUOTE */
+.quote{background:linear-gradient(120deg,var(--surf2),var(--surf));border:1px solid var(--border);border-radius:26px;
+  padding:56px 48px;text-align:center;max-width:900px;margin:0 auto}
+.quote p{font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.quote .grad{background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote .by{margin-top:22px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+/* CTA */
+.cta{text-align:center;background:
+    radial-gradient(70% 120% at 50% 0%, rgba(230,25,139,.28), transparent 70%);
+  border:1px solid var(--border);border-radius:28px;padding:64px 32px;margin:20px 0}
+.cta h2{font-size:clamp(30px,4.5vw,50px);font-weight:900;letter-spacing:-.02em}
+.cta .badges{justify-content:center}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);margin-top:40px;padding:40px 0 60px;color:var(--muted);font-size:13.5px}
+.foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.foot-links{display:flex;gap:24px;flex-wrap:wrap}
+.foot-links a:hover{color:var(--ink)}
+.legal{margin-top:26px;padding-top:22px;border-top:1px solid var(--border);font-size:12px;color:var(--dim);line-height:1.7}
+@media(max-width:860px){.hero{grid-template-columns:1fr;text-align:center}.eyebrow{margin-inline:auto}.sub{margin-inline:auto}.badges{justify-content:center}.phone-wrap{margin-top:20px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav><div class="wrap nav-in">
+  <div class="brand"><span class="mark">B</span><span>Boss&nbsp;<b>Up</b></span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#experience">The Experience</a>
+    <a href="#get">Download</a>
+    <a href="#get" class="nav-cta">Get the App</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<header class="wrap hero">
+  <div>
+    <span class="eyebrow"><span class="dot"></span>Now on iOS · Android soon</span>
+    <h1>Read the book.<br>Live the story.<br><span class="grad">Boss up.</span></h1>
+    <p class="sub">Boss Up — The App turns the bestselling book into an experience: read it, watch <em>Boss Up: The Musical</em>, and level up alongside a community — starting your first day on the floor at TonyMart.</p>
+    <div class="badges">
+      <a class="badge" href="#get">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 12.6c0-2 1.6-3 1.7-3.05-0.9-1.35-2.35-1.53-2.86-1.55-1.2-0.12-2.37 0.72-2.98 0.72-0.62 0-1.57-0.7-2.58-0.68-1.32 0.02-2.55 0.77-3.23 1.96-1.39 2.4-0.36 5.95 0.99 7.9 0.66 0.95 1.44 2.02 2.47 1.98 1-0.04 1.37-0.64 2.58-0.64 1.2 0 1.54 0.64 2.58 0.62 1.07-0.02 1.74-0.97 2.39-1.93 0.75-1.1 1.06-2.17 1.08-2.22-0.02-0.01-2.07-0.8-2.09-3.16zM14.6 6.6c0.55-0.67 0.92-1.6 0.82-2.53-0.79 0.03-1.75 0.53-2.32 1.19-0.51 0.59-0.96 1.53-0.84 2.44 0.88 0.07 1.79-0.45 2.34-1.1z"/></svg>
+        <div class="t"><small>Download on the</small><b>App Store</b></div>
+      </a>
+      <a class="badge soon" href="#get">
+        <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M4 3l10.5 6L4 15V3z" opacity=".9"/><path fill="#FBBC04" d="M14.5 9L18 11l-2.2 1.3L14.5 9z"/><path fill="#34A853" d="M4 21l10.5-6-2.8-1.6L4 21z" opacity=".9"/><path fill="#4285F4" d="M4 3v18l7.7-9L4 3z" opacity=".85"/></svg>
+        <div class="t"><small>Coming soon to</small><b>Google Play</b></div>
+        <span class="tag">Soon</span>
+      </a>
+    </div>
+    <p class="microcopy">Free to download · Account required · Private by default — no ads, no tracking.</p>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="phone"><div class="screen">
+      <div class="notch"></div>
+      <div class="screen-body">
+        <div class="logo-big">B<span class="o">O</span>SS<br>UP</div>
+        <div class="screen-tag">New hire onboarding · TonyMart</div>
+        <div class="screen-card">
+          <div class="lbl">Today's assignment</div>
+          <div class="row"><span>Chapter 4 — Own the Room</span><span>62%</span></div>
+          <div class="bar"><i></i></div>
+          <span class="pill">Continue reading →</span>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</header>
+
+<div class="wrap stats">
+  <div class="stat"><b>1</b><span>Book, fully interactive</span></div>
+  <div class="stat"><b>1</b><span>Film — the Musical</span></div>
+  <div class="stat"><b>∞</b><span>Community in the Break Room</span></div>
+  <div class="stat"><b>0</b><span>Ads &amp; trackers</span></div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" class="wrap">
+  <div class="sec-head">
+    <div class="kick">What's inside</div>
+    <h2>Everything Boss Up, in one app</h2>
+    <p>The book, the film, and a community — wrapped in a gamified onboarding you actually want to finish.</p>
+  </div>
+  <div class="features">
+    <div class="feat"><div class="ic">📖</div><h3>Read the book</h3><p>The full <em>Boss Up</em> book, built for mobile. Track your progress, adjust the theme and text size, and pick up right where you left off.</p></div>
+    <div class="feat"><div class="ic">🎬</div><h3>Watch the Musical</h3><p>Stream <em>Boss Up: The Musical</em> inside the app — the story off the page and on the screen.</p></div>
+    <div class="feat"><div class="ic">🛒</div><h3>Clock in at TonyMart</h3><p>A gamified onboarding at a fictional store. Complete assignments, earn your stripes, and rise from new hire to boss.</p></div>
+    <div class="feat"><div class="ic">💬</div><h3>The Break Room</h3><p>Swap wins, questions, and advice with other readers in the in-app community. Report and block keep it a safe space.</p></div>
+    <div class="feat"><div class="ic">✨</div><h3>Highlights &amp; stats</h3><p>Save the lines that hit, track your streaks, and see how far you've come — all in one place.</p></div>
+    <div class="feat"><div class="ic">🔒</div><h3>Private by default</h3><p>Your reading stays on your device unless you choose to sync. No ads, no third-party tracking. You're in control.</p></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE / QUOTE -->
+<section id="experience" class="wrap">
+  <div class="quote">
+    <p>"You weren't hired to blend in.<br><span class="grad">You were hired to boss up.</span>"</p>
+    <div class="by">— Your first day at TonyMart</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="get" class="wrap">
+  <div class="cta">
+    <h2>Start your first shift.</h2>
+    <p class="sub" style="margin:16px auto 0">Download Boss Up — The App and turn the book into a mission.</p>
+    <div class="badges">
+      <a class="badge" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 12.6c0-2 1.6-3 1.7-3.05-0.9-1.35-2.35-1.53-2.86-1.55-1.2-0.12-2.37 0.72-2.98 0.72-0.62 0-1.57-0.7-2.58-0.68-1.32 0.02-2.55 0.77-3.23 1.96-1.39 2.4-0.36 5.95 0.99 7.9 0.66 0.95 1.44 2.02 2.47 1.98 1-0.04 1.37-0.64 2.58-0.64 1.2 0 1.54 0.64 2.58 0.62 1.07-0.02 1.74-0.97 2.39-1.93 0.75-1.1 1.06-2.17 1.08-2.22-0.02-0.01-2.07-0.8-2.09-3.16zM14.6 6.6c0.55-0.67 0.92-1.6 0.82-2.53-0.79 0.03-1.75 0.53-2.32 1.19-0.51 0.59-0.96 1.53-0.84 2.44 0.88 0.07 1.79-0.45 2.34-1.1z"/></svg><div class="t"><small>Download on the</small><b>App Store</b></div></a>
+      <a class="badge soon" href="#"><svg viewBox="0 0 24 24"><path fill="#EA4335" d="M4 3l10.5 6L4 15V3z" opacity=".9"/><path fill="#FBBC04" d="M14.5 9L18 11l-2.2 1.3L14.5 9z"/><path fill="#34A853" d="M4 21l10.5-6-2.8-1.6L4 21z" opacity=".9"/><path fill="#4285F4" d="M4 3v18l7.7-9L4 3z" opacity=".85"/></svg><div class="t"><small>Coming soon to</small><b>Google Play</b></div><span class="tag">Soon</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="wrap">
+  <div class="foot-top">
+    <div class="brand"><span class="mark">B</span><span>Boss&nbsp;<b>Up</b></span></div>
+    <div class="foot-links">
+      <a href="mailto:support@path-and-pace.com">Support</a>
+      <a href="BossUpTheApp-Privacy-Policy">Privacy Policy</a>
+      <a href="bossupapp-delete-account">Delete Account</a>
+      <a href="legal.html">Legal</a>
+    </div>
+  </div>
+  <div class="legal">
+    Boss Up — The App is operated by Boss Up App LLC (currently Kurot LLC, pending a Georgia name-change filing) and is developed and published by Path &amp; Pace LLC.<br>
+    <em>Boss Up</em> © 2026 and <em>Boss Up: The Musical</em> © 2025 Tony Talks Media LLC, used under license. All rights reserved.
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
