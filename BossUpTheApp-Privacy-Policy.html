@@ -16,7 +16,7 @@
     • Developer/publisher: Path & Pace LLC (development & publishing agreement with Boss Up App LLC).
     • Contact email:      support@path-and-pace.com
                           (consider a dedicated privacy@ / support@ address)
-    • Last updated:       July 7, 2026  (appears at top AND bottom)
+    • Last updated:       July 16, 2026  (appears at top AND bottom)
     • Governing law:      Georgia, United States
     • Address:            Atlanta, Georgia
   NOTE: This is a drafting aid, not legal advice. Have counsel review it first.
@@ -254,7 +254,7 @@ footer {
     <div class="header-label">Boss Up — The App</div>
     <h1 class="header-title">Privacy <em>Policy.</em></h1>
     <p class="header-sub">How <strong>Boss Up App LLC</strong> collects, uses, and protects your information in Boss Up — The App. Written for humans, not billed by the hour.</p>
-    <p class="header-date">Last updated: <strong>July 7, 2026</strong></p>
+    <p class="header-date">Last updated: <strong>July 16, 2026</strong></p>
   </div>
 </header>
 
@@ -267,7 +267,7 @@ footer {
       <li><strong>You need an account</strong> to use the app — just an email and a password (the password is handled by our sign-in provider; we never see it).</li>
       <li><strong>By default, nothing leaves your device.</strong> Reading the book, your progress, highlights, and preferences all work fully on-device without sharing anything to the cloud.</li>
       <li><strong>Cloud sync is opt-in.</strong> You have to switch on a "data sharing" setting (off by default) before we sync your profile and reading progress — and that's also what unlocks the community "Break Room" chat. Turn it off and we purge the synced copy from our servers.</li>
-      <li><strong>No ads. No tracking SDKs. No selling your data.</strong> We don't use third-party advertising networks or analytics trackers, and we never sell or rent your personal information.</li>
+      <li><strong>No ads. No cross-app tracking. No selling your data.</strong> We don't use advertising networks or tracking SDKs, and we never sell or rent your personal information. We do use Firebase Crashlytics to collect crash diagnostics so we can fix bugs.</li>
       <li><strong>You can delete your account in the app</strong> — Settings → Delete account — or by emailing us.</li>
       <li><strong>Who we share with:</strong> Google Firebase (our backend) and Apple (the app platform). That's it.</li>
     </ul>
@@ -316,7 +316,7 @@ footer {
       <li>You create an account with an <strong>email and password</strong>. Our sign-in provider (Google Firebase Authentication) handles the password — we never store or see it in readable form.</li>
       <li><strong>By default, the App keeps your data on your device.</strong> You can read the book, track progress, save highlights, and set preferences without any of it leaving your phone.</li>
       <li>If you want cloud features — syncing your profile across devices and joining the community "Break Room" chat — you <strong>opt in</strong> with a data-sharing setting that's <strong>off by default</strong>. Turn it back off and we delete the synced copy from our servers.</li>
-      <li>We use <strong>Google Firebase</strong> for our backend and <strong>Apple</strong> as the app platform. We do <strong>not</strong> use advertising networks, third-party analytics/tracking SDKs, and we do <strong>not</strong> sell or rent your data.</li>
+      <li>We use <strong>Google Firebase</strong> for our backend (including <strong>Crashlytics</strong> for crash diagnostics) and <strong>Apple</strong> as the app platform. We do <strong>not</strong> use advertising networks or cross-app tracking SDKs, and we do <strong>not</strong> sell or rent your data.</li>
       <li>The App has <strong>no in-app purchases</strong> and processes <strong>no payment data</strong>.</li>
       <li>You can <strong>delete your account right inside the App</strong>, and you have privacy rights you can exercise any time by emailing us.</li>
     </ul>
@@ -349,10 +349,11 @@ footer {
     <ul>
       <li><strong>Anonymous sign-in identity</strong> — on first launch, the App creates an anonymous authentication identity so it works before you sign up. When you register, this is upgraded to your email account.</li>
       <li><strong>Push token</strong> — if you enable notifications, a device push token is generated to deliver messages (see <a href="#push">Push notifications</a>).</li>
+      <li><strong>Crash &amp; diagnostic data</strong> — to keep the App stable, we use <strong>Firebase Crashlytics</strong> (a Google service) to collect crash reports and diagnostics: your device model, operating system and App version, the time and state of a crash, stack traces, and a Crashlytics diagnostic identifier. This is collected automatically when the App runs — whether or not you've turned on data sharing — and isn't used to identify you personally.</li>
     </ul>
 
     <div class="callout">
-      <p>We do <strong>not</strong> collect your camera, precise location, contacts, or microphone data. We do <strong>not</strong> use advertising IDs or third-party tracking SDKs.</p>
+      <p>We do <strong>not</strong> collect your camera, precise location, contacts, or microphone data. We do <strong>not</strong> use advertising IDs or advertising/cross-app tracking SDKs. (We do use Firebase Crashlytics for crash diagnostics — see below.)</p>
     </div>
   </section>
 
@@ -368,6 +369,7 @@ footer {
       <li><strong>To run the community chat</strong> — showing your messages and display name to other eligible users, and handling reports and blocks for safety.</li>
       <li><strong>To send notifications</strong> — only if you've enabled them.</li>
       <li><strong>To keep the App safe and working</strong> — moderating content, preventing abuse, and fixing problems.</li>
+      <li><strong>To diagnose crashes and improve stability</strong> — using crash and diagnostic data to find and fix bugs and keep the App reliable.</li>
       <li><strong>To meet legal obligations</strong> — where the law requires it.</li>
     </ul>
   </section>
@@ -384,7 +386,7 @@ footer {
       <li><strong>You can withdraw consent any time.</strong> Turning the setting back OFF purges the synced copy of your data from our servers.</li>
     </ul>
     <div class="callout">
-      <p><strong>Legal basis (GDPR).</strong> For users in the EU and UK, the lawful basis for this cloud processing is your <strong>consent</strong>, which you give by switching on data sharing and can withdraw at any time. Withdrawing consent doesn't affect processing that already happened before you withdrew it.</p>
+      <p><strong>Legal basis (GDPR).</strong> For users in the EU and UK, the lawful basis for this cloud processing is your <strong>consent</strong>, which you give by switching on data sharing and can withdraw at any time. Withdrawing consent doesn't affect processing that already happened before you withdrew it. For <strong>crash and diagnostic data</strong> (Firebase Crashlytics), our lawful basis is our <strong>legitimate interest</strong> in keeping the App stable and secure; this runs independently of the data-sharing setting.</p>
     </div>
   </section>
 
@@ -413,6 +415,7 @@ footer {
       <li><strong>Cloud Firestore (database)</strong> — your profile and reading progress (when you've opted into data sharing), and community chat messages.</li>
       <li><strong>Cloud Storage</strong> — delivering book content.</li>
       <li><strong>Cloud Messaging</strong> — delivering push notifications.</li>
+      <li><strong>Crashlytics</strong> — crash reporting and diagnostics to keep the App stable (collects the crash/diagnostic data described above).</li>
     </ul>
     <p>Google acts as a data processor / service provider for us. You can read Google's privacy policy at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a>.</p>
 
@@ -420,7 +423,7 @@ footer {
     <p>Apple is the platform and distributor channel for the App (the App Store) and handles push-notification delivery to Apple devices through the Apple Push Notification service (APNs).</p>
 
     <div class="callout">
-      <p><strong>What we don't do.</strong> The App uses <strong>no third-party advertising networks</strong> and <strong>no third-party analytics or tracking SDKs</strong>. We do <strong>not sell or rent</strong> your personal information.</p>
+      <p><strong>What we don't do.</strong> The App uses <strong>no third-party advertising networks</strong> and <strong>no advertising or cross-app tracking SDKs</strong>. The only third-party diagnostics we use is Firebase Crashlytics, for crash reporting and stability. We do <strong>not sell or rent</strong> your personal information.</p>
       <p><strong>Payments.</strong> The App currently has <strong>no in-app purchases</strong> and processes <strong>no payment data</strong>. (The physical book and e-book may be sold separately on the book website — that's outside this App and this policy.)</p>
     </div>
   </section>
@@ -549,7 +552,7 @@ footer {
 </div>
 
 <div class="doc-footer-meta">
-  Last updated: <strong>July 7, 2026</strong>
+  Last updated: <strong>July 16, 2026</strong>
   · Operated by Boss Up App LLC · Developed &amp; published by Path &amp; Pace LLC · Boss Up IP © Tony Talks Media LLC
   <br>
   <a href="#" class="back-top">↑ Back to top</a>
