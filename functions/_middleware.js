@@ -7,6 +7,7 @@
 const CANONICALS = [
   '/BossUpTheApp-Privacy-Policy',
   '/bossupapp-delete-account',
+  '/boss-up-app',
 ];
 // legacy/alternate path -> canonical target (matched case-insensitively)
 const ALIASES = {
