@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="champagne">
+<html lang="en" data-theme="velvet" data-accent="drift">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:title" content="TT. — For Now, Not Later.">
 <meta property="og:description" content="An escape from the noise. Fall/Winter 2026, designed in Atlanta.">
-<meta name="theme-color" content="#F7F0E7">
+<meta name="theme-color" content="#160E22">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Fraunces:opsz,wght@9..144,300..700&family=Kaushan+Script&display=swap" rel="stylesheet">
@@ -187,25 +187,52 @@ header{position:relative;z-index:20;border-bottom:1px solid var(--line);backgrou
   45%{opacity:.95;transform:scale(1) rotate(35deg)}
   70%{opacity:.25;transform:scale(.8) rotate(50deg)}}
 .nav-right{display:flex;align-items:center;gap:12px}
-.themes{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid var(--line-2);border-radius:100px}
-.themes button{width:18px;height:18px;border-radius:50%;border:1.5px solid transparent;cursor:pointer;padding:0;transition:transform .25s,border-color .25s}
-.themes button:hover{transform:scale(1.18)}
-.themes button[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.1)}
-.t-champagne{background:linear-gradient(135deg,#F7F0E7 45%,#C9134F)}
-.t-blush{background:linear-gradient(135deg,#FBE8EE 45%,#CE0F5C)}
-.t-orchid{background:linear-gradient(135deg,#EFE9FB 45%,#6D2FCB)}
-.t-midnight{background:linear-gradient(135deg,#2F1E2B 45%,#FF4A92)}
-.t-velvet{background:linear-gradient(135deg,#2A1C3E 45%,#B57BFF)}
-.t-noir{background:linear-gradient(135deg,#272227 45%,#FF3D82)}
-.t-ink{background:linear-gradient(135deg,#1E293F 45%,#7FB2FF)}
-.t-ember{background:linear-gradient(135deg,#2F1E19 45%,#FF4D6D)}
-.a-theme{background:var(--accent-base)}
-.a-drift{background:conic-gradient(#C9134F,#6D2FCB,#0F6E78,#1E5FBF,#C9134F)}
-.a-pink{background:light-dark(#C9134F,#FF4A92)}
-.a-purple{background:light-dark(#6D2FCB,#B57BFF)}
-.a-teal{background:light-dark(#0F6E78,#3FD0C9)}
-.a-blue{background:light-dark(#1E5FBF,#6FB1FF)}
-.a-amber{background:light-dark(#9A5410,#FFA84D)}
+.look-open{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
+  border-radius:50%;border:1px solid var(--line-2);background:none;cursor:pointer;padding:0;
+  transition:transform .25s,border-color .25s}
+.look-open:hover{transform:scale(1.09);border-color:var(--accent)}
+.look-open i{display:block;width:17px;height:17px;border-radius:50%;
+  background:conic-gradient(from 210deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent))}
+#lookScrim{position:fixed;inset:0;z-index:180;background:rgba(0,0,0,.3);
+  opacity:0;visibility:hidden;transition:opacity .38s,visibility .38s}
+#lookScrim.on{opacity:1;visibility:visible}
+.look{position:fixed;z-index:190;top:0;right:0;height:100%;width:min(290px,86vw);
+  padding:20px 18px 26px;overflow:auto;
+  background:color-mix(in srgb,var(--bg-2) 93%,transparent);backdrop-filter:blur(20px);
+  border-left:1px solid var(--line);box-shadow:-34px 0 64px -34px rgba(0,0,0,.4);
+  transform:translateX(103%);visibility:hidden;
+  transition:transform .42s cubic-bezier(.2,.7,.3,1),visibility .42s}
+.look.on{transform:none;visibility:visible}
+.look .look-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.look .x{position:static;width:32px;height:32px;font-size:13px}
+.look .look-top span{font-size:9px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft)}
+.look h4{margin:0 0 8px;font-size:9px;font-weight:700;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.look .grp+.grp{margin-top:24px}
+.themes{display:flex;flex-direction:column;gap:1px}
+.themes button{display:flex;align-items:center;gap:11px;width:100%;padding:8px 10px;border:0;
+  border-radius:11px;background:none;cursor:pointer;font:inherit;font-size:13px;
+  color:var(--ink-2);text-align:left;transition:background .2s,color .2s}
+.themes button::before{content:"";flex:0 0 auto;width:16px;height:16px;border-radius:50%;
+  background:var(--sw);border:1.5px solid transparent;transition:border-color .2s}
+.themes button:hover{background:var(--bg-3)}
+.themes button[aria-pressed="true"]{color:var(--ink);font-weight:600;background:var(--bg-3)}
+.themes button[aria-pressed="true"]::before{border-color:var(--ink)}
+.t-champagne{--sw:linear-gradient(135deg,#F7F0E7 45%,#C9134F)}
+.t-blush{--sw:linear-gradient(135deg,#FBE8EE 45%,#CE0F5C)}
+.t-orchid{--sw:linear-gradient(135deg,#EFE9FB 45%,#6D2FCB)}
+.t-midnight{--sw:linear-gradient(135deg,#2F1E2B 45%,#FF4A92)}
+.t-velvet{--sw:linear-gradient(135deg,#2A1C3E 45%,#B57BFF)}
+.t-noir{--sw:linear-gradient(135deg,#272227 45%,#FF3D82)}
+.t-ink{--sw:linear-gradient(135deg,#1E293F 45%,#7FB2FF)}
+.t-ember{--sw:linear-gradient(135deg,#2F1E19 45%,#FF4D6D)}
+.a-theme{--sw:var(--accent-base)}
+.a-drift{--sw:conic-gradient(#C9134F,#6D2FCB,#0F6E78,#1E5FBF,#C9134F)}
+.a-pink{--sw:light-dark(#C9134F,#FF4A92)}
+.a-purple{--sw:light-dark(#6D2FCB,#B57BFF)}
+.a-teal{--sw:light-dark(#0F6E78,#3FD0C9)}
+.a-blue{--sw:light-dark(#1E5FBF,#6FB1FF)}
+.a-amber{--sw:light-dark(#9A5410,#FFA84D)}
 .link{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;background:none;border:0;padding:8px 4px;transition:color .2s}
 .link:hover{color:var(--accent)}
 .btn{display:inline-block;padding:11px 22px;border-radius:100px;cursor:pointer;border:1px solid var(--accent);
@@ -385,7 +412,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
 }
 @media(max-width:700px){
   .nav{height:auto;padding-block:11px;gap:10px 12px;flex-wrap:wrap}
-  .themes{order:3}
   #openPersp{display:none}
   .foot{justify-content:flex-start;gap:12px 18px}
   .joinbar{flex:1 1 100%}
@@ -400,8 +426,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
 }
 @media(max-width:430px){
   .mark{font-size:26px}
-  .themes{padding:5px 6px;gap:5px}
-  .themes button{width:14px;height:14px}
   .btn{padding:10px 14px;letter-spacing:.14em}
   .brand .cta .btn{padding:11px 18px}
 }
@@ -499,29 +523,45 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
     <span class="mark sheen">TT.</span>
     <div class="nav-right">
       <button class="link" id="openPersp">The Perspective</button>
-      <div class="themes" id="themes" role="group" aria-label="Color theme">
-        <button class="t-champagne" data-t="champagne" aria-label="Champagne"></button>
-        <button class="t-blush" data-t="blush" aria-label="Blush"></button>
-        <button class="t-orchid" data-t="orchid" aria-label="Orchid"></button>
-        <button class="t-midnight" data-t="midnight" aria-label="Midnight"></button>
-        <button class="t-velvet" data-t="velvet" aria-label="Velvet"></button>
-        <button class="t-noir" data-t="noir" aria-label="Noir"></button>
-        <button class="t-ink" data-t="ink" aria-label="Ink"></button>
-        <button class="t-ember" data-t="ember" aria-label="Ember"></button>
-      </div>
-      <div class="themes" id="accents" role="group" aria-label="Accent color">
-        <button class="a-theme" data-a="theme" aria-label="Match the theme" title="Match the theme"></button>
-        <button class="a-drift" data-a="drift" aria-label="Drifting color" title="Drifting color"></button>
-        <button class="a-pink" data-a="pink" aria-label="Pink" title="Pink"></button>
-        <button class="a-purple" data-a="purple" aria-label="Purple" title="Purple"></button>
-        <button class="a-teal" data-a="teal" aria-label="Teal" title="Teal"></button>
-        <button class="a-blue" data-a="blue" aria-label="Blue" title="Blue"></button>
-        <button class="a-amber" data-a="amber" aria-label="Amber" title="Amber"></button>
-      </div>
+      <button class="look-open" id="openLook" aria-label="Color options" aria-expanded="false"
+              aria-controls="look" title="Color options"><i aria-hidden="true"></i></button>
       <button class="btn" id="openCloset">Your closet</button>
     </div>
   </div>
 </header>
+
+<div id="lookScrim" hidden></div>
+<aside class="look" id="look" aria-label="Color options">
+  <div class="look-top">
+    <span>Color</span>
+    <button class="x" id="closeLook" aria-label="Close">&#10005;</button>
+  </div>
+  <div class="grp">
+    <h4>Accent</h4>
+    <div class="themes" id="accents" role="group" aria-label="Accent color">
+      <button class="a-drift"  data-a="drift">Drifting</button>
+      <button class="a-theme"  data-a="theme">Match theme</button>
+      <button class="a-pink"   data-a="pink">Pink</button>
+      <button class="a-purple" data-a="purple">Purple</button>
+      <button class="a-teal"   data-a="teal">Teal</button>
+      <button class="a-blue"   data-a="blue">Blue</button>
+      <button class="a-amber"  data-a="amber">Amber</button>
+    </div>
+  </div>
+  <div class="grp">
+    <h4>Theme</h4>
+    <div class="themes" id="themes" role="group" aria-label="Color theme">
+      <button class="t-velvet"    data-t="velvet">Velvet</button>
+      <button class="t-midnight"  data-t="midnight">Midnight</button>
+      <button class="t-noir"      data-t="noir">Noir</button>
+      <button class="t-ink"       data-t="ink">Ink</button>
+      <button class="t-ember"     data-t="ember">Ember</button>
+      <button class="t-champagne" data-t="champagne">Champagne</button>
+      <button class="t-blush"     data-t="blush">Blush</button>
+      <button class="t-orchid"    data-t="orchid">Orchid</button>
+    </div>
+  </div>
+</aside>
 
 <main class="stage">
   <div class="wrap stage-in">
@@ -710,7 +750,7 @@ $('#yr').textContent = new Date().getFullYear();
 const THEME_BG = {champagne:'#F7F0E7',blush:'#FBE8EE',orchid:'#EFE9FB',
                   midnight:'#1B1018',velvet:'#160E22',noir:'#141114',ink:'#0F1626',ember:'#1A0F0C'};
 function setTheme(t, save = true){
-  if(!THEME_BG[t]) t = 'champagne';
+  if(!THEME_BG[t]) t = 'velvet';
   document.documentElement.dataset.theme = t;
   let tc = document.querySelector('meta[name=theme-color]');
   if(!tc){ tc = document.createElement('meta'); tc.name = 'theme-color'; document.head.appendChild(tc); }
@@ -720,7 +760,7 @@ function setTheme(t, save = true){
 }
 $('#themes').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if(b) setTheme(b.dataset.t); });
 let sv = null; try{ sv = localStorage.getItem('tt_theme'); }catch(_){}
-setTheme(sv || 'champagne', false);
+setTheme(sv || 'velvet', false);
 
 /* accent — independent of the theme */
 const ACCENTS = ['theme','drift','pink','purple','teal','blue','amber'];
@@ -733,7 +773,7 @@ function setAccent(a, save = true){
 }
 $('#accents').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if(b) setAccent(b.dataset.a); });
 let sa = null; try{ sa = localStorage.getItem('tt_accent'); }catch(_){}
-setAccent(sa || 'theme', false);
+setAccent(sa || 'drift', false);
 
 /* viewer — one window, cycles the collection */
 const frame = $('#frame'), dots = $('#dots');
@@ -798,6 +838,20 @@ document.addEventListener('click', e => {
   const t = e.target.closest('[data-piece]'); if(t) return openPiece(t.dataset.piece);
 });
 addEventListener('keydown', e => e.key === 'Escape' && closeAll());
+
+/* color panel */
+const lookPanel = $('#look'), lookScrim = $('#lookScrim'), lookBtn = $('#openLook');
+lookScrim.removeAttribute('hidden');
+function setLook(on){
+  lookPanel.classList.toggle('on', on);
+  lookScrim.classList.toggle('on', on);
+  lookBtn.setAttribute('aria-expanded', on);
+  if(on) lookPanel.querySelector('button[aria-pressed="true"]')?.focus();
+}
+lookBtn.addEventListener('click', () => setLook(!lookPanel.classList.contains('on')));
+$('#closeLook').addEventListener('click', () => setLook(false));
+lookScrim.addEventListener('click', () => setLook(false));
+addEventListener('keydown', e => e.key === 'Escape' && setLook(false));
 ['#openPersp','#ctaPersp'].forEach(s => $(s).addEventListener('click', () => open($('#ovPersp'))));
 ['#openCloset','#ctaCloset'].forEach(s => $(s).addEventListener('click', () => open($('#ovCloset'))));
 
