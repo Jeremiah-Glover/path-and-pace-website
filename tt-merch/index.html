@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Fraunces:opsz,wght@9..144,300..700&family=Kaushan+Script&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-size='86' fill='%23D9155F' font-family='cursive' font-style='italic' font-weight='700'>TT</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-size='86' fill='%23C9134F' font-family='cursive' font-style='italic' font-weight='700'>TT</text></svg>">
 <style>
 /* ==========================================================
    TT. — Fall/Winter 2026. One screen, no scroll.
@@ -22,9 +22,10 @@
   --bg:#F7F0E7;--bg-2:#FFFCF7;--bg-3:#F0E5D8;
   --ink:#2B1720;--ink-2:#4A333E;--ink-soft:#7A6470;
   --line:#E4D7C8;--line-2:#D3C0AD;
-  --accent:#D9155F;--accent-2:#7B3FD4;--accent-3:#F0873C;--on-accent:#FFF8FA;
+  --accent:#C9134F;--accent-2:#7B3FD4;--accent-3:#F0873C;--on-accent:#FFF8FA;
   --plate:#1E1519;
-  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;--flux:fluxLight;
+  --accent-base:#C9134F;--accent-base-2:#7B3FD4;color-scheme:light;
 }
 [data-theme="blush"]{
   --bg:#FBE8EE;--bg-2:#FFF6F9;--bg-3:#F6DAE3;
@@ -32,15 +33,17 @@
   --line:#F0D2DD;--line-2:#E0B3C6;
   --accent:#CE0F5C;--accent-2:#8B4DE8;--accent-3:#F0873C;--on-accent:#FFF6F9;
   --plate:#241017;
-  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;--flux:fluxLight;
+  --accent-base:#CE0F5C;--accent-base-2:#8B4DE8;color-scheme:light;
 }
 [data-theme="orchid"]{
   --bg:#EFE9FB;--bg-2:#F9F6FF;--bg-3:#E5DBF7;
   --ink:#241243;--ink-2:#3D2166;--ink-soft:#6D5A93;
   --line:#DDD1F2;--line-2:#C4B1E4;
-  --accent:#6D2FCB;--accent-2:#D9155F;--accent-3:#F0873C;--on-accent:#F9F6FF;
+  --accent:#6D2FCB;--accent-2:#C9134F;--accent-3:#F0873C;--on-accent:#F9F6FF;
   --plate:#180F2B;
-  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;--flux:fluxLight;
+  --accent-base:#6D2FCB;--accent-base-2:#C9134F;color-scheme:light;
 }
 [data-theme="midnight"]{
   --bg:#1B1018;--bg-2:#251722;--bg-3:#2F1E2B;
@@ -48,15 +51,17 @@
   --line:#3B2836;--line-2:#5E4356;
   --accent:#FF4A92;--accent-2:#A97BFF;--accent-3:#FFA05C;--on-accent:#1B1018;
   --plate:#120A10;
-  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;--flux:fluxDark;
+  --accent-base:#FF4A92;--accent-base-2:#A97BFF;color-scheme:dark;
 }
 [data-theme="velvet"]{
   --bg:#160E22;--bg-2:#1F142F;--bg-3:#2A1C3E;
   --ink:#F1E9FA;--ink-2:#D5C7E6;--ink-soft:#9E8CB5;
   --line:#2E2140;--line-2:#4B3760;
-  --accent:#FF4A92;--accent-2:#B57BFF;--accent-3:#FFA05C;--on-accent:#160E22;
+  --accent:#E066D8;--accent-2:#B57BFF;--accent-3:#FFA05C;--on-accent:#160E22;
   --plate:#0E0817;
-  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;--flux:fluxDark;
+  --accent-base:#E066D8;--accent-base-2:#B57BFF;color-scheme:dark;
 }
 [data-theme="noir"]{
   --bg:#141114;--bg-2:#1D191D;--bg-3:#272227;
@@ -64,7 +69,8 @@
   --line:#332C33;--line-2:#4E434E;
   --accent:#FF3D82;--accent-2:#B98CFF;--accent-3:#FFA05C;--on-accent:#141114;
   --plate:#0C0A0C;
-  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;--flux:fluxDark;
+  --accent-base:#FF3D82;--accent-base-2:#B98CFF;color-scheme:dark;
 }
 [data-theme="ink"]{
   --bg:#0F1626;--bg-2:#161F33;--bg-3:#1E293F;
@@ -72,7 +78,8 @@
   --line:#26314A;--line-2:#3C4A67;
   --accent:#FF5A93;--accent-2:#7FB2FF;--accent-3:#FFB067;--on-accent:#0F1626;
   --plate:#080D18;
-  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;--flux:fluxDark;
+  --accent-base:#FF5A93;--accent-base-2:#7FB2FF;color-scheme:dark;
 }
 [data-theme="ember"]{
   --bg:#1A0F0C;--bg-2:#241612;--bg-3:#2F1E19;
@@ -80,8 +87,36 @@
   --line:#3A251F;--line-2:#553629;
   --accent:#FF4D6D;--accent-2:#FFA84D;--accent-3:#FF8FB8;--on-accent:#1A0F0C;
   --plate:#110807;
-  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;--flux:fluxDark;
+  --accent-base:#FF4D6D;--accent-base-2:#FFA84D;color-scheme:dark;
 }
+
+@property --accent   { syntax:'<color>'; inherits:true; initial-value:#C9134F }
+@property --accent-2 { syntax:'<color>'; inherits:true; initial-value:#7B3FD4 }
+@keyframes fluxLight{
+  0%  {--accent:#C9134F;--accent-2:#6D2FCB}
+  25% {--accent:#6D2FCB;--accent-2:#0F6E78}
+  50% {--accent:#0F6E78;--accent-2:#1E5FBF}
+  75% {--accent:#1E5FBF;--accent-2:#C9134F}
+  100%{--accent:#C9134F;--accent-2:#6D2FCB}
+}
+@keyframes fluxDark{
+  0%  {--accent:#FF4A92;--accent-2:#B57BFF}
+  25% {--accent:#B57BFF;--accent-2:#3FD0C9}
+  50% {--accent:#3FD0C9;--accent-2:#6FB1FF}
+  75% {--accent:#6FB1FF;--accent-2:#FF4A92}
+  100%{--accent:#FF4A92;--accent-2:#B57BFF}
+}
+/* Accent is its own control, separate from the theme.
+   No data-accent  -> the theme's own accent (the default).
+   drift           -> slowly cycles through the theme's mode range.
+   a named color   -> pinned, light/dark variant chosen automatically. */
+html[data-accent="drift"]{animation:var(--flux) 44s linear infinite}
+html[data-accent="pink"]  {--accent:light-dark(#C9134F,#FF4A92);--accent-2:light-dark(#6D2FCB,#B57BFF)}
+html[data-accent="purple"]{--accent:light-dark(#6D2FCB,#B57BFF);--accent-2:light-dark(#1E5FBF,#6FB1FF)}
+html[data-accent="teal"]  {--accent:light-dark(#0F6E78,#3FD0C9);--accent-2:light-dark(#1E5FBF,#6FB1FF)}
+html[data-accent="blue"]  {--accent:light-dark(#1E5FBF,#6FB1FF);--accent-2:light-dark(#6D2FCB,#B57BFF)}
+html[data-accent="amber"] {--accent:light-dark(#9A5410,#FFA84D);--accent-2:light-dark(#C9134F,#FF4A92)}
 
 *{box-sizing:border-box}
 html{max-width:100%;overflow-x:clip}
@@ -115,18 +150,48 @@ button{font:inherit}
 @keyframes shift{0%{background-position:0 0}25%{background-position:-14px 8px}50%{background-position:9px -13px}75%{background-position:-7px -6px}}
 @media (prefers-reduced-motion:reduce){.aura i,.grain{animation:none}}
 
+.wind{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.wind i{position:absolute;display:block;border-radius:50%;opacity:0;
+  background:radial-gradient(circle,var(--accent) 0%,transparent 68%);
+  animation:gust linear infinite}
+@keyframes gust{
+  0%  {transform:translate3d(-8vw,0,0) scale(.5);opacity:0}
+  14% {opacity:var(--o)}
+  50% {transform:translate3d(50vw,-5vh,0) scale(1)}
+  86% {opacity:calc(var(--o) * .7)}
+  100%{transform:translate3d(114vw,4vh,0) scale(.6);opacity:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .wind{display:none}
+  html[data-accent="drift"]{animation:none}
+  .esc{animation:none}
+  .sheen{animation:none}
+  .twinkle{animation:none;opacity:.5}
+}
+
 .wrap{max-width:1560px;margin:0 auto;width:100%;padding-inline:clamp(18px,3.4vw,52px)}
 
 /* ---------- header ---------- */
 header{position:relative;z-index:20;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 76%,transparent);backdrop-filter:blur(14px)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
-.mark{font-family:'Kaushan Script',cursive;font-size:32px;line-height:1;color:var(--accent);transition:color .6s}
+.mark{font-family:'Kaushan Script',cursive;font-size:32px;line-height:1;color:var(--accent)}
+.sheen{
+  background:linear-gradient(100deg,var(--accent) 0 34%,#FFF4F8 44%,var(--accent-2) 52%,var(--accent) 64% 100%);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  animation:sheen 7s ease-in-out infinite}
+@keyframes sheen{0%{background-position:135% 0}60%,100%{background-position:-35% 0}}
+.twinkle{position:absolute;pointer-events:none;opacity:0;color:var(--accent);
+  animation:twk 4.4s ease-in-out infinite}
+@keyframes twk{0%,100%{opacity:0;transform:scale(.4) rotate(0)}
+  45%{opacity:.95;transform:scale(1) rotate(35deg)}
+  70%{opacity:.25;transform:scale(.8) rotate(50deg)}}
 .nav-right{display:flex;align-items:center;gap:12px}
 .themes{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid var(--line-2);border-radius:100px}
 .themes button{width:18px;height:18px;border-radius:50%;border:1.5px solid transparent;cursor:pointer;padding:0;transition:transform .25s,border-color .25s}
 .themes button:hover{transform:scale(1.18)}
 .themes button[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.1)}
-.t-champagne{background:linear-gradient(135deg,#F7F0E7 45%,#D9155F)}
+.t-champagne{background:linear-gradient(135deg,#F7F0E7 45%,#C9134F)}
 .t-blush{background:linear-gradient(135deg,#FBE8EE 45%,#CE0F5C)}
 .t-orchid{background:linear-gradient(135deg,#EFE9FB 45%,#6D2FCB)}
 .t-midnight{background:linear-gradient(135deg,#2F1E2B 45%,#FF4A92)}
@@ -134,6 +199,13 @@ header{position:relative;z-index:20;border-bottom:1px solid var(--line);backgrou
 .t-noir{background:linear-gradient(135deg,#272227 45%,#FF3D82)}
 .t-ink{background:linear-gradient(135deg,#1E293F 45%,#7FB2FF)}
 .t-ember{background:linear-gradient(135deg,#2F1E19 45%,#FF4D6D)}
+.a-theme{background:var(--accent-base)}
+.a-drift{background:conic-gradient(#C9134F,#6D2FCB,#0F6E78,#1E5FBF,#C9134F)}
+.a-pink{background:light-dark(#C9134F,#FF4A92)}
+.a-purple{background:light-dark(#6D2FCB,#B57BFF)}
+.a-teal{background:light-dark(#0F6E78,#3FD0C9)}
+.a-blue{background:light-dark(#1E5FBF,#6FB1FF)}
+.a-amber{background:light-dark(#9A5410,#FFA84D)}
 .link{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;background:none;border:0;padding:8px 4px;transition:color .2s}
 .link:hover{color:var(--accent)}
 .btn{display:inline-block;padding:11px 22px;border-radius:100px;cursor:pointer;border:1px solid var(--accent);
@@ -148,9 +220,20 @@ header{position:relative;z-index:20;border-bottom:1px solid var(--line);backgrou
 .stage{display:grid;align-items:center;padding-block:clamp(20px,3vh,38px)}
 .stage-in{display:grid;gap:clamp(24px,3vw,54px);grid-template-columns:1fr;min-height:0;align-items:center}
 @media(min-width:1020px){.stage-in{grid-template-columns:minmax(320px,.82fr) 1.18fr}}
-.brand .mark-xl{font-family:'Kaushan Script',cursive;color:var(--accent);font-size:clamp(64px,7vw,104px);line-height:.8;display:block;margin:10px 0 0;transition:color .6s}
+.brand .mark-xl{font-family:'Kaushan Script',cursive;font-size:clamp(64px,7vw,104px);line-height:.8;display:inline-block;position:relative;margin:10px 0 0}
 .brand h1{margin:12px 0 0;font-family:'Fraunces',Georgia,serif;font-size:clamp(34px,3.9vw,58px);line-height:1.02;font-weight:500;letter-spacing:-.03em;color:var(--ink)}
 .brand h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+.esc{display:inline-block;will-change:transform;
+  animation:escape 3.2s cubic-bezier(.5,0,.2,1) .6s both}
+@keyframes escape{
+  0%,14% {transform:translate3d(0,0,0) rotate(0);opacity:1;filter:blur(0)}
+  30%    {transform:translate3d(88vw,-2vh,0) rotate(8deg);opacity:0;filter:blur(4px)}
+  31%    {transform:translate3d(-88vw,2vh,0) rotate(-8deg);opacity:0;filter:blur(4px)}
+  53%    {transform:translate3d(-4vw,0,0) rotate(-1.6deg);opacity:1;filter:blur(0)}
+  70%    {transform:translate3d(1.3vw,0,0) rotate(.6deg)}
+  86%    {transform:translate3d(-.4vw,0,0)}
+  100%   {transform:none}
+}
 .brand p{margin:16px 0 0;font-size:16px;color:var(--ink-2);max-width:38ch}
 .brand .cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:24px}
 
@@ -388,6 +471,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
 <body>
 <div class="aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="wind" aria-hidden="true"><i style="top:7%;width:3px;height:3px;animation-duration:38s;animation-delay:-0s;--o:0.22"></i><i style="top:19%;width:2px;height:2px;animation-duration:36s;animation-delay:-6s;--o:0.29"></i><i style="top:28%;width:4px;height:4px;animation-duration:46s;animation-delay:-13s;--o:0.36"></i><i style="top:36%;width:2px;height:2px;animation-duration:52s;animation-delay:-3s;--o:0.43"></i><i style="top:44%;width:3px;height:3px;animation-duration:59s;animation-delay:-19s;--o:0.50"></i><i style="top:52%;width:2px;height:2px;animation-duration:59s;animation-delay:-9s;--o:0.22"></i><i style="top:61%;width:3px;height:3px;animation-duration:62s;animation-delay:-24s;--o:0.29"></i><i style="top:68%;width:2px;height:2px;animation-duration:52s;animation-delay:-15s;--o:0.36"></i><i style="top:74%;width:4px;height:4px;animation-duration:49s;animation-delay:-2s;--o:0.43"></i><i style="top:81%;width:2px;height:2px;animation-duration:44s;animation-delay:-28s;--o:0.50"></i><i style="top:88%;width:3px;height:3px;animation-duration:34s;animation-delay:-11s;--o:0.22"></i><i style="top:94%;width:2px;height:2px;animation-duration:62s;animation-delay:-21s;--o:0.29"></i><i style="top:12%;width:2px;height:2px;animation-duration:36s;animation-delay:-17s;--o:0.36"></i><i style="top:23%;width:3px;height:3px;animation-duration:39s;animation-delay:-26s;--o:0.43"></i><i style="top:57%;width:2px;height:2px;animation-duration:39s;animation-delay:-7s;--o:0.50"></i><i style="top:84%;width:3px;height:3px;animation-duration:42s;animation-delay:-31s;--o:0.22"></i><i style="top:40%;width:2px;height:2px;animation-duration:44s;animation-delay:-23s;--o:0.29"></i><i style="top:66%;width:2px;height:2px;animation-duration:40s;animation-delay:-12s;--o:0.36"></i></div>
 <canvas id="confetti" aria-hidden="true"></canvas>
 
 <div id="splash">
@@ -397,7 +481,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
   <span class="s-spark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="#FF4A92"/></svg></span>
   <div class="s-in">
     <p class="s-top">Atlanta &nbsp;·&nbsp; MMXXVI</p>
-    <span class="s-mark">TT.</span>
+    <span class="s-mark sheen">TT.</span>
     <p class="s-line">Coming soon.</p>
     <p class="s-sub">Six pieces. One way out of the noise.<br>The list hears first.</p>
     <form class="s-form" id="splashForm" novalidate>
@@ -412,10 +496,10 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
 
 <header>
   <div class="wrap nav">
-    <span class="mark">TT.</span>
+    <span class="mark sheen">TT.</span>
     <div class="nav-right">
       <button class="link" id="openPersp">The Perspective</button>
-      <div class="themes" id="themes" role="group" aria-label="Colour theme">
+      <div class="themes" id="themes" role="group" aria-label="Color theme">
         <button class="t-champagne" data-t="champagne" aria-label="Champagne"></button>
         <button class="t-blush" data-t="blush" aria-label="Blush"></button>
         <button class="t-orchid" data-t="orchid" aria-label="Orchid"></button>
@@ -424,6 +508,15 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
         <button class="t-noir" data-t="noir" aria-label="Noir"></button>
         <button class="t-ink" data-t="ink" aria-label="Ink"></button>
         <button class="t-ember" data-t="ember" aria-label="Ember"></button>
+      </div>
+      <div class="themes" id="accents" role="group" aria-label="Accent color">
+        <button class="a-theme" data-a="theme" aria-label="Match the theme" title="Match the theme"></button>
+        <button class="a-drift" data-a="drift" aria-label="Drifting color" title="Drifting color"></button>
+        <button class="a-pink" data-a="pink" aria-label="Pink" title="Pink"></button>
+        <button class="a-purple" data-a="purple" aria-label="Purple" title="Purple"></button>
+        <button class="a-teal" data-a="teal" aria-label="Teal" title="Teal"></button>
+        <button class="a-blue" data-a="blue" aria-label="Blue" title="Blue"></button>
+        <button class="a-amber" data-a="amber" aria-label="Amber" title="Amber"></button>
       </div>
       <button class="btn" id="openCloset">Your closet</button>
     </div>
@@ -434,8 +527,8 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
   <div class="wrap stage-in">
     <div class="brand">
       <p class="eyebrow" style="margin:0">Fall / Winter 2026 &nbsp;·&nbsp; Designed in Atlanta</p>
-      <span class="mark-xl">TT.</span>
-      <h1>An escape from<br>the <em>noise</em>.</h1>
+      <span class="mark-xl sheen">TT.<span class="twinkle" style="top:-6%;right:-14%" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="currentColor"/></svg></span><span class="twinkle" style="bottom:8%;right:-22%;animation-delay:1.7s" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="currentColor"/></svg></span><span class="twinkle" style="top:38%;left:-16%;animation-delay:2.9s" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="currentColor"/></svg></span></span>
+      <h1>An <em class="esc">escape</em> from<br>the <em>noise</em>.</h1>
       <p>TT isn't a brand — it's a perspective. Six pieces made for joy, cut heavy and finished properly. Buy one and it lands in your Digital Closet forever.</p>
       <div class="cta">
         <button class="btn" id="ctaCloset">Open your closet</button>
@@ -480,7 +573,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
     <div class="pad">
       <p class="eyebrow" style="margin:0 0 14px">The perspective</p>
       <h2>TT isn't a brand.<br>It's a <em>doorway</em>.</h2>
-      <p>Somewhere along the way clothes stopped being fun. This is the way back — colour, weight, sparkle, joy on purpose. Quiet luxury with the volume turned up.</p>
+      <p>Somewhere along the way clothes stopped being fun. This is the way back — color, weight, sparkle, joy on purpose. Quiet luxury with the volume turned up.</p>
       <div class="cols">
         <div><h4>Joy on purpose</h4><p>Hot pink, deep purple, sparkle where you don't expect it. Nothing here is trying to be serious. That is the entire point.</p></div>
         <div><h4>Quality over everything</h4><p>200–240 GSM cotton. 14 oz denim. Heavy French terry. Real puff ink, tackle twill and embroidery — no shortcuts on the parts you feel.</p></div>
@@ -591,7 +684,7 @@ const COLLECTION = [
    line:"stay ahead of yourself",price:118,img:IMG['parachute'],
    specs:[["Front","Embroidery"],["Side","Hardware"],["Back","Puff ink"]]},
   {id:"06",name:"Starstruck Crop Zip Hoodie",colorway:"Hot Pink · Cream · Berry",
-   fabric:"Heavy French Terry",line:"three colourways",price:98,img:IMG['hoodie-pink'],
+   fabric:"Heavy French Terry",line:"three colorways",price:98,img:IMG['hoodie-pink'],
    ways:[{name:"Hot Pink",hex:"#E01B6A",img:IMG['hoodie-pink']},
          {name:"Cream",hex:"#E8DCC8",img:IMG['hoodie-cream']},
          {name:"Berry",hex:"#9E1E48",img:IMG['hoodie-berry']}],
@@ -628,6 +721,19 @@ function setTheme(t, save = true){
 $('#themes').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if(b) setTheme(b.dataset.t); });
 let sv = null; try{ sv = localStorage.getItem('tt_theme'); }catch(_){}
 setTheme(sv || 'champagne', false);
+
+/* accent — independent of the theme */
+const ACCENTS = ['theme','drift','pink','purple','teal','blue','amber'];
+function setAccent(a, save = true){
+  if(!ACCENTS.includes(a)) a = 'theme';
+  if(a === 'theme') delete document.documentElement.dataset.accent;
+  else document.documentElement.dataset.accent = a;
+  $('#accents').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === a));
+  if(save){ try{ localStorage.setItem('tt_accent', a); }catch(_){} }
+}
+$('#accents').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if(b) setAccent(b.dataset.a); });
+let sa = null; try{ sa = localStorage.getItem('tt_accent'); }catch(_){}
+setAccent(sa || 'theme', false);
 
 /* viewer — one window, cycles the collection */
 const frame = $('#frame'), dots = $('#dots');
