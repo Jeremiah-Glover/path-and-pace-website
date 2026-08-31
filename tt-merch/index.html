@@ -1,19 +1,19 @@
-&lt;!doctype html>
-&lt;html lang="en" data-theme="champagne">
-&lt;head>
-&lt;meta charset="utf-8">
-&lt;meta name="viewport" content="width=device-width, initial-scale=1">
-&lt;title>TT. — For Now, Not Later.&lt;/title>
-&lt;meta name="description" content="TT isn't a brand. It's a perspective. Fall/Winter 2026, designed in Atlanta. Every piece you own lands in your Digital Closet.">
-&lt;meta name="robots" content="noindex, nofollow">
-&lt;meta property="og:title" content="TT. — For Now, Not Later.">
-&lt;meta property="og:description" content="An escape from the noise. Fall/Winter 2026, designed in Atlanta.">
-&lt;meta name="theme-color" content="#F7F0E7">
-&lt;link rel="preconnect" href="https://fonts.googleapis.com">
-&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-&lt;link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Fraunces:opsz,wght@9..144,300..700&family=Kaushan+Script&display=swap" rel="stylesheet">
-&lt;link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>&lt;text y='.88em' font-size='86' fill='%23D9155F' font-family='cursive' font-style='italic' font-weight='700'>TT&lt;/text>&lt;/svg>">
-&lt;style>
+<!doctype html>
+<html lang="en" data-theme="champagne">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TT. — For Now, Not Later.</title>
+<meta name="description" content="TT isn't a brand. It's a perspective. Fall/Winter 2026, designed in Atlanta. Every piece you own lands in your Digital Closet.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="TT. — For Now, Not Later.">
+<meta property="og:description" content="An escape from the noise. Fall/Winter 2026, designed in Atlanta.">
+<meta name="theme-color" content="#F7F0E7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Fraunces:opsz,wght@9..144,300..700&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.88em' font-size='86' fill='%23D9155F' font-family='cursive' font-style='italic' font-weight='700'>TT</text></svg>">
+<style>
 /* ==========================================================
    TT. — Fall/Winter 2026. One screen, no scroll.
    SWAP POINTS: CLOSET_API / FORM_ENDPOINT at the bottom of this file.
@@ -24,6 +24,7 @@
   --line:#E4D7C8;--line-2:#D3C0AD;
   --accent:#D9155F;--accent-2:#7B3FD4;--accent-3:#F0873C;--on-accent:#FFF8FA;
   --plate:#1E1519;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
 }
 [data-theme="blush"]{
   --bg:#FBE8EE;--bg-2:#FFF6F9;--bg-3:#F6DAE3;
@@ -31,6 +32,7 @@
   --line:#F0D2DD;--line-2:#E0B3C6;
   --accent:#CE0F5C;--accent-2:#8B4DE8;--accent-3:#F0873C;--on-accent:#FFF6F9;
   --plate:#241017;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
 }
 [data-theme="orchid"]{
   --bg:#EFE9FB;--bg-2:#F9F6FF;--bg-3:#E5DBF7;
@@ -38,6 +40,7 @@
   --line:#DDD1F2;--line-2:#C4B1E4;
   --accent:#6D2FCB;--accent-2:#D9155F;--accent-3:#F0873C;--on-accent:#F9F6FF;
   --plate:#180F2B;
+  --blend:multiply;--aura-op:.44;--aura-blur:80px;--grain-op:.055;--err:#C0392B;
 }
 [data-theme="midnight"]{
   --bg:#1B1018;--bg-2:#251722;--bg-3:#2F1E2B;
@@ -45,6 +48,39 @@
   --line:#3B2836;--line-2:#5E4356;
   --accent:#FF4A92;--accent-2:#A97BFF;--accent-3:#FFA05C;--on-accent:#1B1018;
   --plate:#120A10;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+}
+[data-theme="velvet"]{
+  --bg:#160E22;--bg-2:#1F142F;--bg-3:#2A1C3E;
+  --ink:#F1E9FA;--ink-2:#D5C7E6;--ink-soft:#9E8CB5;
+  --line:#2E2140;--line-2:#4B3760;
+  --accent:#FF4A92;--accent-2:#B57BFF;--accent-3:#FFA05C;--on-accent:#160E22;
+  --plate:#0E0817;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+}
+[data-theme="noir"]{
+  --bg:#141114;--bg-2:#1D191D;--bg-3:#272227;
+  --ink:#F4ECE8;--ink-2:#DACDCB;--ink-soft:#9C8D92;
+  --line:#332C33;--line-2:#4E434E;
+  --accent:#FF3D82;--accent-2:#B98CFF;--accent-3:#FFA05C;--on-accent:#141114;
+  --plate:#0C0A0C;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+}
+[data-theme="ink"]{
+  --bg:#0F1626;--bg-2:#161F33;--bg-3:#1E293F;
+  --ink:#EAEFF8;--ink-2:#CCD7E7;--ink-soft:#8C9BB5;
+  --line:#26314A;--line-2:#3C4A67;
+  --accent:#FF5A93;--accent-2:#7FB2FF;--accent-3:#FFB067;--on-accent:#0F1626;
+  --plate:#080D18;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
+}
+[data-theme="ember"]{
+  --bg:#1A0F0C;--bg-2:#241612;--bg-3:#2F1E19;
+  --ink:#F8EBE2;--ink-2:#E2CDC2;--ink-soft:#AF9389;
+  --line:#3A251F;--line-2:#553629;
+  --accent:#FF4D6D;--accent-2:#FFA84D;--accent-3:#FF8FB8;--on-accent:#1A0F0C;
+  --plate:#110807;
+  --blend:screen;--aura-op:.32;--aura-blur:100px;--grain-op:.09;--err:#FF9E7A;
 }
 
 *{box-sizing:border-box}
@@ -67,17 +103,15 @@ button{font:inherit}
 
 /* living background */
 .aura{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
-.aura i{position:absolute;border-radius:50%;filter:blur(80px);mix-blend-mode:multiply;opacity:.44;animation:float 32s ease-in-out infinite}
-[data-theme="midnight"] .aura i{mix-blend-mode:screen;opacity:.32;filter:blur(100px)}
+.aura i{position:absolute;border-radius:50%;filter:blur(var(--aura-blur));mix-blend-mode:var(--blend);opacity:var(--aura-op);animation:float 32s ease-in-out infinite}
 .aura i:nth-child(1){width:58vw;height:58vw;background:var(--accent);top:-18vw;left:-12vw}
 .aura i:nth-child(2){width:50vw;height:50vw;background:var(--accent-2);top:34%;right:-16vw;animation-delay:-11s}
 .aura i:nth-child(3){width:40vw;height:40vw;background:var(--accent-3);bottom:-16vw;left:20%;opacity:.26;animation-delay:-21s}
 .aura i:nth-child(4){width:32vw;height:32vw;background:var(--accent-2);top:8%;left:42%;opacity:.2;animation-delay:-5s}
 @keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(5vw,-4vw,0) scale(1.15)}50%{transform:translate3d(-3vw,5vw,0) scale(.9)}75%{transform:translate3d(-6vw,-2vw,0) scale(1.07)}}
-.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.055;
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--grain-op);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:shift 5s steps(4) infinite}
-[data-theme="midnight"] .grain{opacity:.09}
 @keyframes shift{0%{background-position:0 0}25%{background-position:-14px 8px}50%{background-position:9px -13px}75%{background-position:-7px -6px}}
 @media (prefers-reduced-motion:reduce){.aura i,.grain{animation:none}}
 
@@ -96,6 +130,10 @@ header{position:relative;z-index:20;border-bottom:1px solid var(--line);backgrou
 .t-blush{background:linear-gradient(135deg,#FBE8EE 45%,#CE0F5C)}
 .t-orchid{background:linear-gradient(135deg,#EFE9FB 45%,#6D2FCB)}
 .t-midnight{background:linear-gradient(135deg,#2F1E2B 45%,#FF4A92)}
+.t-velvet{background:linear-gradient(135deg,#2A1C3E 45%,#B57BFF)}
+.t-noir{background:linear-gradient(135deg,#272227 45%,#FF3D82)}
+.t-ink{background:linear-gradient(135deg,#1E293F 45%,#7FB2FF)}
+.t-ember{background:linear-gradient(135deg,#2F1E19 45%,#FF4D6D)}
 .link{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;background:none;border:0;padding:8px 4px;transition:color .2s}
 .link:hover{color:var(--accent)}
 .btn{display:inline-block;padding:11px 22px;border-radius:100px;cursor:pointer;border:1px solid var(--accent);
@@ -168,8 +206,7 @@ input::placeholder{color:var(--ink-soft)}
 input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
 .legal{font-size:11px;color:var(--ink-soft)}
 .msg{font-size:12px;font-weight:600}
-.msg.ok{color:var(--accent)}.msg.err{color:#C0392B}
-[data-theme="midnight"] .msg.err{color:#FF9E7A}
+.msg.ok{color:var(--accent)}.msg.err{color:var(--err)}
 
 /* ---------- overlays ---------- */
 .ov{position:fixed;inset:0;z-index:100;display:none}
@@ -264,7 +301,8 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
   .brand p{font-size:15px;max-width:100%}
 }
 @media(max-width:700px){
-  .nav{height:auto;padding-block:11px;gap:10px;flex-wrap:wrap}
+  .nav{height:auto;padding-block:11px;gap:10px 12px;flex-wrap:wrap}
+  .themes{order:3}
   #openPersp{display:none}
   .foot{justify-content:flex-start;gap:12px 18px}
   .joinbar{flex:1 1 100%}
@@ -279,8 +317,8 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
 }
 @media(max-width:430px){
   .mark{font-size:26px}
-  .themes{padding:5px 7px;gap:5px}
-  .themes button{width:15px;height:15px}
+  .themes{padding:5px 6px;gap:5px}
+  .themes button{width:14px;height:14px}
   .btn{padding:10px 14px;letter-spacing:.14em}
   .brand .cta .btn{padding:11px 18px}
 }
@@ -345,175 +383,179 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-m
   .stage{min-height:0}
   .stage-in{min-height:0}
 }
-&lt;/style>
-&lt;/head>
-&lt;body>
-&lt;div class="aura" aria-hidden="true">&lt;i>&lt;/i>&lt;i>&lt;/i>&lt;i>&lt;/i>&lt;i>&lt;/i>&lt;/div>
-&lt;div class="grain" aria-hidden="true">&lt;/div>
-&lt;canvas id="confetti" aria-hidden="true">&lt;/canvas>
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
 
-&lt;div id="splash">
-  &lt;div class="s-aura" aria-hidden="true">&lt;i>&lt;/i>&lt;i>&lt;/i>&lt;i>&lt;/i>&lt;/div>
-  &lt;div class="s-grain" aria-hidden="true">&lt;/div>
-  &lt;div class="s-vig" aria-hidden="true">&lt;/div>
-  &lt;span class="s-spark" aria-hidden="true">&lt;svg width="20" height="20" viewBox="0 0 24 24">&lt;path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="#FF4A92"/>&lt;/svg>&lt;/span>
-  &lt;div class="s-in">
-    &lt;p class="s-top">Atlanta &amp;nbsp;·&amp;nbsp; MMXXVI&lt;/p>
-    &lt;span class="s-mark">TT.&lt;/span>
-    &lt;p class="s-line">Coming soon.&lt;/p>
-    &lt;p class="s-sub">Six pieces. One way out of the noise.&lt;br>The list hears first.&lt;/p>
-    &lt;form class="s-form" id="splashForm" novalidate>
-      &lt;label class="sr" for="semail">Email address&lt;/label>
-      &lt;input type="email" id="semail" placeholder="you@email.com" autocomplete="email" required>
-      &lt;button type="submit">Join the list&lt;/button>
-    &lt;/form>
-    &lt;p class="s-msg" id="splashMsg" role="status" aria-live="polite">&lt;/p>
-    &lt;button class="s-enter" id="enterSite">Look inside &amp;nbsp;→&lt;/button>
-  &lt;/div>
-&lt;/div>
+<div id="splash">
+  <div class="s-aura" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="s-grain" aria-hidden="true"></div>
+  <div class="s-vig" aria-hidden="true"></div>
+  <span class="s-spark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z" fill="#FF4A92"/></svg></span>
+  <div class="s-in">
+    <p class="s-top">Atlanta &nbsp;·&nbsp; MMXXVI</p>
+    <span class="s-mark">TT.</span>
+    <p class="s-line">Coming soon.</p>
+    <p class="s-sub">Six pieces. One way out of the noise.<br>The list hears first.</p>
+    <form class="s-form" id="splashForm" novalidate>
+      <label class="sr" for="semail">Email address</label>
+      <input type="email" id="semail" placeholder="you@email.com" autocomplete="email" required>
+      <button type="submit">Join the list</button>
+    </form>
+    <p class="s-msg" id="splashMsg" role="status" aria-live="polite"></p>
+    <button class="s-enter" id="enterSite">Look inside &nbsp;→</button>
+  </div>
+</div>
 
-&lt;header>
-  &lt;div class="wrap nav">
-    &lt;span class="mark">TT.&lt;/span>
-    &lt;div class="nav-right">
-      &lt;button class="link" id="openPersp">The Perspective&lt;/button>
-      &lt;div class="themes" id="themes" role="group" aria-label="Colour theme">
-        &lt;button class="t-champagne" data-t="champagne" aria-label="Champagne">&lt;/button>
-        &lt;button class="t-blush" data-t="blush" aria-label="Blush">&lt;/button>
-        &lt;button class="t-orchid" data-t="orchid" aria-label="Orchid">&lt;/button>
-        &lt;button class="t-midnight" data-t="midnight" aria-label="Midnight">&lt;/button>
-      &lt;/div>
-      &lt;button class="btn" id="openCloset">Your closet&lt;/button>
-    &lt;/div>
-  &lt;/div>
-&lt;/header>
+<header>
+  <div class="wrap nav">
+    <span class="mark">TT.</span>
+    <div class="nav-right">
+      <button class="link" id="openPersp">The Perspective</button>
+      <div class="themes" id="themes" role="group" aria-label="Colour theme">
+        <button class="t-champagne" data-t="champagne" aria-label="Champagne"></button>
+        <button class="t-blush" data-t="blush" aria-label="Blush"></button>
+        <button class="t-orchid" data-t="orchid" aria-label="Orchid"></button>
+        <button class="t-midnight" data-t="midnight" aria-label="Midnight"></button>
+        <button class="t-velvet" data-t="velvet" aria-label="Velvet"></button>
+        <button class="t-noir" data-t="noir" aria-label="Noir"></button>
+        <button class="t-ink" data-t="ink" aria-label="Ink"></button>
+        <button class="t-ember" data-t="ember" aria-label="Ember"></button>
+      </div>
+      <button class="btn" id="openCloset">Your closet</button>
+    </div>
+  </div>
+</header>
 
-&lt;main class="stage">
-  &lt;div class="wrap stage-in">
-    &lt;div class="brand">
-      &lt;p class="eyebrow" style="margin:0">Fall / Winter 2026 &amp;nbsp;·&amp;nbsp; Designed in Atlanta&lt;/p>
-      &lt;span class="mark-xl">TT.&lt;/span>
-      &lt;h1>An escape from&lt;br>the &lt;em>noise&lt;/em>.&lt;/h1>
-      &lt;p>TT isn't a brand — it's a perspective. Six pieces made for joy, cut heavy and finished properly. Buy one and it lands in your Digital Closet forever.&lt;/p>
-      &lt;div class="cta">
-        &lt;button class="btn" id="ctaCloset">Open your closet&lt;/button>
-        &lt;button class="btn ghost" id="ctaPersp">The perspective&lt;/button>
-      &lt;/div>
-    &lt;/div>
-    &lt;div class="viewer">
-      &lt;div class="frame" id="frame" role="group" aria-label="Collection viewer" tabindex="0">
-        &lt;button class="arrow prev" id="prev" aria-label="Previous piece">←&lt;/button>
-        &lt;button class="arrow next" id="next" aria-label="Next piece">→&lt;/button>
-        &lt;span class="n" id="vNum">01&lt;/span>
-        &lt;span class="tag">Owned&lt;/span>
-        &lt;span class="cap">&lt;b id="vName">&lt;/b>&lt;span id="vMeta">&lt;/span>&lt;/span>
-      &lt;/div>
-      &lt;div class="dots" id="dots" role="tablist" aria-label="Choose a piece">&lt;/div>
-    &lt;/div>
-  &lt;/div>
-&lt;/main>
+<main class="stage">
+  <div class="wrap stage-in">
+    <div class="brand">
+      <p class="eyebrow" style="margin:0">Fall / Winter 2026 &nbsp;·&nbsp; Designed in Atlanta</p>
+      <span class="mark-xl">TT.</span>
+      <h1>An escape from<br>the <em>noise</em>.</h1>
+      <p>TT isn't a brand — it's a perspective. Six pieces made for joy, cut heavy and finished properly. Buy one and it lands in your Digital Closet forever.</p>
+      <div class="cta">
+        <button class="btn" id="ctaCloset">Open your closet</button>
+        <button class="btn ghost" id="ctaPersp">The perspective</button>
+      </div>
+    </div>
+    <div class="viewer">
+      <div class="frame" id="frame" role="group" aria-label="Collection viewer" tabindex="0">
+        <button class="arrow prev" id="prev" aria-label="Previous piece">←</button>
+        <button class="arrow next" id="next" aria-label="Next piece">→</button>
+        <span class="n" id="vNum">01</span>
+        <span class="tag">Owned</span>
+        <span class="cap"><b id="vName"></b><span id="vMeta"></span></span>
+      </div>
+      <div class="dots" id="dots" role="tablist" aria-label="Choose a piece"></div>
+    </div>
+  </div>
+</main>
 
-&lt;footer>
-  &lt;div class="wrap foot">
-    &lt;div class="credo">
-      &lt;b>Chaos creates clarity&lt;/b>&lt;i>✦&lt;/i>
-      &lt;b>Energy speaks louder&lt;/b>&lt;i>✦&lt;/i>
-      &lt;b>Stay ahead of yourself&lt;/b>
-    &lt;/div>
-    &lt;form class="joinbar" id="waitlist" novalidate>
-      &lt;label class="sr" for="email">Email address&lt;/label>
-      &lt;input type="email" id="email" placeholder="Know when it lands" autocomplete="email" required>
-      &lt;button type="submit" class="btn ghost">Join&lt;/button>
-      &lt;span class="msg" id="listMsg" role="status" aria-live="polite">&lt;/span>
-    &lt;/form>
-    &lt;span class="legal">© &lt;span id="yr">2026&lt;/span> Tony Talks Media LLC · For now, not later.&lt;/span>
-  &lt;/div>
-&lt;/footer>
+<footer>
+  <div class="wrap foot">
+    <div class="credo">
+      <b>Chaos creates clarity</b><i>✦</i>
+      <b>Energy speaks louder</b><i>✦</i>
+      <b>Stay ahead of yourself</b>
+    </div>
+    <form class="joinbar" id="waitlist" novalidate>
+      <label class="sr" for="email">Email address</label>
+      <input type="email" id="email" placeholder="Know when it lands" autocomplete="email" required>
+      <button type="submit" class="btn ghost">Join</button>
+      <span class="msg" id="listMsg" role="status" aria-live="polite"></span>
+    </form>
+    <span class="legal">© <span id="yr">2026</span> Tony Talks Media LLC · For now, not later.</span>
+  </div>
+</footer>
 
-&lt;!-- perspective -->
-&lt;div class="ov" id="ovPersp" role="dialog" aria-modal="true" aria-label="The Perspective">
-  &lt;div class="scrim" data-close>&lt;/div>
-  &lt;div class="box">
-    &lt;button class="x" data-close aria-label="Close">✕&lt;/button>
-    &lt;div class="pad">
-      &lt;p class="eyebrow" style="margin:0 0 14px">The perspective&lt;/p>
-      &lt;h2>TT isn't a brand.&lt;br>It's a &lt;em>doorway&lt;/em>.&lt;/h2>
-      &lt;p>Somewhere along the way clothes stopped being fun. This is the way back — colour, weight, sparkle, joy on purpose. Quiet luxury with the volume turned up.&lt;/p>
-      &lt;div class="cols">
-        &lt;div>&lt;h4>Joy on purpose&lt;/h4>&lt;p>Hot pink, deep purple, sparkle where you don't expect it. Nothing here is trying to be serious. That is the entire point.&lt;/p>&lt;/div>
-        &lt;div>&lt;h4>Quality over everything&lt;/h4>&lt;p>200–240 GSM cotton. 14 oz denim. Heavy French terry. Real puff ink, tackle twill and embroidery — no shortcuts on the parts you feel.&lt;/p>&lt;/div>
-        &lt;div>&lt;h4>Designed in Atlanta&lt;/h4>&lt;p>Drawn, specced and sampled here. The city is in the cut, not just on the label.&lt;/p>&lt;/div>
-      &lt;/div>
-      &lt;div class="palette" aria-label="Collection palette">
-        &lt;i style="background:#E01B6A">&lt;/i>&lt;i style="background:#C4145C">&lt;/i>&lt;i style="background:#9E1E48">&lt;/i>
-        &lt;i style="background:#4A1D8C">&lt;/i>&lt;i style="background:#8B4DE8">&lt;/i>&lt;i style="background:#F0873C">&lt;/i>
-        &lt;i style="background:#E8DCC8">&lt;/i>&lt;i style="background:#5C5245">&lt;/i>&lt;i style="background:#2E2B2B">&lt;/i>&lt;i style="background:#1A1717">&lt;/i>
-      &lt;/div>
-    &lt;/div>
-  &lt;/div>
-&lt;/div>
+<!-- perspective -->
+<div class="ov" id="ovPersp" role="dialog" aria-modal="true" aria-label="The Perspective">
+  <div class="scrim" data-close></div>
+  <div class="box">
+    <button class="x" data-close aria-label="Close">✕</button>
+    <div class="pad">
+      <p class="eyebrow" style="margin:0 0 14px">The perspective</p>
+      <h2>TT isn't a brand.<br>It's a <em>doorway</em>.</h2>
+      <p>Somewhere along the way clothes stopped being fun. This is the way back — colour, weight, sparkle, joy on purpose. Quiet luxury with the volume turned up.</p>
+      <div class="cols">
+        <div><h4>Joy on purpose</h4><p>Hot pink, deep purple, sparkle where you don't expect it. Nothing here is trying to be serious. That is the entire point.</p></div>
+        <div><h4>Quality over everything</h4><p>200–240 GSM cotton. 14 oz denim. Heavy French terry. Real puff ink, tackle twill and embroidery — no shortcuts on the parts you feel.</p></div>
+        <div><h4>Designed in Atlanta</h4><p>Drawn, specced and sampled here. The city is in the cut, not just on the label.</p></div>
+      </div>
+      <div class="palette" aria-label="Collection palette">
+        <i style="background:#E01B6A"></i><i style="background:#C4145C"></i><i style="background:#9E1E48"></i>
+        <i style="background:#4A1D8C"></i><i style="background:#8B4DE8"></i><i style="background:#F0873C"></i>
+        <i style="background:#E8DCC8"></i><i style="background:#5C5245"></i><i style="background:#2E2B2B"></i><i style="background:#1A1717"></i>
+      </div>
+    </div>
+  </div>
+</div>
 
-&lt;!-- closet -->
-&lt;div class="ov" id="ovCloset" role="dialog" aria-modal="true" aria-label="Digital Closet">
-  &lt;div class="scrim" data-close>&lt;/div>
-  &lt;div class="box">
-    &lt;button class="x" data-close aria-label="Close">✕&lt;/button>
-    &lt;div class="pad" id="loginView">
-      &lt;p class="eyebrow" style="margin:0 0 14px">Members&lt;/p>
-      &lt;h2>Your &lt;em>Digital Closet&lt;/em>&lt;/h2>
-      &lt;p>Buy a piece and your membership number arrives in the box. That number is the whole login — no password, no account to build. Sign in and everything you own is waiting.&lt;/p>
-      &lt;form class="field" id="loginForm" novalidate>
-        &lt;label class="sr" for="memno">Membership number&lt;/label>
-        &lt;input type="text" id="memno" placeholder="TT-0000" autocomplete="off" spellcheck="false" required>
-        &lt;button type="submit" class="btn">Open my closet&lt;/button>
-      &lt;/form>
-      &lt;p class="msg" id="loginMsg" role="status" aria-live="polite" style="margin-top:12px">&lt;/p>
-      &lt;p class="hint">To see how it works, try &lt;b>TT-0001&lt;/b> or &lt;b>TT-0042&lt;/b>.&lt;/p>
-    &lt;/div>
-    &lt;div id="closetView" hidden>
-      &lt;div class="member">
-        &lt;div>&lt;h3 id="mName">—&lt;/h3>&lt;div class="no" id="mNo">—&lt;/div>&lt;div class="since" id="mSince">—&lt;/div>&lt;/div>
-        &lt;div class="stats">
-          &lt;div class="stat">&lt;b id="sOwned">0&lt;/b>&lt;span>Pieces owned&lt;/span>&lt;/div>
-          &lt;div class="stat">&lt;b id="sSet">0%&lt;/b>&lt;span>Of the drop&lt;/span>&lt;/div>
-          &lt;div class="stat">&lt;b id="sTier">—&lt;/b>&lt;span>Status&lt;/span>&lt;/div>
-        &lt;/div>
-      &lt;/div>
-      &lt;div class="progress">
-        &lt;span class="lbl">Fall / Winter 2026 — &lt;span id="pText">0 of 6&lt;/span>&lt;/span>
-        &lt;span class="bar">&lt;i id="pBar">&lt;/i>&lt;/span>
-      &lt;/div>
-      &lt;div class="rack" id="rack">&lt;/div>
-      &lt;div class="closet-foot">
-        &lt;span class="hint" style="margin:0" id="footNote">&lt;/span>
-        &lt;button class="btn ghost" id="signOut">Sign out&lt;/button>
-      &lt;/div>
-    &lt;/div>
-  &lt;/div>
-&lt;/div>
+<!-- closet -->
+<div class="ov" id="ovCloset" role="dialog" aria-modal="true" aria-label="Digital Closet">
+  <div class="scrim" data-close></div>
+  <div class="box">
+    <button class="x" data-close aria-label="Close">✕</button>
+    <div class="pad" id="loginView">
+      <p class="eyebrow" style="margin:0 0 14px">Members</p>
+      <h2>Your <em>Digital Closet</em></h2>
+      <p>Buy a piece and your membership number arrives in the box. That number is the whole login — no password, no account to build. Sign in and everything you own is waiting.</p>
+      <form class="field" id="loginForm" novalidate>
+        <label class="sr" for="memno">Membership number</label>
+        <input type="text" id="memno" placeholder="TT-0000" autocomplete="off" spellcheck="false" required>
+        <button type="submit" class="btn">Open my closet</button>
+      </form>
+      <p class="msg" id="loginMsg" role="status" aria-live="polite" style="margin-top:12px"></p>
+      <p class="hint">To see how it works, try <b>TT-0001</b> or <b>TT-0042</b>.</p>
+    </div>
+    <div id="closetView" hidden>
+      <div class="member">
+        <div><h3 id="mName">—</h3><div class="no" id="mNo">—</div><div class="since" id="mSince">—</div></div>
+        <div class="stats">
+          <div class="stat"><b id="sOwned">0</b><span>Pieces owned</span></div>
+          <div class="stat"><b id="sSet">0%</b><span>Of the drop</span></div>
+          <div class="stat"><b id="sTier">—</b><span>Status</span></div>
+        </div>
+      </div>
+      <div class="progress">
+        <span class="lbl">Fall / Winter 2026 — <span id="pText">0 of 6</span></span>
+        <span class="bar"><i id="pBar"></i></span>
+      </div>
+      <div class="rack" id="rack"></div>
+      <div class="closet-foot">
+        <span class="hint" style="margin:0" id="footNote"></span>
+        <button class="btn ghost" id="signOut">Sign out</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-&lt;!-- piece -->
-&lt;div class="ov" id="ovPiece" role="dialog" aria-modal="true" aria-label="Piece detail">
-  &lt;div class="scrim" data-close>&lt;/div>
-  &lt;div class="sheet">
-    &lt;button class="x" data-close aria-label="Close">✕&lt;/button>
-    &lt;div class="hero-img">&lt;img id="dImg" alt="">&lt;/div>
-    &lt;div class="body">
-      &lt;h3 id="dName">&lt;/h3>
-      &lt;p class="sub" id="dSub">&lt;/p>
-      &lt;p class="quote" id="dLine">&lt;/p>
-      &lt;div class="ways" id="dWays" hidden>&lt;/div>
-      &lt;ul class="specs" id="dSpecs">&lt;/ul>
-      &lt;div class="cert" id="dCert" hidden>
-        &lt;h5>Ownership record&lt;/h5>
-        &lt;dl>&lt;dt>Member&lt;/dt>&lt;dd id="cMem">&lt;/dd>&lt;dt>Acquired&lt;/dt>&lt;dd id="cDate">&lt;/dd>
-            &lt;dt>Size&lt;/dt>&lt;dd id="cSize">&lt;/dd>&lt;dt>Piece&lt;/dt>&lt;dd id="cPiece">&lt;/dd>&lt;/dl>
-      &lt;/div>
-    &lt;/div>
-  &lt;/div>
-&lt;/div>
+<!-- piece -->
+<div class="ov" id="ovPiece" role="dialog" aria-modal="true" aria-label="Piece detail">
+  <div class="scrim" data-close></div>
+  <div class="sheet">
+    <button class="x" data-close aria-label="Close">✕</button>
+    <div class="hero-img"><img id="dImg" alt=""></div>
+    <div class="body">
+      <h3 id="dName"></h3>
+      <p class="sub" id="dSub"></p>
+      <p class="quote" id="dLine"></p>
+      <div class="ways" id="dWays" hidden></div>
+      <ul class="specs" id="dSpecs"></ul>
+      <div class="cert" id="dCert" hidden>
+        <h5>Ownership record</h5>
+        <dl><dt>Member</dt><dd id="cMem"></dd><dt>Acquired</dt><dd id="cDate"></dd>
+            <dt>Size</dt><dd id="cSize"></dd><dt>Piece</dt><dd id="cPiece"></dd></dl>
+      </div>
+    </div>
+  </div>
+</div>
 
-&lt;script>
+<script>
 /* ===== CONFIG — the two things to fill in to go live ===== */
 const CLOSET_API    = null;  // e.g. "https://api.tonytalks.com" → GET {API}/member/:number
 const FORM_ENDPOINT = "";    // e.g. "https://formspree.io/f/xxxxxxx"
@@ -572,7 +614,8 @@ let session = null;
 $('#yr').textContent = new Date().getFullYear();
 
 /* themes */
-const THEME_BG = {champagne:'#F7F0E7',blush:'#FBE8EE',orchid:'#EFE9FB',midnight:'#1B1018'};
+const THEME_BG = {champagne:'#F7F0E7',blush:'#FBE8EE',orchid:'#EFE9FB',
+                  midnight:'#1B1018',velvet:'#160E22',noir:'#141114',ink:'#0F1626',ember:'#1A0F0C'};
 function setTheme(t, save = true){
   if(!THEME_BG[t]) t = 'champagne';
   document.documentElement.dataset.theme = t;
@@ -599,7 +642,7 @@ const SLIDES = COLLECTION.map((p,i) => {
 });
 frame.prepend(...SLIDES);   // keep DOM order identical to COLLECTION order
 dots.innerHTML = COLLECTION.map((p,i) =>
-  `&lt;button role="tab" data-go="${i}" aria-current="${i===0}" aria-label="${p.name}">&lt;/button>`).join('');
+  `<button role="tab" data-go="${i}" aria-current="${i===0}" aria-label="${p.name}"></button>`).join('');
 
 function show(i, restart = true){
   vi = (i + COLLECTION.length) % COLLECTION.length;
@@ -609,7 +652,7 @@ function show(i, restart = true){
   $('#vNum').textContent  = p.id;
   $('#vName').textContent = p.name;
   $('#vMeta').textContent = `${p.colorway} · ${p.fabric} · $${p.price}`;
-  const owned = session &amp;&amp; session.items.some(x => x.id === p.id);
+  const owned = session && session.items.some(x => x.id === p.id);
   frame.classList.toggle('owned', !!owned);
   if(restart) start();
 }
@@ -634,7 +677,7 @@ frame.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passi
 frame.addEventListener('touchend', e => {
   if(sx === null) return;
   const d = e.changedTouches[0].clientX - sx;
-  if(Math.abs(d) > 44) show(vi + (d &lt; 0 ? 1 : -1));
+  if(Math.abs(d) > 44) show(vi + (d < 0 ? 1 : -1));
   sx = null;
 }, {passive:true});
 
@@ -648,23 +691,23 @@ document.addEventListener('click', e => {
   if(e.target.closest('[data-close]')) return closeAll();
   const t = e.target.closest('[data-piece]'); if(t) return openPiece(t.dataset.piece);
 });
-addEventListener('keydown', e => e.key === 'Escape' &amp;&amp; closeAll());
+addEventListener('keydown', e => e.key === 'Escape' && closeAll());
 ['#openPersp','#ctaPersp'].forEach(s => $(s).addEventListener('click', () => open($('#ovPersp'))));
 ['#openCloset','#ctaCloset'].forEach(s => $(s).addEventListener('click', () => open($('#ovCloset'))));
 
 /* piece sheet */
 function openPiece(id){
   const p = byId(id); if(!p) return;
-  const rec = session &amp;&amp; session.items.find(i => i.id === id);
+  const rec = session && session.items.find(i => i.id === id);
   $('#dImg').src = p.img; $('#dImg').alt = p.name;
   $('#dName').textContent = p.name;
   $('#dSub').textContent  = `${p.colorway} · ${p.fabric} · $${p.price}`;
   $('#dLine').textContent = p.line;
-  $('#dSpecs').innerHTML  = p.specs.map(([k,v]) => `&lt;li>&lt;span class="k">${k}&lt;/span>&lt;span class="v">${v}&lt;/span>&lt;/li>`).join('');
+  $('#dSpecs').innerHTML  = p.specs.map(([k,v]) => `<li><span class="k">${k}</span><span class="v">${v}</span></li>`).join('');
   const w = $('#dWays');
   if(p.ways){
     w.hidden = false;
-    w.innerHTML = p.ways.map((v,i) => `&lt;button type="button" data-way="${i}" aria-pressed="${i===0}">&lt;span class="sw" style="background:${v.hex}">&lt;/span>${v.name}&lt;/button>`).join('');
+    w.innerHTML = p.ways.map((v,i) => `<button type="button" data-way="${i}" aria-pressed="${i===0}"><span class="sw" style="background:${v.hex}"></span>${v.name}</button>`).join('');
     w.onclick = ev => {
       const b = ev.target.closest('[data-way]'); if(!b) return;
       const v = p.ways[+b.dataset.way];
@@ -692,14 +735,14 @@ function renderCloset(){
   $('#sOwned').textContent = owned.size;
   $('#sSet').textContent = Math.round(owned.size/COLLECTION.length*100)+'%';
   $('#sTier').textContent = session.tier;
-  $('#pText').innerHTML = `&lt;span>${owned.size}&lt;/span> of ${COLLECTION.length}`;
+  $('#pText').innerHTML = `<span>${owned.size}</span> of ${COLLECTION.length}`;
   setTimeout(() => { $('#pBar').style.width = (owned.size/COLLECTION.length*100)+'%'; }, 140);
   $('#rack').innerHTML = COLLECTION.map(p => {
     const r = session.items.find(i => i.id === p.id);
-    return `&lt;button class="piece ${r?'':'locked'}" data-piece="${p.id}">
-      &lt;span class="ph">&lt;span class="ptag">${r?'Owned':'Not yet'}&lt;/span>&lt;img src="${p.img}" alt="${p.name}">&lt;/span>
-      &lt;span class="meta">&lt;strong>${p.name}&lt;/strong>&lt;small>${r?fmtDate(r.date)+' · size '+r.size:'Complete the set'}&lt;/small>&lt;/span>
-    &lt;/button>`;
+    return `<button class="piece ${r?'':'locked'}" data-piece="${p.id}">
+      <span class="ph"><span class="ptag">${r?'Owned':'Not yet'}</span><img src="${p.img}" alt="${p.name}"></span>
+      <span class="meta"><strong>${p.name}</strong><small>${r?fmtDate(r.date)+' · size '+r.size:'Complete the set'}</small></span>
+    </button>`;
   }).join('');
   const left = COLLECTION.length - owned.size;
   $('#footNote').textContent = left ? `${left} more ${left===1?'piece':'pieces'} to complete the drop.` : 'Full set. You own every piece.';
@@ -791,9 +834,9 @@ function confetti(){
   (function f(){ t++; x.clearRect(0,0,c.width,c.height);
     bits.forEach(b=>{b.x+=b.vx;b.y+=b.vy;b.r+=b.vr;x.save();x.translate(b.x,b.y);x.rotate(b.r);
       x.fillStyle=b.col;x.globalAlpha=Math.max(0,1-t/150);x.fillRect(-b.w/2,-b.h/2,b.w,b.h);x.restore();});
-    if(t&lt;150) requestAnimationFrame(f); else { x.clearRect(0,0,c.width,c.height); c.style.display='none'; }
+    if(t<150) requestAnimationFrame(f); else { x.clearRect(0,0,c.width,c.height); c.style.display='none'; }
   })();
 }
-&lt;/script>
-&lt;/body>
-&lt;/html>
+</script>
+</body>
+</html>
