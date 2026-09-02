@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harmony — Brew Your State</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --ink: #F4F2F8;
-  --dim: rgba(244,242,248,0.5);
-  --dimmer: rgba(244,242,248,0.24);
-  --black: #060509;
-  --card: #0C0A13;
-  --border: rgba(255,255,255,0.08);
+  --dim: rgba(244,242,248,0.55);
+  --dimmer: rgba(244,242,248,0.28);
+  --black: #05040a;
+  --card: #0e0b16;
+  --border: rgba(255,255,255,0.09);
 
   --delta: #1E5FE0;
   --theta: #9B4EF0;
@@ -28,83 +28,77 @@
 html { scroll-behavior: smooth; }
 body { background: var(--black); color: var(--ink); font-family: var(--text); font-size: 16px; line-height: 1.65; overflow-x: hidden; }
 
-/* ── film grain, like the sachet render ── */
 body::before {
-  content: ''; position: fixed; inset: 0; z-index: 500; pointer-events: none; opacity: 0.045; mix-blend-mode: overlay;
+  content: ''; position: fixed; inset: 0; z-index: 500; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ── NAV ── */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 26px 56px; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
-nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border-bottom-color: var(--border); }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 24px 56px; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
+nav.scrolled { background: rgba(5,4,10,0.85); backdrop-filter: blur(18px); border-bottom-color: var(--border); }
 .nav-word { font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
 .nav-right { display: flex; align-items: center; gap: 30px; }
 .nav-link { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s; }
 .nav-link:hover { color: var(--ink); }
-.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 10px 22px; border: 1px solid var(--border); border-radius: 999px; transition: border-color 0.2s, background 0.2s; }
-.nav-cta:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); background: var(--ink); text-decoration: none; padding: 11px 24px; border-radius: 999px; transition: transform 0.15s, box-shadow 0.2s; }
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,255,255,0.16); }
 
-/* ── HERO — mirrors the pouch: black ground, gradient aura sweeping through, wordmark tracked wide ── */
+/* ── HERO ── image-led, immediate, loud ── */
 .hero {
-  min-height: 100vh; position: relative; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 140px 56px 100px;
+  position: relative; min-height: 100vh; overflow: hidden;
+  display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center;
+  padding: 120px 0 0 56px;
 }
 .hero-aura {
   position: absolute; inset: -10%; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 46% 60% at 8% 15%, color-mix(in oklab, var(--delta) 55%, transparent) 0%, transparent 62%),
-    radial-gradient(ellipse 46% 55% at 32% 5%, color-mix(in oklab, var(--theta) 48%, transparent) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 58% 30%, color-mix(in oklab, var(--alpha) 42%, transparent) 0%, transparent 62%),
-    radial-gradient(ellipse 50% 65% at 80% 55%, color-mix(in oklab, var(--beta) 42%, transparent) 0%, transparent 62%),
-    radial-gradient(ellipse 55% 70% at 100% 85%, color-mix(in oklab, var(--gamma) 46%, transparent) 0%, transparent 65%);
-  filter: blur(70px); opacity: 0.55;
-  animation: aura-drift 30s ease-in-out infinite alternate;
+    radial-gradient(ellipse 50% 60% at 6% 20%, color-mix(in oklab, var(--delta) 45%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 46% 55% at 28% 0%, color-mix(in oklab, var(--theta) 40%, transparent) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 65% at 100% 60%, color-mix(in oklab, var(--gamma) 38%, transparent) 0%, transparent 65%);
+  filter: blur(80px); opacity: 0.6;
+  animation: aura-drift 26s ease-in-out infinite alternate;
 }
-@keyframes aura-drift { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.08) translate(-2%,2%)} }
+@keyframes aura-drift { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.1) translate(-2%,2%)} }
 
+.hero-copy { position: relative; z-index: 2; max-width: 620px; }
 .hero-wordmark {
-  position: relative; z-index: 2;
   font-family: var(--display); font-weight: 600; letter-spacing: 0.5em;
-  font-size: clamp(13px, 1.6vw, 16px); text-transform: uppercase; color: var(--ink);
-  margin-bottom: 8px; opacity: 0; animation: up 0.8s ease 0.1s forwards;
+  font-size: clamp(12px, 1.4vw, 15px); text-transform: uppercase; color: var(--ink);
+  margin-bottom: 10px; opacity: 0; animation: up 0.7s ease 0.05s forwards;
 }
 .hero-tagline {
-  position: relative; z-index: 2;
   font-family: var(--display); font-weight: 400; letter-spacing: 0.22em;
-  font-size: 12px; text-transform: uppercase; color: var(--dim); margin-bottom: 56px;
-  opacity: 0; animation: up 0.8s ease 0.22s forwards;
+  font-size: 12px; text-transform: uppercase; color: var(--dim); margin-bottom: 30px;
+  opacity: 0; animation: up 0.7s ease 0.14s forwards;
 }
-
 .hero-h1 {
-  position: relative; z-index: 2;
-  font-family: var(--display); font-weight: 500; font-size: clamp(46px, 7vw, 96px);
-  line-height: 1.02; letter-spacing: -0.02em; max-width: 920px;
-  opacity: 0; animation: up 0.9s ease 0.36s forwards;
+  font-family: var(--display); font-weight: 500; font-size: clamp(42px, 5.6vw, 78px);
+  line-height: 1.0; letter-spacing: -0.02em;
+  opacity: 0; animation: up 0.8s ease 0.24s forwards;
 }
 .hero-h1 .grad {
   background: linear-gradient(90deg, var(--delta), var(--theta), var(--alpha), var(--beta), var(--gamma));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-
 .hero-sub {
-  position: relative; z-index: 2;
-  margin-top: 32px; font-size: 18px; font-weight: 300; color: var(--dim); max-width: 520px; line-height: 1.75;
-  opacity: 0; animation: up 0.9s ease 0.5s forwards;
+  margin-top: 26px; font-size: 17px; font-weight: 300; color: var(--dim); max-width: 480px; line-height: 1.75;
+  opacity: 0; animation: up 0.8s ease 0.36s forwards;
 }
-
-.hero-btns { position: relative; z-index: 2; margin-top: 48px; display: flex; gap: 20px; align-items: center; opacity: 0; animation: up 0.9s ease 0.64s forwards; }
+.hero-btns { margin-top: 40px; display: flex; gap: 20px; align-items: center; opacity: 0; animation: up 0.8s ease 0.48s forwards; }
 .btn-solid {
   height: 52px; padding: 0 30px; background: var(--ink); color: var(--black);
   font-family: var(--text); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
   border: none; border-radius: 999px; cursor: pointer; text-decoration: none;
   display: inline-flex; align-items: center; gap: 10px; transition: transform 0.15s, box-shadow 0.25s;
 }
-.btn-solid:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(255,255,255,0.15); }
+.btn-solid:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(255,255,255,0.16); }
 .btn-ghost { font-size: 13px; font-weight: 500; color: var(--dim); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
 .btn-ghost:hover { color: var(--ink); }
-
 @keyframes up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+
+.hero-visual { position: relative; z-index: 2; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.hero-visual img { width: min(46vw, 560px); max-width: 92vw; min-height: 320px; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.65)); transform: translateY(4%) rotate(-1.5deg); opacity: 0; animation: pouch-in 1s cubic-bezier(.2,.8,.2,1) 0.3s forwards; }
+@keyframes pouch-in { from{opacity:0; transform: translateY(10%) rotate(-1.5deg) scale(0.96);} to{opacity:1; transform: translateY(4%) rotate(-1.5deg) scale(1);} }
 
 /* ── SPECTRUM STRIP ── */
 .spectrum { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 56px; display: flex; justify-content: center; gap: 0; overflow-x: auto; }
@@ -113,12 +107,21 @@ nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border
 .spec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 10px var(--dot); }
 .spec-item:not(:last-child) { border-right: 1px solid var(--border); }
 
-/* ── CONCEPT ── */
-.concept { padding: 130px 56px; max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 0.85fr 1fr; gap: 90px; align-items: start; }
-.eyebrow { font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-bottom: 22px; }
-.concept-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; }
-.concept-title .accent { background: linear-gradient(90deg, var(--theta), var(--alpha)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* ── THE DROP — full pack shot, huge, unmistakable ── */
+.drop { padding: 130px 56px; border-top: 1px solid var(--border); position: relative; overflow: hidden; }
+.drop-glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(155,78,240,0.16), transparent 65%); }
+.drop-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; }
+.drop-head { text-align: center; max-width: 720px; margin: 0 auto 60px; }
+.eyebrow { font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.drop-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,4.2vw,52px); line-height: 1.12; letter-spacing: -0.01em; }
+.drop-title .accent { background: linear-gradient(90deg, var(--theta), var(--alpha), var(--beta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.drop-img-wrap { border-radius: 24px; overflow: hidden; border: 1px solid var(--border); }
+.drop-img-wrap img { width: 100%; display: block; }
 
+/* ── CONCEPT ── */
+.concept { padding: 120px 56px; max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 0.85fr 1fr; gap: 90px; align-items: start; border-top: 1px solid var(--border); }
+.concept-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,3.6vw,44px); line-height: 1.15; letter-spacing: -0.01em; }
+.concept-title .accent { background: linear-gradient(90deg, var(--theta), var(--alpha)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .concept-text { font-size: 17px; font-weight: 300; color: var(--dim); line-height: 1.85; margin-bottom: 22px; }
 .concept-text strong { color: var(--ink); font-weight: 500; }
 .concept-rule { width: 100%; height: 1px; background: var(--border); margin: 32px 0; }
@@ -128,54 +131,26 @@ nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border
 .cband-hz span { font-weight: 300; color: var(--dim); font-size: 12px; }
 .cband-label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); margin-top: 6px; }
 
-/* ── THE LINE — sachet-inspired cards ── */
-.line-section { padding: 60px 56px 130px; border-top: 1px solid var(--border); }
-.line-inner { max-width: 1180px; margin: 0 auto; }
-.line-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 44px; flex-wrap: wrap; gap: 20px; }
-.line-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.1; letter-spacing: -0.01em; }
+/* ── THE LINE — real pouch photography as product cards ── */
+.line-section { padding: 40px 56px 130px; border-top: 1px solid var(--border); }
+.line-inner { max-width: 1280px; margin: 0 auto; }
+.line-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 20px; }
+.line-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,3.6vw,44px); line-height: 1.1; letter-spacing: -0.01em; }
 .line-title .accent { background: linear-gradient(90deg, var(--beta), var(--gamma)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.line-note { font-size: 13px; font-weight: 300; color: var(--dim); max-width: 220px; text-align: right; line-height: 1.7; }
+.line-note { font-size: 13px; font-weight: 300; color: var(--dim); max-width: 240px; text-align: right; line-height: 1.7; }
 
-.line-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
-
-.pouch {
-  position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 3/4.6;
-  display: flex; flex-direction: column;
-  border: 1px solid rgba(255,255,255,0.08);
-  background:
-    radial-gradient(ellipse 120% 90% at 15% 105%, color-mix(in oklab, var(--band) 60%, transparent) 0%, transparent 55%),
-    linear-gradient(165deg, color-mix(in oklab, var(--band) 34%, #060509) 0%, #060509 60%);
-  padding: 22px 18px 20px;
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s;
-}
-.pouch::after {
-  /* subtle foil seam lines, like the pouch photography */
-  content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.06);
-  box-shadow: 8px 0 0 rgba(255,255,255,0.04), -8px 0 0 rgba(255,255,255,0.03);
-}
-.pouch:hover { transform: translateY(-6px); box-shadow: 0 20px 60px -14px color-mix(in oklab, var(--band) 55%, transparent); }
-
-.pouch-mark { font-family: var(--display); font-size: 8.5px; font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(244,242,248,0.75); }
-.pouch-city { font-size: 7px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,242,248,0.4); margin-top: 3px; }
-.pouch-tag { font-size: 6.5px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,242,248,0.3); margin-top: 2px; margin-bottom: 22px; }
-
-.pouch-band { font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--band); margin-bottom: 6px; }
-.pouch-hz { font-family: var(--display); font-weight: 700; font-size: 36px; color: #fff; line-height: 1; text-shadow: 0 0 26px color-mix(in oklab, var(--band) 65%, transparent); }
-.pouch-hz span { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.55); margin-left: 2px; }
-
-.pouch-wave { margin: 14px 0 16px; height: 20px; }
-.pouch-wave svg { width: 100%; height: 100%; display: block; }
-.pouch-wave path { stroke: var(--band); stroke-width: 1.5; fill: none; filter: drop-shadow(0 0 5px color-mix(in oklab, var(--band) 75%, transparent)); }
-
-.pouch-name { font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: #fff; line-height: 1.1; margin-bottom: auto; }
-
-.pouch-foot { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
-.pouch-ing { font-size: 10.5px; font-weight: 400; color: rgba(244,242,248,0.62); line-height: 1.55; margin-bottom: 8px; }
-.pouch-caf { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band); }
+.line-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.pouch-card { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--card); transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s; }
+.pouch-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px -14px color-mix(in oklab, var(--band) 55%, transparent); }
+.pouch-card img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; background: linear-gradient(160deg, color-mix(in oklab, var(--band) 22%, var(--card)), var(--card)); }
+.pouch-meta { padding: 18px 16px 20px; }
+.pouch-band-label { font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--band); margin-bottom: 4px; }
+.pouch-name { font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--ink); }
+.pouch-caf { margin-top: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
 
 /* ── FORMULATION ── */
-.discipline { padding: 130px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
-.discipline-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.2; letter-spacing: -0.01em; max-width: 760px; margin-bottom: 60px; }
+.discipline { padding: 120px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
+.discipline-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,3.6vw,44px); line-height: 1.2; letter-spacing: -0.01em; max-width: 760px; margin-bottom: 56px; }
 .discipline-title .accent { background: linear-gradient(90deg, var(--gamma), var(--beta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .discipline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; }
 .discipline-tier { padding-top: 22px; border-top: 1px solid var(--border); }
@@ -184,9 +159,9 @@ nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border
 .discipline-desc { font-size: 14.5px; font-weight: 300; color: var(--dim); line-height: 1.8; }
 
 /* ── THE DAY ── */
-.theday { padding: 130px 56px; border-top: 1px solid var(--border); background: var(--card); }
+.theday { padding: 120px 56px; border-top: 1px solid var(--border); background: var(--card); }
 .theday-inner { max-width: 1180px; margin: 0 auto; }
-.theday-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 60px; }
+.theday-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,3.6vw,44px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 56px; }
 .theday-title .accent { background: linear-gradient(90deg, var(--beta), var(--delta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
 .tl-item { padding-top: 18px; border-top: 2px solid var(--band); }
@@ -197,8 +172,8 @@ nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border
 .theday-foot { margin-top: 50px; font-size: 15px; font-weight: 300; color: var(--dim); line-height: 1.8; max-width: 660px; }
 
 /* ── PRICING ── */
-.pricing { padding: 130px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
-.pricing-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 60px; }
+.pricing { padding: 120px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
+.pricing-title { font-family: var(--display); font-weight: 500; font-size: clamp(30px,3.6vw,44px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 56px; }
 .pricing-title .accent { background: linear-gradient(90deg, var(--alpha), var(--theta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .price-card { border-radius: 14px; border: 1px solid var(--border); background: var(--card); padding: 40px 30px; }
@@ -212,7 +187,7 @@ nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border
 .price-note { font-size: 13px; font-weight: 300; color: var(--dim); line-height: 1.6; }
 
 /* ── CONTACT ── */
-.contact { padding: 130px 56px; border-top: 1px solid var(--border); }
+.contact { padding: 120px 56px; border-top: 1px solid var(--border); }
 .contact-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
 .contact-h { font-family: var(--display); font-weight: 500; font-size: clamp(36px,4.5vw,56px); line-height: 1.05; letter-spacing: -0.01em; margin-top: 18px; }
 .contact-h .accent { background: linear-gradient(90deg, var(--alpha), var(--beta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -232,13 +207,18 @@ footer { padding: 44px 56px; display: flex; justify-content: space-between; alig
 .reveal.visible { opacity: 1; transform: none; }
 
 @media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; padding: 110px 22px 0; text-align: left; }
+  .hero-visual { justify-content: flex-start; margin-top: 40px; }
+  .hero-visual img { width: min(70vw, 420px); }
   .concept { grid-template-columns: 1fr; gap: 40px; }
-  .concept-bands, .line-grid, .discipline-grid, .timeline, .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+  .concept-bands, .discipline-grid, .timeline, .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+  .line-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 640px) {
-  nav, .hero, .concept, .line-section, .discipline, .theday, .pricing, .contact { padding-left: 22px; padding-right: 22px; }
+  nav, .drop, .concept, .line-section, .discipline, .theday, .pricing, .contact { padding-left: 22px; padding-right: 22px; }
   .concept-bands { grid-template-columns: repeat(3, 1fr); }
-  .line-grid, .discipline-grid, .timeline, .pricing-grid { grid-template-columns: 1fr; }
+  .line-grid { grid-template-columns: repeat(2, 1fr); }
+  .discipline-grid, .timeline, .pricing-grid { grid-template-columns: 1fr; }
   .line-header { flex-direction: column; align-items: flex-start; }
   .line-note { text-align: left; }
   .contact-inner { grid-template-columns: 1fr; gap: 44px; }
@@ -260,13 +240,18 @@ footer { padding: 44px 56px; display: flex; justify-content: space-between; alig
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-aura"></div>
-  <div class="hero-wordmark">Harmony &nbsp; Atlanta</div>
-  <div class="hero-tagline">Brew Your State</div>
-  <h1 class="hero-h1">Five states.<br>Five <span class="grad">frequencies.</span><br>Five teas.</h1>
-  <p class="hero-sub">Your brain runs at five frequencies. Now so does your cup. One tea per band — you don't pick a flavor, you pick a state.</p>
-  <div class="hero-btns">
-    <a href="#contact" class="btn-solid">Get the Day Strip →</a>
-    <a href="#line" class="btn-ghost">See the line ↓</a>
+  <div class="hero-copy">
+    <div class="hero-wordmark">Harmony &nbsp; Atlanta</div>
+    <div class="hero-tagline">Brew Your State</div>
+    <h1 class="hero-h1">Five states.<br>Five <span class="grad">frequencies.</span><br>Five teas.</h1>
+    <p class="hero-sub">Your brain runs at five frequencies. Now so does your cup. One tea per band — you don't pick a flavor, you pick a state.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-solid">Get the Day Strip →</a>
+      <a href="#line" class="btn-ghost">See the line ↓</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img data-asset="hero" alt="Harmony Drift sachet, Theta 5Hz">
   </div>
 </section>
 
@@ -298,7 +283,7 @@ footer { padding: 44px 56px; display: flex; justify-content: space-between; alig
   </div>
 </section>
 
-<!-- THE LINE -->
+<!-- THE LINE — real product photography -->
 <section class="line-section" id="line">
   <div class="line-inner">
     <div class="line-header reveal">
@@ -310,72 +295,47 @@ footer { padding: 44px 56px; display: flex; justify-content: space-between; alig
     </div>
     <div class="line-grid">
 
-      <div class="pouch reveal" style="--band:var(--delta)">
-        <div class="pouch-mark">Harmony</div>
-        <div class="pouch-city">Atlanta</div>
-        <div class="pouch-tag">Brew Your State</div>
-        <div class="pouch-band">Delta</div>
-        <div class="pouch-hz">2<span>Hz</span></div>
-        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 12,1 25,19 37,10 C 49,1 62,19 74,10 C 86,1 99,19 100,10"/></svg></div>
-        <div class="pouch-name">Lights Out</div>
-        <div class="pouch-foot">
-          <div class="pouch-ing">Chamomile, lavender, lemon balm</div>
+      <div class="pouch-card reveal" style="--band:var(--delta)">
+        <img data-asset="delta" alt="Harmony Lights Out sachet, Delta 2Hz">
+        <div class="pouch-meta">
+          <div class="pouch-band-label">Delta · 2 Hz</div>
+          <div class="pouch-name">Lights Out</div>
           <div class="pouch-caf">Caffeine free</div>
         </div>
       </div>
 
-      <div class="pouch reveal" style="--band:var(--theta)">
-        <div class="pouch-mark">Harmony</div>
-        <div class="pouch-city">Atlanta</div>
-        <div class="pouch-tag">Brew Your State</div>
-        <div class="pouch-band">Theta</div>
-        <div class="pouch-hz">5<span>Hz</span></div>
-        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 6,2 12,18 18,10 C 24,2 31,18 37,10 C 43,2 49,18 55,10 C 61,2 68,18 74,10 C 80,2 87,18 93,10 C 96,6 99,14 100,10"/></svg></div>
-        <div class="pouch-name">Drift</div>
-        <div class="pouch-foot">
-          <div class="pouch-ing">Tulsi, rose, valerian, vanilla</div>
+      <div class="pouch-card reveal" style="--band:var(--theta)">
+        <img data-asset="theta" alt="Harmony Drift sachet, Theta 5Hz">
+        <div class="pouch-meta">
+          <div class="pouch-band-label">Theta · 5 Hz</div>
+          <div class="pouch-name">Drift</div>
           <div class="pouch-caf">Caffeine free</div>
         </div>
       </div>
 
-      <div class="pouch reveal" style="--band:var(--alpha)">
-        <div class="pouch-mark">Harmony</div>
-        <div class="pouch-city">Atlanta</div>
-        <div class="pouch-tag">Brew Your State</div>
-        <div class="pouch-band">Alpha</div>
-        <div class="pouch-hz">11<span>Hz</span></div>
-        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 3,3 6,17 9,10 C 12,3 16,17 19,10 C 22,3 25,17 28,10 C 31,3 35,17 38,10 C 41,3 44,17 47,10 C 50,3 54,17 57,10 C 60,3 63,17 66,10 C 69,3 72,17 75,10 C 78,3 82,17 85,10 C 88,3 91,17 94,10 C 96,5 98,15 100,10"/></svg></div>
-        <div class="pouch-name">Tune In</div>
-        <div class="pouch-foot">
-          <div class="pouch-ing">Sencha, L-theanine, mint, yuzu</div>
+      <div class="pouch-card reveal" style="--band:var(--alpha)">
+        <img data-asset="alpha" alt="Harmony Tune In sachet, Alpha 11Hz">
+        <div class="pouch-meta">
+          <div class="pouch-band-label">Alpha · 11 Hz</div>
+          <div class="pouch-name">Tune In</div>
           <div class="pouch-caf">Low caffeine</div>
         </div>
       </div>
 
-      <div class="pouch reveal" style="--band:var(--beta)">
-        <div class="pouch-mark">Harmony</div>
-        <div class="pouch-city">Atlanta</div>
-        <div class="pouch-tag">Brew Your State</div>
-        <div class="pouch-band">Beta</div>
-        <div class="pouch-hz">19<span>Hz</span></div>
-        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 2,4 4,16 6,10 C 8,4 10,16 12,10 C 14,4 16,16 18,10 C 20,4 22,16 24,10 C 26,4 28,16 30,10 C 32,4 34,16 36,10 C 38,4 40,16 42,10 C 44,4 46,16 48,10 C 50,4 52,16 54,10 C 56,4 58,16 60,10 C 62,4 64,16 66,10 C 68,4 70,16 72,10 C 74,4 76,16 78,10 C 80,4 82,16 84,10 C 86,4 88,16 90,10 C 92,4 94,16 96,10 C 97,6 99,14 100,10"/></svg></div>
-        <div class="pouch-name">Lock In</div>
-        <div class="pouch-foot">
-          <div class="pouch-ing">Matcha, guayusa, ginger, lime</div>
+      <div class="pouch-card reveal" style="--band:var(--beta)">
+        <img data-asset="beta" alt="Harmony Lock In sachet, Beta 19Hz">
+        <div class="pouch-meta">
+          <div class="pouch-band-label">Beta · 19 Hz</div>
+          <div class="pouch-name">Lock In</div>
           <div class="pouch-caf">High caffeine</div>
         </div>
       </div>
 
-      <div class="pouch reveal" style="--band:var(--gamma)">
-        <div class="pouch-mark">Harmony</div>
-        <div class="pouch-city">Atlanta</div>
-        <div class="pouch-tag">Brew Your State</div>
-        <div class="pouch-band">Gamma</div>
-        <div class="pouch-hz">41<span>Hz</span></div>
-        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 2,4 4,16 6,10 C 8,4 10,16 12,10 C 14,4 16,16 18,10 C 20,4 22,16 24,10 C 26,4 28,16 30,10 C 32,4 34,16 36,10 C 38,4 40,16 42,10 C 44,4 46,16 48,10 C 50,4 52,16 54,10 C 56,4 58,16 60,10 C 62,4 64,16 66,10 C 68,4 70,16 72,10 C 74,4 76,16 78,10 C 80,4 82,16 84,10 C 86,4 88,16 90,10 C 92,4 94,16 96,10 C 97,6 99,14 100,10"/></svg></div>
-        <div class="pouch-name">Spark</div>
-        <div class="pouch-foot">
-          <div class="pouch-ing">Cacao, lion's mane, orange peel</div>
+      <div class="pouch-card reveal" style="--band:var(--gamma)">
+        <img data-asset="gamma" alt="Harmony Spark sachet, Gamma 41Hz">
+        <div class="pouch-meta">
+          <div class="pouch-band-label">Gamma · 41 Hz</div>
+          <div class="pouch-name">Spark</div>
           <div class="pouch-caf">Medium caffeine</div>
         </div>
       </div>
@@ -514,6 +474,16 @@ const obs = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Load real product photography: fetch base64-encoded JPEGs and build data: URIs.
+// (Assets are stored as plain-text .b64 files in the repo.)
+document.querySelectorAll('img[data-asset]').forEach(img => {
+  const name = img.getAttribute('data-asset');
+  fetch(`assets/harmony-${name}.b64`)
+    .then(r => { if (!r.ok) throw new Error('missing asset: ' + name); return r.text(); })
+    .then(b64 => { img.src = 'data:image/jpeg;base64,' + b64.trim(); })
+    .catch(err => console.error(err));
+});
 </script>
 </body>
 </html>
