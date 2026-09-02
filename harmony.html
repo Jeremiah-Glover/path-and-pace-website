@@ -3,788 +3,297 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harmony Tea — Five States, Five Teas | Path & Pace</title>
+<title>Harmony — Brew Your State</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Darker+Grotesque:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ink: #0E0E0E;
-    --paper: #F5F2EC;
-    --warm: #EDF4F4;
-    --accent: #C85A1E;
-    --accent-light: #E8784A;
-    --teal: #2A8A8A;
-    --teal-light: #3DB8B8;
-    --teal-muted: #1D6666;
-    --muted: #6A7A7A;
-    --border: #C8DDDD;
-    --serif: 'Cormorant Garamond', Georgia, serif;
-    --sans: 'Darker Grotesque', sans-serif;
-
-    /* Band colors — cool (slow) to warm (fast), matching the Hz gradient */
-    --delta: #2A5A9A;
-    --theta: #6B4FA8;
-    --alpha: #B8306A;
-    --beta: #2A8A8A;
-    --gamma: #2E8F5E;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.5;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 24px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    mix-blend-mode: multiply;
-  }
-
-  .nav-logo {
-    font-family: var(--serif);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: 0.02em;
-    text-decoration: none;
-  }
-
-  .nav-right { display: flex; align-items: center; gap: 32px; }
-
-  .nav-back {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-back:hover { color: var(--ink); }
-
-  .nav-cta {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--teal);
-    text-decoration: none;
-    border-bottom: 1px solid var(--teal);
-    padding-bottom: 2px;
-    transition: opacity 0.2s;
-  }
-  .nav-cta:hover { opacity: 0.7; }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 48px 72px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(107,79,168,0.12) 0%, transparent 70%),
-                radial-gradient(ellipse 60% 80% at 20% 80%, rgba(200,90,30,0.07) 0%, transparent 60%);
-  }
-
-  .hero-line {
-    position: absolute;
-    top: 0;
-    right: 120px;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
-    opacity: 0.6;
-  }
-
-  .hero-number {
-    position: absolute;
-    top: 48px;
-    right: 160px;
-    font-family: var(--serif);
-    font-size: 11px;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    opacity: 0;
-    animation: fadeIn 1s ease 1.2s forwards;
-  }
-
-  .hero-content { position: relative; z-index: 2; max-width: 900px; }
-
-  .hero-eyebrow {
-    font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 28px;
-    opacity: 0;
-    animation: slideUp 0.8s ease 0.2s forwards;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: var(--teal);
-    display: block;
-  }
-
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(52px, 7.5vw, 104px);
-    font-weight: 300;
-    line-height: 0.98;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-    opacity: 0;
-    animation: slideUp 0.9s ease 0.4s forwards;
-  }
-
-  .hero-title em { font-style: italic; color: var(--accent); }
-
-  .hero-sub {
-    margin-top: 36px;
-    font-family: var(--sans);
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--muted);
-    max-width: 560px;
-    line-height: 1.6;
-    opacity: 0;
-    animation: slideUp 0.9s ease 0.6s forwards;
-  }
-
-  .hero-actions {
-    margin-top: 52px;
-    display: flex;
-    gap: 24px;
-    align-items: center;
-    opacity: 0;
-    animation: slideUp 0.9s ease 0.8s forwards;
-  }
-
-  .btn-primary {
-    height: 52px;
-    padding: 0 32px;
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.2s;
-  }
-  .btn-primary:hover { background: var(--teal); }
-
-  .btn-ghost {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.2s;
-  }
-  .btn-ghost:hover { color: var(--ink); }
-  .btn-ghost::after { content: '↓'; font-size: 16px; }
-
-  /* WAVE SPECTRUM STRIP */
-  .spectrum-wrap {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 22px 48px;
-    background: var(--warm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    overflow-x: auto;
-  }
-
-  .spectrum-item {
-    font-family: var(--serif);
-    font-size: 14px;
-    font-style: italic;
-    color: var(--muted);
-    padding: 0 24px;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .spectrum-item:not(:last-child)::after {
-    content: '·';
-    color: var(--teal);
-    font-style: normal;
-    font-size: 18px;
-    margin-left: 24px;
-  }
-  .spectrum-item b { color: var(--ink); font-style: normal; font-weight: 700; }
-
-  /* CONCEPT */
-  .concept {
-    padding: 120px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .concept-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .concept-label::before { content: '01'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .concept-title {
-    font-family: var(--serif);
-    font-size: clamp(34px, 3.8vw, 50px);
-    font-weight: 300;
-    line-height: 1.15;
-    color: var(--ink);
-  }
-  .concept-title em { font-style: italic; color: var(--accent); }
-
-  .concept-text {
-    font-size: 17px;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 24px;
-  }
-  .concept-text strong { color: var(--ink); font-weight: 600; }
-
-  .concept-divider { width: 40px; height: 1px; background: var(--border); margin: 32px 0; }
-
-  .concept-bands {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-  }
-
-  .cband { padding: 16px 0 0; border-top: 2px solid var(--band, var(--border)); }
-  .cband-hz { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--ink); line-height: 1; }
-  .cband-hz span { font-style: italic; color: var(--band, var(--accent)); font-size: 15px; }
-  .cband-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-
-  /* LINE — 5 SKUs */
-  .line-section {
-    background: #0D2B2B;
-    padding: 120px 48px;
-  }
-
-  .line-inner { max-width: 1200px; margin: 0 auto; }
-
-  .line-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 72px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-
-  .line-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal-light);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .line-label::before { content: '02'; color: rgba(255,255,255,0.25); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .line-title {
-    font-family: var(--serif);
-    font-size: clamp(34px, 3.8vw, 50px);
-    font-weight: 300;
-    color: #F5F2EC;
-    line-height: 1.1;
-  }
-  .line-title em { font-style: italic; color: var(--accent-light); }
-
-  .line-note {
-    font-size: 14px;
-    color: rgba(245,242,236,0.4);
-    max-width: 240px;
-    text-align: right;
-    line-height: 1.6;
-  }
-
-  .line-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1px;
-    background: rgba(255,255,255,0.08);
-  }
-
-  .tea-card {
-    background: #0D2B2B;
-    padding: 36px 24px;
-    transition: background 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .tea-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--band);
-  }
-  .tea-card:hover { background: #112E2E; }
-
-  .tea-band {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--band);
-    margin-bottom: 18px;
-  }
-
-  .tea-hz {
-    font-family: var(--serif);
-    font-size: 34px;
-    font-weight: 300;
-    color: #F5F2EC;
-    line-height: 1;
-  }
-  .tea-hz span { font-size: 16px; color: rgba(245,242,236,0.5); }
-
-  .tea-name {
-    font-family: var(--serif);
-    font-size: 24px;
-    font-weight: 300;
-    color: #F5F2EC;
-    line-height: 1.2;
-    margin: 18px 0 14px;
-  }
-
-  .tea-desc {
-    font-size: 13.5px;
-    color: rgba(245,242,236,0.45);
-    line-height: 1.6;
-    margin-bottom: 16px;
-    min-height: 42px;
-  }
-
-  .tea-ingredients {
-    font-size: 12.5px;
-    color: rgba(245,242,236,0.65);
-    line-height: 1.6;
-    padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .tea-tag {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--band);
-    opacity: 0.85;
-  }
-
-  /* TIER / CLAIMS DISCIPLINE */
-  .discipline {
-    padding: 120px 48px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .discipline-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .discipline-label::before { content: '03'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .discipline-title {
-    font-family: var(--serif);
-    font-size: clamp(34px, 3.8vw, 50px);
-    font-weight: 300;
-    line-height: 1.15;
-    color: var(--ink);
-    max-width: 700px;
-    margin-bottom: 64px;
-  }
-  .discipline-title em { font-style: italic; color: var(--accent); }
-
-  .discipline-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 48px;
-  }
-
-  .discipline-tier { padding-top: 24px; border-top: 1px solid var(--border); }
-  .discipline-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-  .discipline-bands { font-family: var(--serif); font-size: 22px; font-weight: 300; font-style: italic; color: var(--ink); margin-bottom: 14px; }
-  .discipline-desc { font-size: 15px; color: var(--muted); line-height: 1.75; }
-
-  /* THE DAY */
-  .theday {
-    background: var(--warm);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 120px 48px;
-  }
-
-  .theday-inner { max-width: 1200px; margin: 0 auto; }
-
-  .theday-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .theday-label::before { content: '04'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .theday-title {
-    font-family: var(--serif);
-    font-size: clamp(34px, 3.8vw, 50px);
-    font-weight: 300;
-    line-height: 1.15;
-    color: var(--ink);
-    max-width: 640px;
-    margin-bottom: 64px;
-  }
-  .theday-title em { font-style: italic; color: var(--accent); }
-
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 24px;
-  }
-
-  .tl-item { padding: 24px 0 0; border-top: 2px solid var(--band, var(--border)); }
-  .tl-time { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
-  .tl-band { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band); }
-  .tl-name { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--ink); margin: 8px 0 10px; }
-  .tl-caf { font-size: 13px; color: var(--muted); }
-
-  .theday-foot {
-    margin-top: 56px;
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 640px;
-  }
-
-  /* PRICING */
-  .pricing {
-    padding: 120px 48px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .pricing-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .pricing-label::before { content: '05'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .pricing-title {
-    font-family: var(--serif);
-    font-size: clamp(34px, 3.8vw, 50px);
-    font-weight: 300;
-    line-height: 1.15;
-    color: var(--ink);
-    max-width: 640px;
-    margin-bottom: 64px;
-  }
-  .pricing-title em { font-style: italic; color: var(--accent); }
-
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .price-card {
-    background: var(--paper);
-    padding: 44px 36px;
-    position: relative;
-  }
-  .price-card.featured { background: #0D2B2B; }
-
-  .price-name { font-family: var(--serif); font-size: 26px; font-weight: 300; color: var(--ink); margin-bottom: 6px; }
-  .price-card.featured .price-name { color: #F5F2EC; }
-
-  .price-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; min-height: 44px; }
-  .price-card.featured .price-desc { color: rgba(245,242,236,0.5); }
-
-  .price-amount { font-family: var(--serif); font-size: 44px; font-weight: 300; color: var(--ink); }
-  .price-card.featured .price-amount { color: #F5F2EC; }
-  .price-amount span { font-size: 16px; color: var(--muted); font-family: var(--sans); }
-  .price-card.featured .price-amount span { color: rgba(245,242,236,0.5); }
-
-  .price-per { font-size: 13px; color: var(--teal); font-weight: 600; margin-top: 8px; }
-  .price-card.featured .price-per { color: var(--teal-light); }
-
-  .price-divider { width: 32px; height: 1px; background: var(--border); margin: 24px 0; }
-  .price-card.featured .price-divider { background: rgba(255,255,255,0.15); }
-
-  .price-note { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
-  .price-card.featured .price-note { color: rgba(245,242,236,0.45); }
-
-  /* CONTACT */
-  .contact {
-    background: var(--warm);
-    border-top: 1px solid var(--border);
-    padding: 120px 48px;
-  }
-
-  .contact-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-
-  .contact-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .contact-label::before { content: '06'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
-
-  .contact-title {
-    font-family: var(--serif);
-    font-size: clamp(38px, 4.5vw, 58px);
-    font-weight: 300;
-    line-height: 1.05;
-    color: var(--ink);
-  }
-  .contact-title em { font-style: italic; color: var(--accent); }
-
-  .contact-sub { margin-top: 20px; font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 440px; }
-
-  .contact-right { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
-
-  .contact-right .btn-primary { width: 100%; justify-content: center; }
-
-  .contact-fine { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-  /* FOOTER */
-  footer {
-    background: #0C2424;
-    padding: 40px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(61,184,184,0.12);
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .footer-logo { font-family: var(--serif); font-size: 18px; font-weight: 300; color: rgba(245,242,236,0.6); letter-spacing: 0.02em; }
-  .footer-copy { font-size: 12px; color: rgba(245,242,236,0.25); letter-spacing: 0.06em; }
-  .footer-link { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-light); text-decoration: none; transition: opacity 0.2s; }
-  .footer-link:hover { opacity: 0.7; }
-
-  @keyframes slideUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* Band color assignment */
-  .band-delta { --band: var(--delta); }
-  .band-theta { --band: var(--theta); }
-  .band-alpha { --band: var(--alpha); }
-  .band-beta  { --band: var(--beta); }
-  .band-gamma { --band: var(--gamma); }
-
-  /* MOBILE */
-  @media (max-width: 900px) {
-    .line-grid, .concept-bands, .timeline { grid-template-columns: repeat(2, 1fr); }
-    .discipline-grid { grid-template-columns: 1fr; gap: 32px; }
-    .pricing-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
-    .hero { padding: 0 24px 56px; }
-    .hero-line { display: none; }
-    .spectrum-wrap { padding: 18px 24px; justify-content: flex-start; }
-    .concept { grid-template-columns: 1fr; gap: 40px; padding: 80px 24px; }
-    .concept-bands { grid-template-columns: repeat(3, 1fr); }
-    .line-section { padding: 80px 24px; }
-    .line-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .line-note { text-align: left; }
-    .line-grid, .timeline { grid-template-columns: 1fr; }
-    .discipline { padding: 80px 24px; }
-    .theday { padding: 80px 24px; }
-    .pricing { padding: 80px 24px; }
-    .contact { padding: 80px 24px; }
-    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
-    footer { padding: 28px 24px; flex-direction: column; text-align: center; }
-  }
+:root {
+  --ink: #F4F2F8;
+  --dim: rgba(244,242,248,0.5);
+  --dimmer: rgba(244,242,248,0.24);
+  --black: #060509;
+  --card: #0C0A13;
+  --border: rgba(255,255,255,0.08);
+
+  --delta: #1E5FE0;
+  --theta: #9B4EF0;
+  --alpha: #E01B7E;
+  --beta:  #12B8E0;
+  --gamma: #17C98A;
+
+  --display: 'Space Grotesk', sans-serif;
+  --text: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--ink); font-family: var(--text); font-size: 16px; line-height: 1.65; overflow-x: hidden; }
+
+/* ── film grain, like the sachet render ── */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 500; pointer-events: none; opacity: 0.045; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 26px 56px; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
+nav.scrolled { background: rgba(6,5,9,0.82); backdrop-filter: blur(18px); border-bottom-color: var(--border); }
+.nav-word { font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 30px; }
+.nav-link { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+.nav-link:hover { color: var(--ink); }
+.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 10px 22px; border: 1px solid var(--border); border-radius: 999px; transition: border-color 0.2s, background 0.2s; }
+.nav-cta:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+
+/* ── HERO — mirrors the pouch: black ground, gradient aura sweeping through, wordmark tracked wide ── */
+.hero {
+  min-height: 100vh; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 140px 56px 100px;
+}
+.hero-aura {
+  position: absolute; inset: -10%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 60% at 8% 15%, color-mix(in oklab, var(--delta) 55%, transparent) 0%, transparent 62%),
+    radial-gradient(ellipse 46% 55% at 32% 5%, color-mix(in oklab, var(--theta) 48%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 58% 30%, color-mix(in oklab, var(--alpha) 42%, transparent) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 65% at 80% 55%, color-mix(in oklab, var(--beta) 42%, transparent) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 70% at 100% 85%, color-mix(in oklab, var(--gamma) 46%, transparent) 0%, transparent 65%);
+  filter: blur(70px); opacity: 0.55;
+  animation: aura-drift 30s ease-in-out infinite alternate;
+}
+@keyframes aura-drift { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.08) translate(-2%,2%)} }
+
+.hero-wordmark {
+  position: relative; z-index: 2;
+  font-family: var(--display); font-weight: 600; letter-spacing: 0.5em;
+  font-size: clamp(13px, 1.6vw, 16px); text-transform: uppercase; color: var(--ink);
+  margin-bottom: 8px; opacity: 0; animation: up 0.8s ease 0.1s forwards;
+}
+.hero-tagline {
+  position: relative; z-index: 2;
+  font-family: var(--display); font-weight: 400; letter-spacing: 0.22em;
+  font-size: 12px; text-transform: uppercase; color: var(--dim); margin-bottom: 56px;
+  opacity: 0; animation: up 0.8s ease 0.22s forwards;
+}
+
+.hero-h1 {
+  position: relative; z-index: 2;
+  font-family: var(--display); font-weight: 500; font-size: clamp(46px, 7vw, 96px);
+  line-height: 1.02; letter-spacing: -0.02em; max-width: 920px;
+  opacity: 0; animation: up 0.9s ease 0.36s forwards;
+}
+.hero-h1 .grad {
+  background: linear-gradient(90deg, var(--delta), var(--theta), var(--alpha), var(--beta), var(--gamma));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.hero-sub {
+  position: relative; z-index: 2;
+  margin-top: 32px; font-size: 18px; font-weight: 300; color: var(--dim); max-width: 520px; line-height: 1.75;
+  opacity: 0; animation: up 0.9s ease 0.5s forwards;
+}
+
+.hero-btns { position: relative; z-index: 2; margin-top: 48px; display: flex; gap: 20px; align-items: center; opacity: 0; animation: up 0.9s ease 0.64s forwards; }
+.btn-solid {
+  height: 52px; padding: 0 30px; background: var(--ink); color: var(--black);
+  font-family: var(--text); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  border: none; border-radius: 999px; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px; transition: transform 0.15s, box-shadow 0.25s;
+}
+.btn-solid:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(255,255,255,0.15); }
+.btn-ghost { font-size: 13px; font-weight: 500; color: var(--dim); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+.btn-ghost:hover { color: var(--ink); }
+
+@keyframes up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+
+/* ── SPECTRUM STRIP ── */
+.spectrum { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 56px; display: flex; justify-content: center; gap: 0; overflow-x: auto; }
+.spec-item { display: flex; align-items: center; gap: 10px; padding: 0 26px; font-family: var(--display); font-size: 13px; color: var(--dim); white-space: nowrap; }
+.spec-item b { color: var(--ink); font-weight: 600; }
+.spec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 10px var(--dot); }
+.spec-item:not(:last-child) { border-right: 1px solid var(--border); }
+
+/* ── CONCEPT ── */
+.concept { padding: 130px 56px; max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 0.85fr 1fr; gap: 90px; align-items: start; }
+.eyebrow { font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-bottom: 22px; }
+.concept-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; }
+.concept-title .accent { background: linear-gradient(90deg, var(--theta), var(--alpha)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.concept-text { font-size: 17px; font-weight: 300; color: var(--dim); line-height: 1.85; margin-bottom: 22px; }
+.concept-text strong { color: var(--ink); font-weight: 500; }
+.concept-rule { width: 100%; height: 1px; background: var(--border); margin: 32px 0; }
+.concept-bands { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.cband { padding-top: 14px; border-top: 2px solid var(--band); }
+.cband-hz { font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--ink); line-height: 1; }
+.cband-hz span { font-weight: 300; color: var(--dim); font-size: 12px; }
+.cband-label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); margin-top: 6px; }
+
+/* ── THE LINE — sachet-inspired cards ── */
+.line-section { padding: 60px 56px 130px; border-top: 1px solid var(--border); }
+.line-inner { max-width: 1180px; margin: 0 auto; }
+.line-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 44px; flex-wrap: wrap; gap: 20px; }
+.line-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.1; letter-spacing: -0.01em; }
+.line-title .accent { background: linear-gradient(90deg, var(--beta), var(--gamma)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.line-note { font-size: 13px; font-weight: 300; color: var(--dim); max-width: 220px; text-align: right; line-height: 1.7; }
+
+.line-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+.pouch {
+  position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 3/4.6;
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
+  background:
+    radial-gradient(ellipse 120% 90% at 15% 105%, color-mix(in oklab, var(--band) 60%, transparent) 0%, transparent 55%),
+    linear-gradient(165deg, color-mix(in oklab, var(--band) 34%, #060509) 0%, #060509 60%);
+  padding: 22px 18px 20px;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s;
+}
+.pouch::after {
+  /* subtle foil seam lines, like the pouch photography */
+  content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.06);
+  box-shadow: 8px 0 0 rgba(255,255,255,0.04), -8px 0 0 rgba(255,255,255,0.03);
+}
+.pouch:hover { transform: translateY(-6px); box-shadow: 0 20px 60px -14px color-mix(in oklab, var(--band) 55%, transparent); }
+
+.pouch-mark { font-family: var(--display); font-size: 8.5px; font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(244,242,248,0.75); }
+.pouch-city { font-size: 7px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,242,248,0.4); margin-top: 3px; }
+.pouch-tag { font-size: 6.5px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,242,248,0.3); margin-top: 2px; margin-bottom: 22px; }
+
+.pouch-band { font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--band); margin-bottom: 6px; }
+.pouch-hz { font-family: var(--display); font-weight: 700; font-size: 36px; color: #fff; line-height: 1; text-shadow: 0 0 26px color-mix(in oklab, var(--band) 65%, transparent); }
+.pouch-hz span { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.55); margin-left: 2px; }
+
+.pouch-wave { margin: 14px 0 16px; height: 20px; }
+.pouch-wave svg { width: 100%; height: 100%; display: block; }
+.pouch-wave path { stroke: var(--band); stroke-width: 1.5; fill: none; filter: drop-shadow(0 0 5px color-mix(in oklab, var(--band) 75%, transparent)); }
+
+.pouch-name { font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: #fff; line-height: 1.1; margin-bottom: auto; }
+
+.pouch-foot { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+.pouch-ing { font-size: 10.5px; font-weight: 400; color: rgba(244,242,248,0.62); line-height: 1.55; margin-bottom: 8px; }
+.pouch-caf { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band); }
+
+/* ── FORMULATION ── */
+.discipline { padding: 130px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
+.discipline-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.2; letter-spacing: -0.01em; max-width: 760px; margin-bottom: 60px; }
+.discipline-title .accent { background: linear-gradient(90deg, var(--gamma), var(--beta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.discipline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; }
+.discipline-tier { padding-top: 22px; border-top: 1px solid var(--border); }
+.discipline-tag { font-family: var(--display); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--alpha); margin-bottom: 12px; }
+.discipline-bands { font-family: var(--display); font-size: 22px; font-weight: 500; color: var(--ink); margin-bottom: 14px; }
+.discipline-desc { font-size: 14.5px; font-weight: 300; color: var(--dim); line-height: 1.8; }
+
+/* ── THE DAY ── */
+.theday { padding: 130px 56px; border-top: 1px solid var(--border); background: var(--card); }
+.theday-inner { max-width: 1180px; margin: 0 auto; }
+.theday-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 60px; }
+.theday-title .accent { background: linear-gradient(90deg, var(--beta), var(--delta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.tl-item { padding-top: 18px; border-top: 2px solid var(--band); }
+.tl-time { font-family: var(--display); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--dim); text-transform: uppercase; margin-bottom: 10px; }
+.tl-band { font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--band); }
+.tl-name { font-family: var(--display); font-size: 20px; font-weight: 600; color: var(--ink); margin: 8px 0; }
+.tl-caf { font-size: 12.5px; font-weight: 300; color: var(--dim); }
+.theday-foot { margin-top: 50px; font-size: 15px; font-weight: 300; color: var(--dim); line-height: 1.8; max-width: 660px; }
+
+/* ── PRICING ── */
+.pricing { padding: 130px 56px; max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--border); }
+.pricing-title { font-family: var(--display); font-weight: 500; font-size: clamp(32px,3.6vw,46px); line-height: 1.15; letter-spacing: -0.01em; max-width: 640px; margin-bottom: 60px; }
+.pricing-title .accent { background: linear-gradient(90deg, var(--alpha), var(--theta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.price-card { border-radius: 14px; border: 1px solid var(--border); background: var(--card); padding: 40px 30px; }
+.price-card.featured { background: linear-gradient(160deg, color-mix(in oklab, var(--theta) 16%, var(--card)), color-mix(in oklab, var(--alpha) 10%, var(--card))); border-color: color-mix(in oklab, var(--theta) 40%, var(--border)); }
+.price-name { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.price-desc { font-size: 13.5px; font-weight: 300; color: var(--dim); line-height: 1.65; margin-bottom: 26px; min-height: 42px; }
+.price-amount { font-family: var(--display); font-size: 42px; font-weight: 600; color: #fff; }
+.price-amount span { font-size: 15px; font-weight: 400; color: var(--dim); }
+.price-per { font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--beta); margin-top: 10px; }
+.price-divider { width: 28px; height: 1px; background: var(--border); margin: 24px 0; }
+.price-note { font-size: 13px; font-weight: 300; color: var(--dim); line-height: 1.6; }
+
+/* ── CONTACT ── */
+.contact { padding: 130px 56px; border-top: 1px solid var(--border); }
+.contact-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
+.contact-h { font-family: var(--display); font-weight: 500; font-size: clamp(36px,4.5vw,56px); line-height: 1.05; letter-spacing: -0.01em; margin-top: 18px; }
+.contact-h .accent { background: linear-gradient(90deg, var(--alpha), var(--beta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact-sub { margin-top: 20px; font-size: 16px; font-weight: 300; color: var(--dim); line-height: 1.8; max-width: 440px; }
+.contact-right { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.contact-right .btn-solid { width: 100%; justify-content: center; }
+.contact-fine { font-size: 12.5px; font-weight: 300; color: var(--dimmer); line-height: 1.7; }
+
+/* ── FOOTER ── */
+footer { padding: 44px 56px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 20px; }
+.footer-word { font-family: var(--display); font-size: 13px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dimmer); }
+.footer-copy { font-size: 12px; color: var(--dimmer); letter-spacing: 0.02em; margin-top: 6px; }
+.footer-email { font-size: 12px; font-weight: 500; color: var(--dimmer); text-decoration: none; transition: color 0.2s; }
+.footer-email:hover { color: var(--beta); }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 980px) {
+  .concept { grid-template-columns: 1fr; gap: 40px; }
+  .concept-bands, .line-grid, .discipline-grid, .timeline, .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  nav, .hero, .concept, .line-section, .discipline, .theday, .pricing, .contact { padding-left: 22px; padding-right: 22px; }
+  .concept-bands { grid-template-columns: repeat(3, 1fr); }
+  .line-grid, .discipline-grid, .timeline, .pricing-grid { grid-template-columns: 1fr; }
+  .line-header { flex-direction: column; align-items: flex-start; }
+  .line-note { text-align: left; }
+  .contact-inner { grid-template-columns: 1fr; gap: 44px; }
+  footer { flex-direction: column; align-items: flex-start; }
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <a href="index.html#home" class="nav-logo">Path & Pace</a>
+<nav id="nav">
+  <a href="index.html" class="nav-word">Harmony</a>
   <div class="nav-right">
-    <a href="index.html" class="nav-back">← Studio</a>
+    <a href="index.html" class="nav-link">Path &amp; Pace</a>
     <a href="#contact" class="nav-cta">Get the Day Strip</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-line"></div>
-  <div class="hero-number">Delta · Theta · Alpha · Beta · Gamma</div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Harmony · A Path & Pace Product</div>
-    <h1 class="hero-title">
-      Five states.<br>
-      Five <em>frequencies.</em><br>
-      Five teas.
-    </h1>
-    <p class="hero-sub">
-      Your brain runs at five frequencies. Now so does your cup. Harmony is one tea per brain wave band — you don't pick a flavor, you pick a state.
-    </p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn-primary">
-        Get the Day Strip
-        <span>→</span>
-      </a>
-      <a href="#line" class="btn-ghost">See the line</a>
-    </div>
+  <div class="hero-aura"></div>
+  <div class="hero-wordmark">Harmony &nbsp; Atlanta</div>
+  <div class="hero-tagline">Brew Your State</div>
+  <h1 class="hero-h1">Five states.<br>Five <span class="grad">frequencies.</span><br>Five teas.</h1>
+  <p class="hero-sub">Your brain runs at five frequencies. Now so does your cup. One tea per band — you don't pick a flavor, you pick a state.</p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn-solid">Get the Day Strip →</a>
+    <a href="#line" class="btn-ghost">See the line ↓</a>
   </div>
 </section>
 
-<!-- SPECTRUM STRIP -->
-<div class="spectrum-wrap">
-  <div class="spectrum-item"><b>2 Hz</b> Delta</div>
-  <div class="spectrum-item"><b>5 Hz</b> Theta</div>
-  <div class="spectrum-item"><b>11 Hz</b> Alpha</div>
-  <div class="spectrum-item"><b>19 Hz</b> Beta</div>
-  <div class="spectrum-item"><b>41 Hz</b> Gamma</div>
+<!-- SPECTRUM -->
+<div class="spectrum">
+  <div class="spec-item" style="--dot:var(--delta)"><span class="spec-dot"></span><b>2 Hz</b>&nbsp;Delta</div>
+  <div class="spec-item" style="--dot:var(--theta)"><span class="spec-dot"></span><b>5 Hz</b>&nbsp;Theta</div>
+  <div class="spec-item" style="--dot:var(--alpha)"><span class="spec-dot"></span><b>11 Hz</b>&nbsp;Alpha</div>
+  <div class="spec-item" style="--dot:var(--beta)"><span class="spec-dot"></span><b>19 Hz</b>&nbsp;Beta</div>
+  <div class="spec-item" style="--dot:var(--gamma)"><span class="spec-dot"></span><b>41 Hz</b>&nbsp;Gamma</div>
 </div>
 
 <!-- CONCEPT -->
 <section class="concept" id="concept">
   <div class="reveal">
-    <div class="concept-label">The concept</div>
-    <h2 class="concept-title">
-      One tea per band.<br>
-      You don't pick a <em>flavor</em> —<br>
-      you pick a <em>state.</em>
-    </h2>
+    <div class="eyebrow">The concept</div>
+    <h2 class="concept-title">One tea per band. You pick a <span class="accent">state.</span></h2>
   </div>
   <div class="reveal">
-    <p class="concept-text">
-      EEG splits brain activity into five bands. Each one lines up with a state people already chase every day — sleep, drift, calm focus, hard focus, and the spark. <strong>Nobody has to learn a new language</strong> — these are already the words people use for their own day: wired, foggy, locked in, out of it. We just gave them a shelf.
-    </p>
-    <div class="concept-divider"></div>
+    <p class="concept-text">EEG splits brain activity into five bands. Each one lines up with a state people already chase every day — sleep, drift, calm focus, hard focus, and the spark. <strong>Nobody has to learn a new language</strong> — these are already the words people use for their own day: wired, foggy, locked in, out of it. We just gave them a shelf.</p>
+    <div class="concept-rule"></div>
     <div class="concept-bands">
-      <div class="cband band-delta"><div class="cband-hz">0.5<span>–4</span></div><div class="cband-label">Delta</div></div>
-      <div class="cband band-theta"><div class="cband-hz">4<span>–8</span></div><div class="cband-label">Theta</div></div>
-      <div class="cband band-alpha"><div class="cband-hz">8<span>–12</span></div><div class="cband-label">Alpha</div></div>
-      <div class="cband band-beta"><div class="cband-hz">12<span>–30</span></div><div class="cband-label">Beta</div></div>
-      <div class="cband band-gamma"><div class="cband-hz">30<span>–100</span></div><div class="cband-label">Gamma</div></div>
+      <div class="cband" style="--band:var(--delta)"><div class="cband-hz">0.5<span>–4</span></div><div class="cband-label">Delta</div></div>
+      <div class="cband" style="--band:var(--theta)"><div class="cband-hz">4<span>–8</span></div><div class="cband-label">Theta</div></div>
+      <div class="cband" style="--band:var(--alpha)"><div class="cband-hz">8<span>–12</span></div><div class="cband-label">Alpha</div></div>
+      <div class="cband" style="--band:var(--beta)"><div class="cband-hz">12<span>–30</span></div><div class="cband-label">Beta</div></div>
+      <div class="cband" style="--band:var(--gamma)"><div class="cband-hz">30<span>–100</span></div><div class="cband-label">Gamma</div></div>
     </div>
   </div>
 </section>
@@ -794,63 +303,91 @@
   <div class="line-inner">
     <div class="line-header reveal">
       <div>
-        <div class="line-label">The line</div>
-        <h2 class="line-title">Five SKUs.<br>One <em>system.</em></h2>
+        <div class="eyebrow">The line</div>
+        <h2 class="line-title">Five SKUs. One <span class="accent">system.</span></h2>
       </div>
       <p class="line-note">Same face, different frequency. Line them up and the shelf reads as a spectrum.</p>
     </div>
     <div class="line-grid">
-      <div class="tea-card reveal band-delta">
-        <div class="tea-band">Delta · Sleep</div>
-        <div class="tea-hz">2<span>Hz</span></div>
-        <div class="tea-name">Lights Out</div>
-        <p class="tea-desc">The hour before sleep.</p>
-        <div class="tea-ingredients">Chamomile, lavender, lemon balm, licorice root</div>
-        <div class="tea-tag">Caffeine free</div>
+
+      <div class="pouch reveal" style="--band:var(--delta)">
+        <div class="pouch-mark">Harmony</div>
+        <div class="pouch-city">Atlanta</div>
+        <div class="pouch-tag">Brew Your State</div>
+        <div class="pouch-band">Delta</div>
+        <div class="pouch-hz">2<span>Hz</span></div>
+        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 12,1 25,19 37,10 C 49,1 62,19 74,10 C 86,1 99,19 100,10"/></svg></div>
+        <div class="pouch-name">Lights Out</div>
+        <div class="pouch-foot">
+          <div class="pouch-ing">Chamomile, lavender, lemon balm</div>
+          <div class="pouch-caf">Caffeine free</div>
+        </div>
       </div>
-      <div class="tea-card reveal band-theta">
-        <div class="tea-band">Theta · Drift</div>
-        <div class="tea-hz">5<span>Hz</span></div>
-        <div class="tea-name">Drift</div>
-        <p class="tea-desc">The in-between hour.</p>
-        <div class="tea-ingredients">Tulsi, rose, valerian, vanilla</div>
-        <div class="tea-tag">Caffeine free</div>
+
+      <div class="pouch reveal" style="--band:var(--theta)">
+        <div class="pouch-mark">Harmony</div>
+        <div class="pouch-city">Atlanta</div>
+        <div class="pouch-tag">Brew Your State</div>
+        <div class="pouch-band">Theta</div>
+        <div class="pouch-hz">5<span>Hz</span></div>
+        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 6,2 12,18 18,10 C 24,2 31,18 37,10 C 43,2 49,18 55,10 C 61,2 68,18 74,10 C 80,2 87,18 93,10 C 96,6 99,14 100,10"/></svg></div>
+        <div class="pouch-name">Drift</div>
+        <div class="pouch-foot">
+          <div class="pouch-ing">Tulsi, rose, valerian, vanilla</div>
+          <div class="pouch-caf">Caffeine free</div>
+        </div>
       </div>
-      <div class="tea-card reveal band-alpha">
-        <div class="tea-band">Alpha · Calm focus</div>
-        <div class="tea-hz">11<span>Hz</span></div>
-        <div class="tea-name">Tune In</div>
-        <p class="tea-desc">Calm and awake at the same time.</p>
-        <div class="tea-ingredients">Sencha, L-theanine, mint, yuzu peel</div>
-        <div class="tea-tag">Low caffeine</div>
+
+      <div class="pouch reveal" style="--band:var(--alpha)">
+        <div class="pouch-mark">Harmony</div>
+        <div class="pouch-city">Atlanta</div>
+        <div class="pouch-tag">Brew Your State</div>
+        <div class="pouch-band">Alpha</div>
+        <div class="pouch-hz">11<span>Hz</span></div>
+        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 3,3 6,17 9,10 C 12,3 16,17 19,10 C 22,3 25,17 28,10 C 31,3 35,17 38,10 C 41,3 44,17 47,10 C 50,3 54,17 57,10 C 60,3 63,17 66,10 C 69,3 72,17 75,10 C 78,3 82,17 85,10 C 88,3 91,17 94,10 C 96,5 98,15 100,10"/></svg></div>
+        <div class="pouch-name">Tune In</div>
+        <div class="pouch-foot">
+          <div class="pouch-ing">Sencha, L-theanine, mint, yuzu</div>
+          <div class="pouch-caf">Low caffeine</div>
+        </div>
       </div>
-      <div class="tea-card reveal band-beta">
-        <div class="tea-band">Beta · Hard focus</div>
-        <div class="tea-hz">19<span>Hz</span></div>
-        <div class="tea-name">Lock In</div>
-        <p class="tea-desc">Two hours of real work.</p>
-        <div class="tea-ingredients">Matcha, guayusa, ginger, lime</div>
-        <div class="tea-tag">High caffeine</div>
+
+      <div class="pouch reveal" style="--band:var(--beta)">
+        <div class="pouch-mark">Harmony</div>
+        <div class="pouch-city">Atlanta</div>
+        <div class="pouch-tag">Brew Your State</div>
+        <div class="pouch-band">Beta</div>
+        <div class="pouch-hz">19<span>Hz</span></div>
+        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 2,4 4,16 6,10 C 8,4 10,16 12,10 C 14,4 16,16 18,10 C 20,4 22,16 24,10 C 26,4 28,16 30,10 C 32,4 34,16 36,10 C 38,4 40,16 42,10 C 44,4 46,16 48,10 C 50,4 52,16 54,10 C 56,4 58,16 60,10 C 62,4 64,16 66,10 C 68,4 70,16 72,10 C 74,4 76,16 78,10 C 80,4 82,16 84,10 C 86,4 88,16 90,10 C 92,4 94,16 96,10 C 97,6 99,14 100,10"/></svg></div>
+        <div class="pouch-name">Lock In</div>
+        <div class="pouch-foot">
+          <div class="pouch-ing">Matcha, guayusa, ginger, lime</div>
+          <div class="pouch-caf">High caffeine</div>
+        </div>
       </div>
-      <div class="tea-card reveal band-gamma">
-        <div class="tea-band">Gamma · The spark</div>
-        <div class="tea-hz">41<span>Hz</span></div>
-        <div class="tea-name">Spark</div>
-        <p class="tea-desc">The cup you drink while you're making something.</p>
-        <div class="tea-ingredients">Cacao, lion's mane, orange peel, cinnamon</div>
-        <div class="tea-tag">Medium caffeine</div>
+
+      <div class="pouch reveal" style="--band:var(--gamma)">
+        <div class="pouch-mark">Harmony</div>
+        <div class="pouch-city">Atlanta</div>
+        <div class="pouch-tag">Brew Your State</div>
+        <div class="pouch-band">Gamma</div>
+        <div class="pouch-hz">41<span>Hz</span></div>
+        <div class="pouch-wave"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0,10 C 2,4 4,16 6,10 C 8,4 10,16 12,10 C 14,4 16,16 18,10 C 20,4 22,16 24,10 C 26,4 28,16 30,10 C 32,4 34,16 36,10 C 38,4 40,16 42,10 C 44,4 46,16 48,10 C 50,4 52,16 54,10 C 56,4 58,16 60,10 C 62,4 64,16 66,10 C 68,4 70,16 72,10 C 74,4 76,16 78,10 C 80,4 82,16 84,10 C 86,4 88,16 90,10 C 92,4 94,16 96,10 C 97,6 99,14 100,10"/></svg></div>
+        <div class="pouch-name">Spark</div>
+        <div class="pouch-foot">
+          <div class="pouch-ing">Cacao, lion's mane, orange peel</div>
+          <div class="pouch-caf">Medium caffeine</div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- CLAIMS DISCIPLINE -->
+<!-- FORMULATION -->
 <section class="discipline" id="discipline">
-  <div class="discipline-label reveal">How we formulate</div>
-  <h2 class="discipline-title reveal">
-    Dose to the research where it exists.<br>
-    Call it a <em>ritual</em> where it doesn't.
-  </h2>
+  <div class="eyebrow reveal">How we formulate</div>
+  <h2 class="discipline-title reveal">Dose to the research where it exists. Call it a <span class="accent">ritual</span> where it doesn't.</h2>
   <div class="discipline-grid">
     <div class="discipline-tier reveal">
       <div class="discipline-tag">Tier 1 · Dose it</div>
@@ -873,34 +410,34 @@
 <!-- THE DAY -->
 <section class="theday" id="theday">
   <div class="theday-inner">
-    <div class="theday-label reveal">The ritual</div>
-    <h2 class="theday-title reveal">Five cups is a day, <em>not a dose.</em></h2>
+    <div class="eyebrow reveal">The ritual</div>
+    <h2 class="theday-title reveal">Five cups is a day, <span class="accent">not a dose.</span></h2>
     <div class="timeline">
-      <div class="tl-item reveal band-beta">
+      <div class="tl-item reveal" style="--band:var(--beta)">
         <div class="tl-time">7:00 AM</div>
         <div class="tl-band">Beta · 19 Hz</div>
         <div class="tl-name">Lock In</div>
         <div class="tl-caf">~70mg caffeine</div>
       </div>
-      <div class="tl-item reveal band-gamma">
+      <div class="tl-item reveal" style="--band:var(--gamma)">
         <div class="tl-time">11:00 AM</div>
         <div class="tl-band">Gamma · 41 Hz</div>
         <div class="tl-name">Spark</div>
         <div class="tl-caf">~15mg caffeine</div>
       </div>
-      <div class="tl-item reveal band-alpha">
+      <div class="tl-item reveal" style="--band:var(--alpha)">
         <div class="tl-time">2:30 PM</div>
         <div class="tl-band">Alpha · 11 Hz</div>
         <div class="tl-name">Tune In</div>
         <div class="tl-caf">~25mg caffeine</div>
       </div>
-      <div class="tl-item reveal band-theta">
+      <div class="tl-item reveal" style="--band:var(--theta)">
         <div class="tl-time">7:00 PM</div>
         <div class="tl-band">Theta · 5 Hz</div>
         <div class="tl-name">Drift</div>
         <div class="tl-caf">Caffeine free</div>
       </div>
-      <div class="tl-item reveal band-delta">
+      <div class="tl-item reveal" style="--band:var(--delta)">
         <div class="tl-time">9:30 PM</div>
         <div class="tl-band">Delta · 2 Hz</div>
         <div class="tl-name">Lights Out</div>
@@ -913,14 +450,14 @@
 
 <!-- PRICING -->
 <section class="pricing" id="pricing">
-  <div class="pricing-label reveal">Three ways in</div>
-  <h2 class="pricing-title reveal">One of them is a <em>habit.</em></h2>
+  <div class="eyebrow reveal">Three ways in</div>
+  <h2 class="pricing-title reveal">One of them is a <span class="accent">habit.</span></h2>
   <div class="pricing-grid">
     <div class="price-card reveal">
       <div class="price-name">The Day</div>
       <p class="price-desc">Five sachets, one per band. The whole idea in a single day.</p>
       <div class="price-amount">$7</div>
-      <div class="price-per">$1.40 a cup</div>
+      <div class="price-per">$1.40 A CUP</div>
       <div class="price-divider"></div>
       <p class="price-note">The sample at The Block, the checkout add-on, the thing you hand a friend.</p>
     </div>
@@ -928,7 +465,7 @@
       <div class="price-name">The Box</div>
       <p class="price-desc">Fifteen sachets of one band — the state you actually live in.</p>
       <div class="price-amount">$19</div>
-      <div class="price-per">$1.27 a cup</div>
+      <div class="price-per">$1.27 A CUP</div>
       <div class="price-divider"></div>
       <p class="price-note">Most people have a favorite. This is the one they buy again.</p>
     </div>
@@ -936,7 +473,7 @@
       <div class="price-name">The Month</div>
       <p class="price-desc">150 sachets, all five bands, delivered or picked up. $79 for members.</p>
       <div class="price-amount">$97</div>
-      <div class="price-per">$3.23 a day</div>
+      <div class="price-per">$3.23 A DAY</div>
       <div class="price-divider"></div>
       <p class="price-note">Five cups a day, made normal.</p>
     </div>
@@ -947,43 +484,36 @@
 <section class="contact" id="contact">
   <div class="contact-inner">
     <div class="reveal">
-      <div class="contact-label">Get in touch</div>
-      <h2 class="contact-title">
-        Pick your<br>
-        <em>state.</em>
-      </h2>
-      <p class="contact-sub">
-        Harmony is sold direct and in person — The Block, pop-ins, and select rooms around Atlanta. Reach out to be first in line for the next run.
-      </p>
+      <div class="eyebrow">Get in touch</div>
+      <h2 class="contact-h">Pick your <span class="accent">state.</span></h2>
+      <p class="contact-sub">Harmony is sold direct and in person — The Block, pop-ins, and select rooms around Atlanta. Reach out to be first in line for the next run.</p>
     </div>
     <div class="contact-right reveal">
-      <a href="mailto:hello@path-and-pace.com?subject=Harmony%20Tea" class="btn-primary">
-        Ask about Harmony
-        <span>→</span>
-      </a>
-      <p class="contact-fine">Georgia cottage-food product, sold in-state and in person. Every claim on this page describes the band, not the brain — see our claims discipline above.</p>
+      <a href="mailto:hello@path-and-pace.com?subject=Harmony%20Tea" class="btn-solid">Ask about Harmony →</a>
+      <p class="contact-fine">Georgia cottage-food product, sold in-state and in person. Every claim on this page describes the band, not the brain — see our formulation discipline above.</p>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Path & Pace</div>
-  <div class="footer-copy">© 2026 Path & Pace LLC · Atlanta, GA · Harmony is a Path & Pace product</div>
-  <a href="mailto:hello@path-and-pace.com" class="footer-link">hello@path-and-pace.com</a>
+  <div>
+    <div class="footer-word">Harmony</div>
+    <div class="footer-copy">A Path &amp; Pace product · Atlanta, GA</div>
+  </div>
+  <a href="mailto:hello@path-and-pace.com" class="footer-email">hello@path-and-pace.com</a>
 </footer>
 
 <script>
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 60);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 60); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
