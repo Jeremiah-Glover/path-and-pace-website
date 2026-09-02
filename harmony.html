@@ -1,1 +1,989 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harmony Tea — Five States, Five Teas | Path & Pace</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Darker+Grotesque:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0E0E0E;
+    --paper: #F5F2EC;
+    --warm: #EDF4F4;
+    --accent: #C85A1E;
+    --accent-light: #E8784A;
+    --teal: #2A8A8A;
+    --teal-light: #3DB8B8;
+    --teal-muted: #1D6666;
+    --muted: #6A7A7A;
+    --border: #C8DDDD;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Darker Grotesque', sans-serif;
+
+    /* Band colors — cool (slow) to warm (fast), matching the Hz gradient */
+    --delta: #2A5A9A;
+    --theta: #6B4FA8;
+    --alpha: #B8306A;
+    --beta: #2A8A8A;
+    --gamma: #2E8F5E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: multiply;
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 32px; }
+
+  .nav-back {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--ink); }
+
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.7; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(107,79,168,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 80% at 20% 80%, rgba(200,90,30,0.07) 0%, transparent 60%);
+  }
+
+  .hero-line {
+    position: absolute;
+    top: 0;
+    right: 120px;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    opacity: 0.6;
+  }
+
+  .hero-number {
+    position: absolute;
+    top: 48px;
+    right: 160px;
+    font-family: var(--serif);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    opacity: 0;
+    animation: fadeIn 1s ease 1.2s forwards;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: slideUp 0.8s ease 0.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--teal);
+    display: block;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(52px, 7.5vw, 104px);
+    font-weight: 300;
+    line-height: 0.98;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: slideUp 0.9s ease 0.4s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--accent); }
+
+  .hero-sub {
+    margin-top: 36px;
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: slideUp 0.9s ease 0.6s forwards;
+  }
+
+  .hero-actions {
+    margin-top: 52px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    opacity: 0;
+    animation: slideUp 0.9s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    height: 52px;
+    padding: 0 32px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--teal); }
+
+  .btn-ghost {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--ink); }
+  .btn-ghost::after { content: '↓'; font-size: 16px; }
+
+  /* WAVE SPECTRUM STRIP */
+  .spectrum-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 48px;
+    background: var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .spectrum-item {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--muted);
+    padding: 0 24px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .spectrum-item:not(:last-child)::after {
+    content: '·';
+    color: var(--teal);
+    font-style: normal;
+    font-size: 18px;
+    margin-left: 24px;
+  }
+  .spectrum-item b { color: var(--ink); font-style: normal; font-weight: 700; }
+
+  /* CONCEPT */
+  .concept {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .concept-label::before { content: '01'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .concept-title {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.8vw, 50px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .concept-title em { font-style: italic; color: var(--accent); }
+
+  .concept-text {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+  .concept-text strong { color: var(--ink); font-weight: 600; }
+
+  .concept-divider { width: 40px; height: 1px; background: var(--border); margin: 32px 0; }
+
+  .concept-bands {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .cband { padding: 16px 0 0; border-top: 2px solid var(--band, var(--border)); }
+  .cband-hz { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--ink); line-height: 1; }
+  .cband-hz span { font-style: italic; color: var(--band, var(--accent)); font-size: 15px; }
+  .cband-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+  /* LINE — 5 SKUs */
+  .line-section {
+    background: #0D2B2B;
+    padding: 120px 48px;
+  }
+
+  .line-inner { max-width: 1200px; margin: 0 auto; }
+
+  .line-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 72px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .line-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .line-label::before { content: '02'; color: rgba(255,255,255,0.25); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .line-title {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.8vw, 50px);
+    font-weight: 300;
+    color: #F5F2EC;
+    line-height: 1.1;
+  }
+  .line-title em { font-style: italic; color: var(--accent-light); }
+
+  .line-note {
+    font-size: 14px;
+    color: rgba(245,242,236,0.4);
+    max-width: 240px;
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .line-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .tea-card {
+    background: #0D2B2B;
+    padding: 36px 24px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tea-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--band);
+  }
+  .tea-card:hover { background: #112E2E; }
+
+  .tea-band {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--band);
+    margin-bottom: 18px;
+  }
+
+  .tea-hz {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 300;
+    color: #F5F2EC;
+    line-height: 1;
+  }
+  .tea-hz span { font-size: 16px; color: rgba(245,242,236,0.5); }
+
+  .tea-name {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 300;
+    color: #F5F2EC;
+    line-height: 1.2;
+    margin: 18px 0 14px;
+  }
+
+  .tea-desc {
+    font-size: 13.5px;
+    color: rgba(245,242,236,0.45);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    min-height: 42px;
+  }
+
+  .tea-ingredients {
+    font-size: 12.5px;
+    color: rgba(245,242,236,0.65);
+    line-height: 1.6;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tea-tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--band);
+    opacity: 0.85;
+  }
+
+  /* TIER / CLAIMS DISCIPLINE */
+  .discipline {
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .discipline-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .discipline-label::before { content: '03'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .discipline-title {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.8vw, 50px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 64px;
+  }
+  .discipline-title em { font-style: italic; color: var(--accent); }
+
+  .discipline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .discipline-tier { padding-top: 24px; border-top: 1px solid var(--border); }
+  .discipline-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .discipline-bands { font-family: var(--serif); font-size: 22px; font-weight: 300; font-style: italic; color: var(--ink); margin-bottom: 14px; }
+  .discipline-desc { font-size: 15px; color: var(--muted); line-height: 1.75; }
+
+  /* THE DAY */
+  .theday {
+    background: var(--warm);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 120px 48px;
+  }
+
+  .theday-inner { max-width: 1200px; margin: 0 auto; }
+
+  .theday-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .theday-label::before { content: '04'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .theday-title {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.8vw, 50px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ink);
+    max-width: 640px;
+    margin-bottom: 64px;
+  }
+  .theday-title em { font-style: italic; color: var(--accent); }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+
+  .tl-item { padding: 24px 0 0; border-top: 2px solid var(--band, var(--border)); }
+  .tl-time { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .tl-band { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band); }
+  .tl-name { font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--ink); margin: 8px 0 10px; }
+  .tl-caf { font-size: 13px; color: var(--muted); }
+
+  .theday-foot {
+    margin-top: 56px;
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  /* PRICING */
+  .pricing {
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .pricing-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pricing-label::before { content: '05'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .pricing-title {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.8vw, 50px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ink);
+    max-width: 640px;
+    margin-bottom: 64px;
+  }
+  .pricing-title em { font-style: italic; color: var(--accent); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .price-card {
+    background: var(--paper);
+    padding: 44px 36px;
+    position: relative;
+  }
+  .price-card.featured { background: #0D2B2B; }
+
+  .price-name { font-family: var(--serif); font-size: 26px; font-weight: 300; color: var(--ink); margin-bottom: 6px; }
+  .price-card.featured .price-name { color: #F5F2EC; }
+
+  .price-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; min-height: 44px; }
+  .price-card.featured .price-desc { color: rgba(245,242,236,0.5); }
+
+  .price-amount { font-family: var(--serif); font-size: 44px; font-weight: 300; color: var(--ink); }
+  .price-card.featured .price-amount { color: #F5F2EC; }
+  .price-amount span { font-size: 16px; color: var(--muted); font-family: var(--sans); }
+  .price-card.featured .price-amount span { color: rgba(245,242,236,0.5); }
+
+  .price-per { font-size: 13px; color: var(--teal); font-weight: 600; margin-top: 8px; }
+  .price-card.featured .price-per { color: var(--teal-light); }
+
+  .price-divider { width: 32px; height: 1px; background: var(--border); margin: 24px 0; }
+  .price-card.featured .price-divider { background: rgba(255,255,255,0.15); }
+
+  .price-note { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+  .price-card.featured .price-note { color: rgba(245,242,236,0.45); }
+
+  /* CONTACT */
+  .contact {
+    background: var(--warm);
+    border-top: 1px solid var(--border);
+    padding: 120px 48px;
+  }
+
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .contact-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .contact-label::before { content: '06'; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 14px; font-weight: 300; letter-spacing: 0; }
+
+  .contact-title {
+    font-family: var(--serif);
+    font-size: clamp(38px, 4.5vw, 58px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .contact-title em { font-style: italic; color: var(--accent); }
+
+  .contact-sub { margin-top: 20px; font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 440px; }
+
+  .contact-right { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+
+  .contact-right .btn-primary { width: 100%; justify-content: center; }
+
+  .contact-fine { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    background: #0C2424;
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(61,184,184,0.12);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo { font-family: var(--serif); font-size: 18px; font-weight: 300; color: rgba(245,242,236,0.6); letter-spacing: 0.02em; }
+  .footer-copy { font-size: 12px; color: rgba(245,242,236,0.25); letter-spacing: 0.06em; }
+  .footer-link { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-light); text-decoration: none; transition: opacity 0.2s; }
+  .footer-link:hover { opacity: 0.7; }
+
+  @keyframes slideUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Band color assignment */
+  .band-delta { --band: var(--delta); }
+  .band-theta { --band: var(--theta); }
+  .band-alpha { --band: var(--alpha); }
+  .band-beta  { --band: var(--beta); }
+  .band-gamma { --band: var(--gamma); }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .line-grid, .concept-bands, .timeline { grid-template-columns: repeat(2, 1fr); }
+    .discipline-grid { grid-template-columns: 1fr; gap: 32px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .hero { padding: 0 24px 56px; }
+    .hero-line { display: none; }
+    .spectrum-wrap { padding: 18px 24px; justify-content: flex-start; }
+    .concept { grid-template-columns: 1fr; gap: 40px; padding: 80px 24px; }
+    .concept-bands { grid-template-columns: repeat(3, 1fr); }
+    .line-section { padding: 80px 24px; }
+    .line-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .line-note { text-align: left; }
+    .line-grid, .timeline { grid-template-columns: 1fr; }
+    .discipline { padding: 80px 24px; }
+    .theday { padding: 80px 24px; }
+    .pricing { padding: 80px 24px; }
+    .contact { padding: 80px 24px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+    footer { padding: 28px 24px; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html#home" class="nav-logo">Path & Pace</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Studio</a>
+    <a href="#contact" class="nav-cta">Get the Day Strip</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-number">Delta · Theta · Alpha · Beta · Gamma</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Harmony · A Path & Pace Product</div>
+    <h1 class="hero-title">
+      Five states.<br>
+      Five <em>frequencies.</em><br>
+      Five teas.
+    </h1>
+    <p class="hero-sub">
+      Your brain runs at five frequencies. Now so does your cup. Harmony is one tea per brain wave band — you don't pick a flavor, you pick a state.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">
+        Get the Day Strip
+        <span>→</span>
+      </a>
+      <a href="#line" class="btn-ghost">See the line</a>
+    </div>
+  </div>
+</section>
+
+<!-- SPECTRUM STRIP -->
+<div class="spectrum-wrap">
+  <div class="spectrum-item"><b>2 Hz</b> Delta</div>
+  <div class="spectrum-item"><b>5 Hz</b> Theta</div>
+  <div class="spectrum-item"><b>11 Hz</b> Alpha</div>
+  <div class="spectrum-item"><b>19 Hz</b> Beta</div>
+  <div class="spectrum-item"><b>41 Hz</b> Gamma</div>
+</div>
+
+<!-- CONCEPT -->
+<section class="concept" id="concept">
+  <div class="reveal">
+    <div class="concept-label">The concept</div>
+    <h2 class="concept-title">
+      One tea per band.<br>
+      You don't pick a <em>flavor</em> —<br>
+      you pick a <em>state.</em>
+    </h2>
+  </div>
+  <div class="reveal">
+    <p class="concept-text">
+      EEG splits brain activity into five bands. Each one lines up with a state people already chase every day — sleep, drift, calm focus, hard focus, and the spark. <strong>Nobody has to learn a new language</strong> — these are already the words people use for their own day: wired, foggy, locked in, out of it. We just gave them a shelf.
+    </p>
+    <div class="concept-divider"></div>
+    <div class="concept-bands">
+      <div class="cband band-delta"><div class="cband-hz">0.5<span>–4</span></div><div class="cband-label">Delta</div></div>
+      <div class="cband band-theta"><div class="cband-hz">4<span>–8</span></div><div class="cband-label">Theta</div></div>
+      <div class="cband band-alpha"><div class="cband-hz">8<span>–12</span></div><div class="cband-label">Alpha</div></div>
+      <div class="cband band-beta"><div class="cband-hz">12<span>–30</span></div><div class="cband-label">Beta</div></div>
+      <div class="cband band-gamma"><div class="cband-hz">30<span>–100</span></div><div class="cband-label">Gamma</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- THE LINE -->
+<section class="line-section" id="line">
+  <div class="line-inner">
+    <div class="line-header reveal">
+      <div>
+        <div class="line-label">The line</div>
+        <h2 class="line-title">Five SKUs.<br>One <em>system.</em></h2>
+      </div>
+      <p class="line-note">Same face, different frequency. Line them up and the shelf reads as a spectrum.</p>
+    </div>
+    <div class="line-grid">
+      <div class="tea-card reveal band-delta">
+        <div class="tea-band">Delta · Sleep</div>
+        <div class="tea-hz">2<span>Hz</span></div>
+        <div class="tea-name">Lights Out</div>
+        <p class="tea-desc">The hour before sleep.</p>
+        <div class="tea-ingredients">Chamomile, lavender, lemon balm, licorice root</div>
+        <div class="tea-tag">Caffeine free</div>
+      </div>
+      <div class="tea-card reveal band-theta">
+        <div class="tea-band">Theta · Drift</div>
+        <div class="tea-hz">5<span>Hz</span></div>
+        <div class="tea-name">Drift</div>
+        <p class="tea-desc">The in-between hour.</p>
+        <div class="tea-ingredients">Tulsi, rose, valerian, vanilla</div>
+        <div class="tea-tag">Caffeine free</div>
+      </div>
+      <div class="tea-card reveal band-alpha">
+        <div class="tea-band">Alpha · Calm focus</div>
+        <div class="tea-hz">11<span>Hz</span></div>
+        <div class="tea-name">Tune In</div>
+        <p class="tea-desc">Calm and awake at the same time.</p>
+        <div class="tea-ingredients">Sencha, L-theanine, mint, yuzu peel</div>
+        <div class="tea-tag">Low caffeine</div>
+      </div>
+      <div class="tea-card reveal band-beta">
+        <div class="tea-band">Beta · Hard focus</div>
+        <div class="tea-hz">19<span>Hz</span></div>
+        <div class="tea-name">Lock In</div>
+        <p class="tea-desc">Two hours of real work.</p>
+        <div class="tea-ingredients">Matcha, guayusa, ginger, lime</div>
+        <div class="tea-tag">High caffeine</div>
+      </div>
+      <div class="tea-card reveal band-gamma">
+        <div class="tea-band">Gamma · The spark</div>
+        <div class="tea-hz">41<span>Hz</span></div>
+        <div class="tea-name">Spark</div>
+        <p class="tea-desc">The cup you drink while you're making something.</p>
+        <div class="tea-ingredients">Cacao, lion's mane, orange peel, cinnamon</div>
+        <div class="tea-tag">Medium caffeine</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLAIMS DISCIPLINE -->
+<section class="discipline" id="discipline">
+  <div class="discipline-label reveal">How we formulate</div>
+  <h2 class="discipline-title reveal">
+    Dose to the research where it exists.<br>
+    Call it a <em>ritual</em> where it doesn't.
+  </h2>
+  <div class="discipline-grid">
+    <div class="discipline-tier reveal">
+      <div class="discipline-tag">Tier 1 · Dose it</div>
+      <div class="discipline-bands">Alpha, Beta</div>
+      <p class="discipline-desc">Functional amounts, printed on the box. We can talk about what the research shows, in reviewed language.</p>
+    </div>
+    <div class="discipline-tier reveal">
+      <div class="discipline-tag">Tier 2 · Tradition</div>
+      <div class="discipline-bands">Delta</div>
+      <p class="discipline-desc">Long-used ingredients with a real mechanism and modest human data. Softer language, no promises.</p>
+    </div>
+    <div class="discipline-tier reveal">
+      <div class="discipline-tag">Tier 3 · Ritual</div>
+      <div class="discipline-bands">Theta, Gamma</div>
+      <p class="discipline-desc">Flavor and ceremony. Zero functional claims, on purpose. The band is the mood, not the mechanism.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE DAY -->
+<section class="theday" id="theday">
+  <div class="theday-inner">
+    <div class="theday-label reveal">The ritual</div>
+    <h2 class="theday-title reveal">Five cups is a day, <em>not a dose.</em></h2>
+    <div class="timeline">
+      <div class="tl-item reveal band-beta">
+        <div class="tl-time">7:00 AM</div>
+        <div class="tl-band">Beta · 19 Hz</div>
+        <div class="tl-name">Lock In</div>
+        <div class="tl-caf">~70mg caffeine</div>
+      </div>
+      <div class="tl-item reveal band-gamma">
+        <div class="tl-time">11:00 AM</div>
+        <div class="tl-band">Gamma · 41 Hz</div>
+        <div class="tl-name">Spark</div>
+        <div class="tl-caf">~15mg caffeine</div>
+      </div>
+      <div class="tl-item reveal band-alpha">
+        <div class="tl-time">2:30 PM</div>
+        <div class="tl-band">Alpha · 11 Hz</div>
+        <div class="tl-name">Tune In</div>
+        <div class="tl-caf">~25mg caffeine</div>
+      </div>
+      <div class="tl-item reveal band-theta">
+        <div class="tl-time">7:00 PM</div>
+        <div class="tl-band">Theta · 5 Hz</div>
+        <div class="tl-name">Drift</div>
+        <div class="tl-caf">Caffeine free</div>
+      </div>
+      <div class="tl-item reveal band-delta">
+        <div class="tl-time">9:30 PM</div>
+        <div class="tl-band">Delta · 2 Hz</div>
+        <div class="tl-name">Lights Out</div>
+        <div class="tl-caf">Caffeine free</div>
+      </div>
+    </div>
+    <p class="theday-foot reveal">About 110mg of caffeine across the whole day — one strong coffee, nothing after mid-afternoon. The rotation is designed so it sits under the FDA's 400mg daily ceiling for healthy adults, and stops early enough not to touch sleep.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-label reveal">Three ways in</div>
+  <h2 class="pricing-title reveal">One of them is a <em>habit.</em></h2>
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-name">The Day</div>
+      <p class="price-desc">Five sachets, one per band. The whole idea in a single day.</p>
+      <div class="price-amount">$7</div>
+      <div class="price-per">$1.40 a cup</div>
+      <div class="price-divider"></div>
+      <p class="price-note">The sample at The Block, the checkout add-on, the thing you hand a friend.</p>
+    </div>
+    <div class="price-card featured reveal">
+      <div class="price-name">The Box</div>
+      <p class="price-desc">Fifteen sachets of one band — the state you actually live in.</p>
+      <div class="price-amount">$19</div>
+      <div class="price-per">$1.27 a cup</div>
+      <div class="price-divider"></div>
+      <p class="price-note">Most people have a favorite. This is the one they buy again.</p>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-name">The Month</div>
+      <p class="price-desc">150 sachets, all five bands, delivered or picked up. $79 for members.</p>
+      <div class="price-amount">$97</div>
+      <div class="price-per">$3.23 a day</div>
+      <div class="price-divider"></div>
+      <p class="price-note">Five cups a day, made normal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="contact-label">Get in touch</div>
+      <h2 class="contact-title">
+        Pick your<br>
+        <em>state.</em>
+      </h2>
+      <p class="contact-sub">
+        Harmony is sold direct and in person — The Block, pop-ins, and select rooms around Atlanta. Reach out to be first in line for the next run.
+      </p>
+    </div>
+    <div class="contact-right reveal">
+      <a href="mailto:hello@path-and-pace.com?subject=Harmony%20Tea" class="btn-primary">
+        Ask about Harmony
+        <span>→</span>
+      </a>
+      <p class="contact-fine">Georgia cottage-food product, sold in-state and in person. Every claim on this page describes the band, not the brain — see our claims discipline above.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Path & Pace</div>
+  <div class="footer-copy">© 2026 Path & Pace LLC · Atlanta, GA · Harmony is a Path & Pace product</div>
+  <a href="mailto:hello@path-and-pace.com" class="footer-link">hello@path-and-pace.com</a>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
