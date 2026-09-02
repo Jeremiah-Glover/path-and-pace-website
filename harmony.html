@@ -1,7 +1,646 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-&lt;meta charset="UTF-8"&gt;
-&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-&lt;title&gt;Harmony — Brew Your State&lt;/title&gt;
-&lt;meta name="robots" content="noindex, nofollow"&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harmony — Brew Your State</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0A0C;
+  --ink-2:#101014;
+  --surface:#151318;
+  --white:#F7F5F2;
+  --white-dim:rgba(247,245,242,0.68);
+  --white-dimmer:rgba(247,245,242,0.4);
+  --line:rgba(247,245,242,0.14);
+  --text:var(--white);
+  --text-dim:var(--white-dim);
+  --text-dimmer:var(--white-dimmer);
+  --bg:var(--ink);
+  --bg-2:var(--ink-2);
+  --card-ing-text:rgba(255,255,255,0.75);
+
+  --delta-a:#1747E8; --delta-b:#7C2FD6;
+  --theta-a:#8A1FD6; --theta-b:#E0234F;
+  --alpha-a:#E0158E; --alpha-b:#17C2E0;
+  --beta-a:#17C2E0;  --beta-b:#E0173B;
+  --gamma-a:#1FCB68; --gamma-b:#7C2FD6;
+
+  --band-a:var(--delta-a); --band-b:var(--delta-b);
+
+  --display:'Space Grotesk',sans-serif;
+  --sans:'Manrope',sans-serif;
+}
+
+/* ===== LIGHT THEME ===== */
+:root[data-theme="light"]{
+  --ink:#F3F0EA;
+  --ink-2:#EAE5DC;
+  --surface:#FFFFFF;
+  --white:#171310;
+  --white-dim:rgba(23,19,16,0.68);
+  --white-dimmer:rgba(23,19,16,0.42);
+  --line:rgba(23,19,16,0.12);
+  --card-ing-text:rgba(255,255,255,0.85);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ink:#F3F0EA;
+    --ink-2:#EAE5DC;
+    --surface:#FFFFFF;
+    --white:#171310;
+    --white-dim:rgba(23,19,16,0.68);
+    --white-dimmer:rgba(23,19,16,0.42);
+    --line:rgba(23,19,16,0.12);
+    --card-ing-text:rgba(255,255,255,0.85);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{background:var(--ink);}
+body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x:hidden;transition:background 0.4s ease, color 0.4s ease;}
+
+/* ===== ambient canvas smoke, full-page ===== */
+#smoke{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.55;}
+:root[data-theme="light"] #smoke{opacity:0.28;}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) #smoke{opacity:0.28;}}
+
+/* one-time steam surge, plays once per band per session */
+#steamBurst{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:0;}
+
+/* ===== top bar: wordmark + theme toggle ===== */
+.topbar{position:relative;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:22px 44px;border-bottom:1px solid var(--line);}
+.nav-mark{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:0.3em;text-transform:uppercase;color:var(--white);}
+.topbar-right{display:flex;align-items:center;gap:22px;}
+.nav-tag{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--white-dim);}
+.theme-toggle{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:4px;gap:2px;}
+.theme-btn{border:none;background:none;padding:7px 14px;border-radius:100px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--white-dimmer);cursor:pointer;transition:background 0.2s, color 0.2s;display:flex;align-items:center;gap:6px;}
+.theme-btn.active{background:var(--white);color:var(--ink);}
+
+/* ===== band rail: now the top-level selector, first thing under topbar ===== */
+.rail{position:relative;z-index:15;border-bottom:1px solid var(--line);}
+.rail-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);}
+.rail-item{position:relative;padding:16px 24px;cursor:pointer;background:none;border:none;border-right:1px solid var(--line);text-align:left;color:var(--white);font-family:inherit;transition:background 0.25s;}
+.rail-item:last-child{border-right:none;}
+.rail-item:hover{background:rgba(127,127,127,0.06);}
+.rail-item.active{background:rgba(127,127,127,0.08);}
+.rail-item::before{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--ra),var(--rb));transform:scaleX(0);transform-origin:left;transition:transform 0.35s cubic-bezier(.4,0,.2,1);}
+.rail-item.active::before{transform:scaleX(1);}
+.rail-hz{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--white-dimmer);margin-bottom:6px;}
+.rail-item.active .rail-hz{color:var(--white-dim);}
+.rail-name{font-family:var(--display);font-size:19px;font-weight:600;}
+
+/* ===== hero+product merged: copy & specs left, big pouch right ===== */
+.hero{
+  position:relative; min-height:calc(100svh - 130px); display:flex; align-items:center;
+  padding:70px 44px; overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 15%, color-mix(in oklab, var(--band-a) 42%, transparent), transparent 60%),
+    radial-gradient(ellipse 90% 70% at 88% 90%, color-mix(in oklab, var(--band-b) 42%, transparent), transparent 60%),
+    var(--bg);
+  transition: background 1.2s cubic-bezier(.4,0,.2,1);
+}
+.hero-grain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.hero-content{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr 0.95fr;gap:70px;align-items:center;max-width:1440px;margin:0 auto;width:100%;}
+
+.hero-eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:18px;background:linear-gradient(90deg,var(--band-a),var(--band-b));-webkit-background-clip:text;background-clip:text;color:transparent;transition:background 1s ease;}
+.hero-h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,5.4vw,74px);line-height:1.02;letter-spacing:-0.02em;min-height:1.1em;color:var(--white);animation:name-glow 3.6s ease-in-out infinite;}
+@keyframes name-glow{
+  0%,100%{ text-shadow:
+    0 0 14px color-mix(in oklab, var(--band-a) 90%, transparent),
+    0 0 34px color-mix(in oklab, var(--band-a) 75%, transparent),
+    0 0 70px color-mix(in oklab, var(--band-a) 55%, transparent),
+    0 0 120px color-mix(in oklab, var(--band-a) 35%, transparent); }
+  50%{ text-shadow:
+    0 0 14px color-mix(in oklab, var(--band-b) 90%, transparent),
+    0 0 34px color-mix(in oklab, var(--band-b) 75%, transparent),
+    0 0 70px color-mix(in oklab, var(--band-b) 55%, transparent),
+    0 0 120px color-mix(in oklab, var(--band-b) 35%, transparent); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-h1{animation:none; text-shadow: 0 0 34px color-mix(in oklab, var(--band-a) 70%, transparent);}
+}
+.hero-sub{margin-top:24px;font-size:16.5px;font-weight:400;color:var(--text-dim);max-width:460px;line-height:1.75;min-height:5.5em;}
+.hero-specs{display:flex;gap:36px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line);}
+.hero-spec-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dimmer);margin-bottom:6px;}
+.hero-spec-val{font-family:var(--display);font-size:17px;font-weight:600;}
+.hero-cta{margin-top:38px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.btn{font-family:var(--sans);font-size:13px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;padding:16px 30px;border-radius:100px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:transform 0.2s;}
+.btn-solid{background:var(--white);color:var(--ink);}
+.btn-solid:hover{transform:translateY(-2px) scale(1.02);}
+.btn-line{border:1.5px solid var(--line);color:var(--white);}
+.btn-line:hover{border-color:var(--white-dim);}
+.play-hint{font-size:11px;color:var(--text-dimmer);display:flex;align-items:center;gap:7px;}
+.play-dot{width:6px;height:6px;border-radius:50%;background:var(--band-a);opacity:0;transition:opacity 0.2s;flex-shrink:0;}
+.play-dot.on{opacity:1;animation:pulse-dot 1s ease-in-out infinite;}
+.steam-reset{background:none;border:none;color:var(--text-dimmer);font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0;margin-left:2px;opacity:0.75;transition:opacity 0.2s,color 0.2s;}
+.steam-reset:hover{opacity:1;color:var(--text);}
+.steam-reset.flash{color:var(--band-a);opacity:1;}
+@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:0.5;}}
+
+.hero-visual{position:relative;display:flex;align-items:center;justify-content:center;height:100%;}
+.hero-visual-glow{position:absolute;width:520px;height:520px;max-width:90vw;border-radius:50%;background:radial-gradient(circle,var(--band-a),transparent 68%);opacity:0.4;filter:blur(56px);transition:background 1s ease;}
+.hero-visual img{position:relative;width:min(320px,58%);filter:drop-shadow(0 44px 80px rgba(0,0,0,0.55));transition:opacity 0.3s ease;}
+.hero-visual-wave{position:relative;width:100%;max-width:380px;margin-top:26px;}
+canvas.wave-canvas{width:100%;height:70px;display:block;}
+.hero-visual-hz{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);text-align:center;margin-top:10px;}
+
+/* ===== full lineup strip, each card carries its own slice of the horizontal day-timeline ===== */
+.lineup{position:relative;z-index:2;padding:100px 44px;background:var(--bg-2);}
+.lineup-inner{max-width:1440px;margin:0 auto;}
+.lineup-head{margin-bottom:56px;max-width:600px;}
+.lineup-head .eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;}
+.lineup-head h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,3.6vw,46px);line-height:1.1;}
+.lineup-head p{margin-top:16px;font-size:15px;color:var(--text-dim);line-height:1.7;max-width:520px;}
+
+.lineup-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;}
+.lu-card{position:relative;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.4s cubic-bezier(.2,.8,.2,1);isolation:isolate;}
+.lu-card:hover{transform:translateY(-8px);}
+.lu-card.active{outline:2px solid var(--white);outline-offset:3px;}
+.lu-card-bg{position:absolute;inset:0;z-index:-1;background:linear-gradient(155deg,var(--la),var(--lb));}
+.lu-body{padding:28px 20px 20px;flex:1;display:flex;flex-direction:column;}
+.lu-hz{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.85);}
+.lu-num{font-family:var(--display);font-weight:700;font-size:50px;color:#fff;line-height:1;margin-top:8px;}
+.lu-num span{font-size:0.32em;font-weight:600;}
+.lu-wave{width:100%;height:30px;margin:14px 0 16px;}
+.lu-img{width:66%;margin:6px auto 12px;filter:drop-shadow(0 14px 24px rgba(0,0,0,0.5));}
+.lu-name{font-family:var(--display);font-weight:700;font-size:22px;color:#fff;margin-top:auto;}
+.lu-ing{font-size:11px;color:var(--card-ing-text);margin-top:8px;line-height:1.5;}
+
+/* horizontal day-timeline slice, docked under each card */
+.lu-time-strip{padding:14px 20px 20px;border-top:1px solid rgba(255,255,255,0.16);}
+.lu-time-label{font-size:9.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:4px;}
+.lu-time-val{font-family:var(--display);font-size:15px;font-weight:600;color:#fff;}
+.lu-time-caf{font-size:10.5px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+.timeline-note{margin-top:36px;font-size:13px;color:var(--text-dim);line-height:1.7;max-width:640px;}
+
+/* ===== contact ===== */
+.contact{position:relative;z-index:2;padding:130px 44px;text-align:center;background:
+  radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, var(--band-a) 22%, transparent), transparent 65%), var(--bg);
+  transition:background 1s ease;}
+.contact h2{font-family:var(--display);font-weight:700;font-size:clamp(34px,5vw,62px);line-height:1.05;max-width:800px;margin:0 auto 22px;}
+.contact p{font-size:16px;color:var(--text-dim);max-width:480px;margin:0 auto 36px;line-height:1.7;}
+
+footer{padding:36px 44px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);flex-wrap:wrap;gap:16px;}
+.footer-mark{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dimmer);}
+.footer-email{font-size:12px;color:var(--text-dimmer);text-decoration:none;}
+.footer-email:hover{color:var(--white);}
+
+@media(max-width:1080px){
+  .lineup-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:980px){
+  .hero-content{grid-template-columns:1fr;}
+  .hero{padding:44px 22px;}
+  .rail-inner{grid-template-columns:repeat(3,1fr);}
+  .rail-item:nth-child(3){border-right:none;}
+  .hero-specs{flex-wrap:wrap;gap:24px;}
+}
+@media(max-width:640px){
+  .lineup-grid{grid-template-columns:repeat(2,1fr);}
+  .topbar{padding:18px 22px;}
+  .lineup{padding:70px 22px;}
+}
+@media(max-width:420px){
+  .rail-inner{grid-template-columns:repeat(2,1fr);}
+  .lineup-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="smoke"></canvas>
+<canvas id="steamBurst"></canvas>
+
+<div class="topbar">
+  <div class="nav-mark">Harmony</div>
+  <div class="topbar-right">
+    <div class="nav-tag">Atlanta · Brew Your State</div>
+    <div class="theme-toggle" role="group" aria-label="Theme">
+      <button class="theme-btn" data-theme-choice="light">Light</button>
+      <button class="theme-btn active" data-theme-choice="dark">Dark</button>
+    </div>
+  </div>
+</div>
+
+<div class="rail">
+  <div class="rail-inner" id="rail">
+    <button class="rail-item active" data-band="delta" style="--ra:#1747E8;--rb:#7C2FD6;">
+      <div class="rail-hz">Delta · 2 Hz</div><div class="rail-name">Drift</div>
+    </button>
+    <button class="rail-item" data-band="theta" style="--ra:#8A1FD6;--rb:#E0234F;">
+      <div class="rail-hz">Theta · 5 Hz</div><div class="rail-name">Unwind</div>
+    </button>
+    <button class="rail-item" data-band="alpha" style="--ra:#E0158E;--rb:#17C2E0;">
+      <div class="rail-hz">Alpha · 11 Hz</div><div class="rail-name">Sustain</div>
+    </button>
+    <button class="rail-item" data-band="beta" style="--ra:#17C2E0;--rb:#E0173B;">
+      <div class="rail-hz">Beta · 19 Hz</div><div class="rail-name">Lock In</div>
+    </button>
+    <button class="rail-item" data-band="gamma" style="--ra:#1FCB68;--rb:#7C2FD6;">
+      <div class="rail-hz">Gamma · 41 Hz</div><div class="rail-name">Spark</div>
+    </button>
+  </div>
+</div>
+
+<section class="hero" id="hero">
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow" id="heroEye">Delta · 2 Hz</div>
+      <h1 class="hero-h1" id="heroName">Drift</h1>
+      <p class="hero-sub" id="heroDesc">Chamomile, lavender, and lemon balm, held low and slow. The last cup of the day — the one that closes it rather than extends it.</p>
+      <div class="hero-specs">
+        <div><div class="hero-spec-label">Caffeine</div><div class="hero-spec-val" id="heroCaf">None</div></div>
+        <div><div class="hero-spec-label">Best At</div><div class="hero-spec-val" id="heroTime">9:30 PM</div></div>
+      </div>
+      <div class="hero-cta">
+        <a href="#lineup" class="btn btn-solid">See the Line</a>
+        <a href="#contact" class="btn btn-line">Get the Day Strip</a>
+      </div>
+      <div class="play-hint"><span class="play-dot" id="playDot"></span><span id="playHint">Binaural beat plays on select — headphones recommended</span> <button type="button" class="steam-reset" id="steamResetBtn" title="Replay the steam effect on your next selection">· replay steam</button></div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-visual-glow" id="hglow"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;">
+        <img id="himg" src="" alt="Harmony sachet">
+        <div class="hero-visual-wave"><canvas class="wave-canvas" id="wave"></canvas></div>
+        <div class="hero-visual-hz" id="hwaveLabel">2 Hz Waveform</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lineup" id="lineup">
+  <div class="lineup-inner">
+    <div class="lineup-head">
+      <div class="eyebrow">The Full Line</div>
+      <h2>Five SKUs. One system, one day.</h2>
+      <p>Same face, different frequency — and each blend has its place in the rotation. The strip under each card is when it's built to be poured.</p>
+    </div>
+    <div class="lineup-grid" id="lineupGrid"></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Pick your state.</h2>
+  <p>Sold direct and in person around Atlanta. Reach out to be first in line for the next run.</p>
+  <a href="mailto:support@path-and-pace.com?subject=Harmony%20Tea" class="btn btn-solid">Ask About Harmony →</a>
+</section>
+
+<footer>
+  <div class="footer-mark">Harmony</div>
+  <a href="mailto:support@path-and-pace.com" class="footer-email">support@path-and-pace.com</a>
+</footer>
+
+<script>
+// ---------- audio state (declared early so selectBand can reference it) ----------
+let audioCtx = null;
+let activeNodes = null;
+
+// ---------- band data ----------
+const BANDS = {
+  delta: { hz:2, hzLabel:'2', name:'Drift', gradA:'#1747E8', gradB:'#7C2FD6', desc:"Chamomile, lavender, and lemon balm, held low and slow. The last cup of the day — the one that closes it rather than extends it.", caf:'None', time:'9:30 PM', ing:'chamomile · lavender · lemon balm', asset:'delta' },
+  theta: { hz:5, hzLabel:'5', name:'Unwind', gradA:'#8A1FD6', gradB:'#E0234F', desc:"Tulsi, rose, valerian, and vanilla. The hour where the day loosens its grip — before sleep, not instead of it.", caf:'None', time:'7:00 PM', ing:'tulsi · rose · valerian · vanilla', asset:'theta' },
+  alpha: { hz:11, hzLabel:'11', name:'Sustain', gradA:'#E0158E', gradB:'#17C2E0', desc:"Sencha, mint, and yuzu, dosed light. Not a boost — an even keel held through the flattest part of the afternoon.", caf:'Low', time:'2:30 PM', ing:'sencha · mint · yuzu', asset:'alpha' },
+  beta: { hz:19, hzLabel:'19', name:'Lock In', gradA:'#17C2E0', gradB:'#E0173B', desc:"Guayusa, ginger, and lime, dosed to work. The first cup of the morning, built for the first hour that matters.", caf:'High', time:'7:00 AM', ing:'guayusa · ginger · lime', asset:'beta' },
+  gamma: { hz:41, hzLabel:'41', name:'Spark', gradA:'#1FCB68', gradB:'#7C2FD6', desc:"Cacao and orange peel, dosed moderate. Held in reserve — poured on the days that ask for it.", caf:'Moderate', time:'11:00 AM', ing:'cacao · orange peel', asset:'gamma' },
+};
+const ORDER = ['delta','theta','alpha','beta','gamma'];
+
+// ---------- image loading (gamma ships as two chunks) ----------
+const imgCache = {};
+async function loadAsset(name){
+  if (imgCache[name]) return imgCache[name];
+  const parts = name === 'gamma' ? ['assets/harmony-gamma-p1.b64','assets/harmony-gamma-p2.b64'] : [`assets/harmony-${name}.b64`];
+  const chunks = await Promise.all(parts.map(p => fetch(p).then(r=>r.text())));
+  const uri = 'data:image/jpeg;base64,' + chunks.join('').trim();
+  imgCache[name] = uri;
+  return uri;
+}
+
+// ---------- waveform drawing ----------
+function drawWave(canvas, hz, colorA, colorB, animT){
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== w*dpr || canvas.height !== h*dpr){
+    canvas.width = w*dpr; canvas.height = h*dpr;
+  }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  const cycles = Math.max(2, Math.min(hz, 26));
+  const grad = ctx.createLinearGradient(0,0,w,0);
+  grad.addColorStop(0, colorA); grad.addColorStop(1, colorB);
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const amp = h*0.32;
+  const mid = h/2;
+  const phase = (animT||0) * 0.0016;
+  for(let x=0;x<=w;x+=2){
+    const t = x/w;
+    const y = mid + Math.sin(t*Math.PI*2*cycles + phase)*amp*(0.55+0.45*Math.sin(t*Math.PI));
+    if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+
+let currentBand = 'delta';
+let heroWaveCanvas = document.getElementById('wave');
+let rafId;
+function animateHeroWave(t){
+  const b = BANDS[currentBand];
+  drawWave(heroWaveCanvas, b.hz, b.gradA, b.gradB, t);
+  rafId = requestAnimationFrame(animateHeroWave);
+}
+requestAnimationFrame(animateHeroWave);
+
+// ---------- select a band: updates hero (merged with product panel) + rail + cards ----------
+async function selectBand(key, playSound){
+  currentBand = key;
+  const b = BANDS[key];
+  document.documentElement.style.setProperty('--band-a', b.gradA);
+  document.documentElement.style.setProperty('--band-b', b.gradB);
+
+  document.querySelectorAll('.rail-item').forEach(el => el.classList.toggle('active', el.dataset.band === key));
+  document.querySelectorAll('.lu-card').forEach(el => el.classList.toggle('active', el.dataset.band === key));
+
+  const hint = document.getElementById('playHint');
+  if (hint) hint.textContent = `${b.hzLabel} Hz binaural beat plays on select — headphones recommended`;
+  if (playSound) playTone(b.hz);
+  if (playSound) maybeSteamBurst(key);
+
+  const himg = document.getElementById('himg');
+  himg.style.opacity = 0;
+
+  document.getElementById('heroEye').textContent = key.charAt(0).toUpperCase()+key.slice(1) + ' · ' + b.hzLabel + ' Hz';
+  document.getElementById('heroName').textContent = b.name;
+  document.getElementById('heroDesc').textContent = b.desc;
+  document.getElementById('heroCaf').textContent = b.caf;
+  document.getElementById('heroTime').textContent = b.time;
+  document.getElementById('hwaveLabel').textContent = b.hzLabel + ' Hz Waveform';
+  document.getElementById('hglow').style.background = `radial-gradient(circle, ${b.gradA}, transparent 68%)`;
+
+  const uri = await loadAsset(b.asset);
+  himg.src = uri;
+  himg.style.opacity = 1;
+}
+
+document.querySelectorAll('.rail-item').forEach(btn => {
+  btn.addEventListener('click', () => selectBand(btn.dataset.band, true));
+});
+selectBand('delta', false);
+
+// ---------- lineup grid: cards each carry their own live waveform + a horizontal slice of the day timeline ----------
+const grid = document.getElementById('lineupGrid');
+ORDER.forEach(key => {
+  const b = BANDS[key];
+  const card = document.createElement('div');
+  card.className = 'lu-card';
+  card.dataset.band = key;
+  card.style.setProperty('--la', b.gradA);
+  card.style.setProperty('--lb', b.gradB);
+  card.innerHTML = `
+    <div class="lu-card-bg"></div>
+    <div class="lu-body">
+      <div class="lu-hz">${key.charAt(0).toUpperCase()+key.slice(1)} · ${b.hzLabel} Hz</div>
+      <div class="lu-num">${b.hzLabel}<span>Hz</span></div>
+      <canvas class="lu-wave" data-hz="${b.hz}" data-a="${b.gradA}" data-b="#ffffff"></canvas>
+      <img class="lu-img" alt="${b.name} sachet">
+      <div class="lu-name">${b.name}</div>
+      <div class="lu-ing">${b.ing}</div>
+    </div>
+    <div class="lu-time-strip">
+      <div class="lu-time-label">Best At</div>
+      <div class="lu-time-val">${b.time}</div>
+      <div class="lu-time-caf">${b.caf === 'None' ? 'Caffeine free' : b.caf + ' caffeine'}</div>
+    </div>
+  `;
+  card.addEventListener('click', () => {
+    selectBand(key, true);
+    document.getElementById('hero').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  grid.appendChild(card);
+  loadAsset(b.asset).then(uri => { card.querySelector('.lu-img').src = uri; });
+});
+
+const luCanvases = [...document.querySelectorAll('.lu-wave')];
+function animateLuWaves(t){
+  luCanvases.forEach(c => drawWave(c, parseFloat(c.dataset.hz), c.dataset.a, c.dataset.b, t*0.6));
+  requestAnimationFrame(animateLuWaves);
+}
+requestAnimationFrame(animateLuWaves);
+
+// ---------- ambient smoke background ----------
+const smokeCanvas = document.getElementById('smoke');
+const sctx = smokeCanvas.getContext('2d');
+function resizeSmoke(){
+  smokeCanvas.width = window.innerWidth;
+  smokeCanvas.height = window.innerHeight;
+}
+resizeSmoke();
+window.addEventListener('resize', resizeSmoke);
+
+const blobs = Array.from({length:5}, (_,i) => ({
+  x: Math.random(), y: Math.random(),
+  r: 220 + Math.random()*260,
+  spx: (Math.random()-0.5)*0.00012,
+  spy: (Math.random()-0.5)*0.00012,
+  phase: Math.random()*1000,
+}));
+
+function animateSmoke(t){
+  const w = smokeCanvas.width, h = smokeCanvas.height;
+  sctx.clearRect(0,0,w,h);
+  const b = BANDS[currentBand];
+  blobs.forEach((bl, i) => {
+    const x = ((bl.x + Math.sin(t*bl.spx + bl.phase)*0.15) % 1 + 1) % 1 * w;
+    const y = ((bl.y + Math.cos(t*bl.spy + bl.phase)*0.15) % 1 + 1) % 1 * h;
+    const grad = sctx.createRadialGradient(x,y,0,x,y,bl.r);
+    const color = i % 2 === 0 ? b.gradA : b.gradB;
+    grad.addColorStop(0, color + '22');
+    grad.addColorStop(1, color + '00');
+    sctx.fillStyle = grad;
+    sctx.fillRect(0,0,w,h);
+  });
+  requestAnimationFrame(animateSmoke);
+}
+requestAnimationFrame(animateSmoke);
+
+// ---------- one-time steam surge: fires the first time a band is ever selected ----------
+const seenBands = new Set();
+const steamCanvas = document.getElementById('steamBurst');
+const bctx = steamCanvas.getContext('2d');
+function resizeSteam(){
+  steamCanvas.width = window.innerWidth;
+  steamCanvas.height = window.innerHeight;
+}
+resizeSteam();
+window.addEventListener('resize', resizeSteam);
+
+function triggerSteamBurst(gradA, gradB){
+  const w = steamCanvas.width, h = steamCanvas.height;
+  // soft, light puffs of vapor — smaller and airier than a single thick cloud,
+  // drifting and widening as they rise, like steam curling off a hot cup.
+  const puffs = Array.from({length:46}, () => {
+    const baseX = Math.random()*w;
+    return {
+      baseX,
+      x: baseX,
+      y: h + Math.random()*100,
+      r0: 14 + Math.random()*22,
+      vy: -(0.22 + Math.random()*0.34),
+      drift: (Math.random()-0.5)*0.22,
+      sway: 10 + Math.random()*22,
+      freq: 0.0007 + Math.random()*0.0009,
+      phase: Math.random()*Math.PI*2,
+      color: Math.random() < 0.5 ? gradA : gradB,
+      born: performance.now() + Math.random()*600,
+      life: 2600 + Math.random()*2000,
+    };
+  });
+
+  steamCanvas.style.opacity = 1;
+  let running = true;
+
+  function frame(now){
+    if (!running) return;
+    bctx.clearRect(0,0,w,h);
+    let anyAlive = false;
+    puffs.forEach(p => {
+      const age = now - p.born;
+      if (age < 0) { anyAlive = true; return; }
+      if (age > p.life) return;
+      anyAlive = true;
+      const t = age / p.life;
+      const fade = Math.sin(t*Math.PI); // fades in, peaks mid-life, fades out softly
+      const y = p.y + p.vy * age * 0.16;
+      const x = p.x + Math.sin(now*p.freq + p.phase)*p.sway + p.drift*age*0.05;
+      const radius = p.r0 * (0.7 + t*1.6); // widens as it rises and disperses
+
+      const alpha = Math.max(0, fade * 0.34);
+      const grad = bctx.createRadialGradient(x,y,0,x,y,radius);
+      grad.addColorStop(0, p.color + Math.round(alpha*255).toString(16).padStart(2,'0'));
+      grad.addColorStop(0.6, p.color + Math.round(alpha*0.4*255).toString(16).padStart(2,'0'));
+      grad.addColorStop(1, p.color + '00');
+      bctx.fillStyle = grad;
+      bctx.fillRect(x-radius, y-radius, radius*2, radius*2);
+    });
+    if (anyAlive){
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      steamCanvas.style.transition = 'opacity 1.1s ease';
+      steamCanvas.style.opacity = 0;
+      setTimeout(() => { bctx.clearRect(0,0,w,h); steamCanvas.style.transition = ''; }, 1200);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function maybeSteamBurst(key){
+  if (seenBands.has(key)) return;
+  seenBands.add(key);
+  const b = BANDS[key];
+  triggerSteamBurst(b.gradA, b.gradB);
+}
+
+// reset so the steam burst can play again for every band (e.g. from the "replay steam" control)
+function resetSteamBursts(){
+  seenBands.clear();
+}
+
+const steamResetBtn = document.getElementById('steamResetBtn');
+if (steamResetBtn){
+  steamResetBtn.addEventListener('click', () => {
+    resetSteamBursts();
+    steamResetBtn.classList.add('flash');
+    setTimeout(() => steamResetBtn.classList.remove('flash'), 900);
+  });
+}
+
+// ---------- binaural tone generator ----------
+// True brainwave frequencies (2-41 Hz) are below/at the edge of hearing, so we
+// play a binaural beat instead: two audible carrier tones, one per ear, whose
+// DIFFERENCE equals the band's Hz. The brain perceives that difference as the beat.
+const CARRIER = 220; // base carrier tone, Hz — audible, comfortable
+const playDot = document.getElementById('playDot');
+const TONE_DURATION = 3; // seconds
+
+function stopTone(){
+  if (activeNodes){
+    const { leftOsc, rightOsc, gain, ctx } = activeNodes;
+    const now = ctx.currentTime;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setValueAtTime(gain.gain.value, now);
+    gain.gain.linearRampToValueAtTime(0, now + 0.2);
+    setTimeout(() => { try { leftOsc.stop(); rightOsc.stop(); } catch(e){} }, 260);
+    activeNodes = null;
+  }
+  if (playDot) playDot.classList.remove('on');
+}
+
+function playTone(hz){
+  stopTone();
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  const merger = audioCtx.createChannelMerger(2);
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 0.3);
+  gain.gain.setValueAtTime(0.09, audioCtx.currentTime + TONE_DURATION - 0.4);
+  gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + TONE_DURATION);
+
+  const leftOsc = audioCtx.createOscillator();
+  leftOsc.type = 'sine';
+  leftOsc.frequency.setValueAtTime(CARRIER, audioCtx.currentTime);
+
+  const rightOsc = audioCtx.createOscillator();
+  rightOsc.type = 'sine';
+  rightOsc.frequency.setValueAtTime(CARRIER + hz, audioCtx.currentTime);
+
+  leftOsc.connect(merger, 0, 0);
+  rightOsc.connect(merger, 0, 1);
+  merger.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  leftOsc.start();
+  rightOsc.start();
+  leftOsc.stop(audioCtx.currentTime + TONE_DURATION + 0.05);
+  rightOsc.stop(audioCtx.currentTime + TONE_DURATION + 0.05);
+
+  activeNodes = { leftOsc, rightOsc, gain, ctx: audioCtx };
+  if (playDot) playDot.classList.add('on');
+
+  setTimeout(() => { if (activeNodes) { activeNodes = null; if (playDot) playDot.classList.remove('on'); } }, TONE_DURATION * 1000);
+}
+
+// ---------- theme toggle ----------
+const themeBtns = document.querySelectorAll('.theme-btn');
+function setTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode);
+  themeBtns.forEach(b => b.classList.toggle('active', b.dataset.themeChoice === mode));
+  try { localStorage.setItem('harmony-theme', mode); } catch(e) {}
+}
+themeBtns.forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.themeChoice)));
+(function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem('harmony-theme'); } catch(e) {}
+  // Harmony defaults to dark regardless of system preference; a user's explicit
+  // choice (saved locally) is the only thing that overrides that default.
+  setTheme(saved === 'light' ? 'light' : 'dark');
+})();
+
+// prefers-reduced-motion: freeze heavy animation loops
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (rafId) cancelAnimationFrame(rafId);
+}
+</script>
+</body>
+</html>
