@@ -480,9 +480,15 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 // (Assets are stored as plain-text .b64 files in the repo.)
 document.querySelectorAll('img[data-asset]').forEach(img => {
   const name = img.getAttribute('data-asset');
-  fetch(`assets/harmony-${name}.b64`)
-    .then(r => { if (!r.ok) throw new Error('missing asset: ' + name); return r.text(); })
-    .then(b64 => { img.src = 'data:image/jpeg;base64,' + b64.trim(); })
+  // Gamma is transported as two chunks (see assets/) and joined client-side.
+  const parts = name === 'gamma'
+    ? [`assets/harmony-gamma-p1.b64`, `assets/harmony-gamma-p2.b64`]
+    : [`assets/harmony-${name}.b64`];
+  Promise.all(parts.map(p => fetch(p).then(r => {
+    if (!r.ok) throw new Error('missing asset chunk: ' + p);
+    return r.text();
+  })))
+    .then(chunks => { img.src = 'data:image/jpeg;base64,' + chunks.join('').trim(); })
     .catch(err => console.error(err));
 });
 </script>
