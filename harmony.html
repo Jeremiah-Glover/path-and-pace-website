@@ -34,28 +34,16 @@
   --sans:'Manrope',sans-serif;
 }
 
-/* ===== LIGHT THEME ===== */
+/* ===== LIGHT THEME — cool paper white, not cream ===== */
 :root[data-theme="light"]{
-  --ink:#F3F0EA;
-  --ink-2:#EAE5DC;
+  --ink:#FBFBFD;
+  --ink-2:#F0F1F5;
   --surface:#FFFFFF;
-  --white:#171310;
-  --white-dim:rgba(23,19,16,0.68);
-  --white-dimmer:rgba(23,19,16,0.42);
-  --line:rgba(23,19,16,0.12);
+  --white:#12131A;
+  --white-dim:rgba(18,19,26,0.66);
+  --white-dimmer:rgba(18,19,26,0.40);
+  --line:rgba(18,19,26,0.10);
   --card-ing-text:rgba(255,255,255,0.85);
-}
-@media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]){
-    --ink:#F3F0EA;
-    --ink-2:#EAE5DC;
-    --surface:#FFFFFF;
-    --white:#171310;
-    --white-dim:rgba(23,19,16,0.68);
-    --white-dimmer:rgba(23,19,16,0.42);
-    --line:rgba(23,19,16,0.12);
-    --card-ing-text:rgba(255,255,255,0.85);
-  }
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -64,8 +52,7 @@ body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x
 
 /* ===== ambient canvas smoke, full-page ===== */
 #smoke{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.55;}
-:root[data-theme="light"] #smoke{opacity:0.28;}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) #smoke{opacity:0.28;}}
+:root[data-theme="light"] #smoke{opacity:0.30;}
 
 /* one-time steam surge, plays once per band per session */
 #steamBurst{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:0;}
@@ -101,7 +88,7 @@ body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x
 .theme-btn{border:none;background:none;padding:7px 14px;border-radius:100px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--white-dimmer);cursor:pointer;transition:background 0.2s, color 0.2s;display:flex;align-items:center;gap:6px;}
 .theme-btn.active{background:var(--white);color:var(--ink);}
 
-/* ===== band rail: now the top-level selector, first thing under topbar ===== */
+/* ===== band rail: the top-level selector, first thing under topbar ===== */
 .rail{position:relative;z-index:15;border-bottom:1px solid var(--line);}
 .rail-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);}
 .rail-item{position:relative;padding:16px 24px;cursor:pointer;background:none;border:none;border-right:1px solid var(--line);text-align:left;color:var(--white);font-family:inherit;transition:background 0.25s;}
@@ -129,22 +116,7 @@ body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x
 .hero-content{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr 0.95fr;gap:70px;align-items:center;max-width:1440px;margin:0 auto;width:100%;}
 
 .hero-eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:18px;background:linear-gradient(90deg,var(--band-a),var(--band-b));-webkit-background-clip:text;background-clip:text;color:transparent;transition:background 1s ease;}
-.hero-h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,5.4vw,74px);line-height:1.02;letter-spacing:-0.02em;min-height:1.1em;color:var(--white);animation:name-glow 3.6s ease-in-out infinite;}
-@keyframes name-glow{
-  0%,100%{ text-shadow:
-    0 0 14px color-mix(in oklab, var(--band-a) 90%, transparent),
-    0 0 34px color-mix(in oklab, var(--band-a) 75%, transparent),
-    0 0 70px color-mix(in oklab, var(--band-a) 55%, transparent),
-    0 0 120px color-mix(in oklab, var(--band-a) 35%, transparent); }
-  50%{ text-shadow:
-    0 0 14px color-mix(in oklab, var(--band-b) 90%, transparent),
-    0 0 34px color-mix(in oklab, var(--band-b) 75%, transparent),
-    0 0 70px color-mix(in oklab, var(--band-b) 55%, transparent),
-    0 0 120px color-mix(in oklab, var(--band-b) 35%, transparent); }
-}
-@media (prefers-reduced-motion: reduce){
-  .hero-h1{animation:none; text-shadow: 0 0 34px color-mix(in oklab, var(--band-a) 70%, transparent);}
-}
+.hero-h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,5.4vw,74px);line-height:1.02;letter-spacing:-0.02em;min-height:1.1em;color:var(--white);}
 .hero-sub{margin-top:24px;font-size:16.5px;font-weight:400;color:var(--text-dim);max-width:460px;line-height:1.75;min-height:5.5em;}
 .hero-specs{display:flex;gap:36px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line);}
 .hero-spec-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dimmer);margin-bottom:6px;}
@@ -155,7 +127,7 @@ body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x
 .btn-solid:hover{transform:translateY(-2px) scale(1.02);}
 .btn-line{border:1.5px solid var(--line);color:var(--white);}
 .btn-line:hover{border-color:var(--white-dim);}
-.play-hint{font-size:11px;color:var(--text-dimmer);display:flex;align-items:center;gap:7px;}
+.play-hint{margin-top:18px;font-size:11px;color:var(--text-dimmer);display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .play-dot{width:6px;height:6px;border-radius:50%;background:var(--band-a);opacity:0;transition:opacity 0.2s;flex-shrink:0;}
 .play-dot.on{opacity:1;animation:pulse-dot 1s ease-in-out infinite;}
 .steam-reset{background:none;border:none;color:var(--text-dimmer);font:inherit;font-size:11px;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0;margin-left:2px;opacity:0.75;transition:opacity 0.2s,color 0.2s;}
@@ -218,9 +190,14 @@ footer{padding:36px 44px;display:flex;justify-content:space-between;align-items:
 @media(max-width:980px){
   .hero-content{grid-template-columns:1fr;}
   .hero{padding:44px 22px;}
-  .rail-inner{grid-template-columns:repeat(3,1fr);}
-  .rail-item:nth-child(3){border-right:none;}
   .hero-specs{flex-wrap:wrap;gap:24px;}
+  /* five bands never divide evenly into a 2- or 3-up grid, so on narrow screens
+     the rail becomes one compact row per band — even, no orphans */
+  .rail-inner{grid-template-columns:1fr;}
+  .rail-item{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 22px;border-right:none;border-bottom:1px solid var(--line);}
+  .rail-item:last-child{border-bottom:none;}
+  .rail-hz{margin-bottom:0;font-size:10.5px;}
+  .rail-name{font-size:17px;}
 }
 @media(max-width:760px){
   /* toggle drops below the centered wordmark instead of overlapping it */
@@ -232,7 +209,6 @@ footer{padding:36px 44px;display:flex;justify-content:space-between;align-items:
   .lineup{padding:70px 22px;}
 }
 @media(max-width:420px){
-  .rail-inner{grid-template-columns:repeat(2,1fr);}
   .lineup-grid{grid-template-columns:1fr;}
 }
 </style>
@@ -247,8 +223,8 @@ footer{padding:36px 44px;display:flex;justify-content:space-between;align-items:
   <div class="nav-tag">Brew Your State</div>
   <div class="topbar-right">
     <div class="theme-toggle" role="group" aria-label="Theme">
-      <button class="theme-btn" data-theme-choice="light">Light</button>
       <button class="theme-btn active" data-theme-choice="dark">Dark</button>
+      <button class="theme-btn" data-theme-choice="light">Light</button>
     </div>
   </div>
 </div>
@@ -520,14 +496,14 @@ function triggerSteamBurst(gradA, gradB){
       x: baseX,
       y: h + Math.random()*100,
       r0: 14 + Math.random()*22,
-      vy: -(0.22 + Math.random()*0.34),
-      drift: (Math.random()-0.5)*0.22,
+      vy: -(0.55 + Math.random()*0.75),
+      drift: (Math.random()-0.5)*0.4,
       sway: 10 + Math.random()*22,
-      freq: 0.0007 + Math.random()*0.0009,
+      freq: 0.0013 + Math.random()*0.0016,
       phase: Math.random()*Math.PI*2,
       color: Math.random() < 0.5 ? gradA : gradB,
-      born: performance.now() + Math.random()*600,
-      life: 2600 + Math.random()*2000,
+      born: performance.now() + Math.random()*320,
+      life: 1500 + Math.random()*1100,
     };
   });
 
@@ -545,7 +521,7 @@ function triggerSteamBurst(gradA, gradB){
       anyAlive = true;
       const t = age / p.life;
       const fade = Math.sin(t*Math.PI); // fades in, peaks mid-life, fades out softly
-      const y = p.y + p.vy * age * 0.16;
+      const y = p.y + p.vy * age * 0.30;
       const x = p.x + Math.sin(now*p.freq + p.phase)*p.sway + p.drift*age*0.05;
       const radius = p.r0 * (0.7 + t*1.6); // widens as it rises and disperses
 
