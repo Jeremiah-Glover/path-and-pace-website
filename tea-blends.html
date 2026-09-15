@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blend Bench — Frequency</title>
+<meta name="description" content="Pick a brainwave band, then a feeling, and the bench tells you which loose-leaf botanicals to scoop and why.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Blend Bench">
+<meta property="og:description" content="Five bands. Twelve botanicals. Build your own cup.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --serif:"Cormorant Garamond",Georgia,serif;
+    --sans:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  html[data-mode="light"]{
+    --bg:#FCFDFD;
+    --bg-a:rgba(233,244,243,.9);
+    --bg-b:rgba(242,236,255,.9);
+    --ink:#0A3B3D;
+    --ink-soft:#56726F;
+    --ink-faint:#7E9491;
+    --hair:rgba(10,59,61,.14);
+    --hair-soft:rgba(10,59,61,.07);
+    --card:rgba(255,255,255,.7);
+    --panel-teal:#E9F4F3;
+    --panel-purple:#F2ECFF;
+    --mark:#0A3B3D;
+    --rule-accent:#7B3FF2;
+  }
+  html[data-mode="dark"]{
+    --bg:#04191A;
+    --bg-a:rgba(18,133,127,.16);
+    --bg-b:rgba(123,63,242,.18);
+    --ink:#EAF6F5;
+    --ink-soft:#8FADAB;
+    --ink-faint:#6B8886;
+    --hair:rgba(180,230,226,.16);
+    --hair-soft:rgba(180,230,226,.08);
+    --card:rgba(255,255,255,.035);
+    --panel-teal:rgba(18,133,127,.13);
+    --panel-purple:rgba(123,63,242,.13);
+    --mark:#EAF6F5;
+    --rule-accent:#B08CFF;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);
+    background-image:
+      radial-gradient(120% 55% at 8% 0%,var(--bg-a) 0%,transparent 62%),
+      radial-gradient(110% 50% at 96% 4%,var(--bg-b) 0%,transparent 58%);
+    background-repeat:no-repeat;background-attachment:fixed;
+    color:var(--ink);font:300 17px/1.5 var(--sans);padding:0 0 70px;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:0 22px}
+
+  .top{display:flex;justify-content:flex-end;padding-top:16px}
+  .mode{
+    background:none;border:1px solid var(--hair);border-radius:99px;
+    padding:7px 14px;color:var(--ink-soft);cursor:pointer;
+    font:400 10px/1 var(--sans);letter-spacing:.2em;
+  }
+
+  .mast{padding:18px 0 0;text-align:center}
+  .mark{font:400 15px/1 var(--sans);letter-spacing:.44em;text-indent:.44em;color:var(--mark)}
+  .sub-mark{font:300 10.5px/1 var(--sans);letter-spacing:.3em;text-indent:.3em;color:var(--ink-faint);margin-top:9px}
+  h1{font:300 46px/1 var(--serif);margin:22px 0 0;letter-spacing:-.01em}
+  .lede{margin:12px auto 0;color:var(--ink-soft);font-size:15.5px;max-width:40ch}
+
+  .wave-stage{margin:24px 0 4px}
+  .wave-stage svg{display:block;width:100%;height:78px;overflow:visible}
+  .wave-stage path{
+    fill:none;stroke:var(--w,#12857F);stroke-width:1.6;stroke-linecap:round;
+    stroke-dasharray:2600;stroke-dashoffset:0;
+  }
+  html[data-mode="dark"] .wave-stage path{
+    stroke-width:1.9;filter:drop-shadow(0 0 7px var(--w)) drop-shadow(0 0 20px var(--w));
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .wave-stage.draw path{animation:draw .9s cubic-bezier(.4,0,.2,1)}
+  }
+  @keyframes draw{from{stroke-dashoffset:2600}to{stroke-dashoffset:0}}
+  .wave-read{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font:400 11px/1 var(--sans);letter-spacing:.22em;color:var(--ink-faint);
+    padding-top:8px;border-top:1px solid var(--hair-soft);
+  }
+
+  nav{display:flex;gap:32px;justify-content:center;margin:30px 0 36px;border-bottom:1px solid var(--hair)}
+  nav button{
+    background:none;border:none;padding:0 0 13px;margin-bottom:-1px;cursor:pointer;
+    font:400 12.5px/1 var(--sans);letter-spacing:.2em;color:var(--ink-faint);
+    border-bottom:1.5px solid transparent;
+  }
+  nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--rule-accent)}
+
+  .step{font:400 11px/1 var(--sans);letter-spacing:.24em;color:var(--ink-faint);margin:0 0 16px}
+
+  .bands{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .band{
+    --c:var(--cl);
+    padding:14px 3px 13px;cursor:pointer;border:none;border-top:1.5px solid var(--hair);
+    background:none;font:inherit;color:var(--ink-faint);text-align:center;
+  }
+  html[data-mode="dark"] .band{--c:var(--cd)}
+  .band .eeg{
+    display:block;font:500 11.5px/1 var(--sans);letter-spacing:.16em;
+    color:var(--c);margin-bottom:9px;
+  }
+  html[data-mode="dark"] .band .eeg{
+    text-shadow:0 0 7px var(--c),0 0 18px color-mix(in srgb,var(--c) 60%,transparent);
+  }
+  .band .hz{display:block;font:300 24px/1 var(--serif);color:var(--ink);letter-spacing:-.02em}
+  .band .hz i{font-style:normal;font-size:10px;letter-spacing:.06em;vertical-align:.5em;margin-left:1px;color:var(--ink-soft)}
+  .band .nm{display:block;font-size:9.5px;letter-spacing:.11em;margin-top:8px}
+  .band[aria-pressed="true"]{border-top-color:var(--c);color:var(--ink)}
+  html[data-mode="dark"] .band[aria-pressed="true"]{
+    box-shadow:inset 0 22px 34px -30px var(--c);
+  }
+  html[data-mode="light"] .band[aria-pressed="true"] .hz{color:var(--c)}
+
+  .feels{display:flex;flex-direction:column}
+  .feel{
+    --c:var(--cl);
+    display:flex;align-items:baseline;gap:14px;width:100%;padding:17px 10px;
+    background:none;border:none;border-bottom:1px solid var(--hair-soft);
+    font:inherit;color:var(--ink);text-align:left;cursor:pointer;
+  }
+  html[data-mode="dark"] .feel{--c:var(--cd)}
+  .feel:first-child{border-top:1px solid var(--hair-soft)}
+  .feel b{font:500 21px/1.1 var(--serif);flex:0 0 auto}
+  .feel span{color:var(--ink-soft);font-size:14px;line-height:1.35}
+  .feel[aria-pressed="true"] b{color:var(--c)}
+  .feel[aria-pressed="true"]{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 13%,transparent),transparent 72%)}
+
+  .card{--c:var(--cl);margin-top:40px;border-top:1.5px solid var(--c);background:var(--card)}
+  html[data-mode="dark"] .card{--c:var(--cd);box-shadow:0 -14px 40px -32px var(--c)}
+  .card-top{padding:22px 20px 20px}
+  .tag{font:400 10.5px/1.5 var(--sans);letter-spacing:.22em;color:var(--c)}
+  html[data-mode="dark"] .tag{text-shadow:0 0 12px color-mix(in srgb,var(--c) 50%,transparent)}
+  .card h2{font:300 36px/1.02 var(--serif);margin:11px 0 0;letter-spacing:-.015em}
+  .card .why{margin:13px 0 0;color:var(--ink-soft);font-size:15.5px;max-width:46ch}
+
+  .scale{
+    display:flex;align-items:center;gap:16px;padding:14px 20px;
+    border-top:1px solid var(--hair-soft);border-bottom:1px solid var(--hair-soft);
+  }
+  .scale button{
+    width:34px;height:34px;border-radius:50%;border:1px solid var(--hair);
+    background:none;color:var(--ink);font:300 19px/1 var(--sans);cursor:pointer;
+  }
+  .scale b{font:400 13px/1 var(--sans);letter-spacing:.16em;min-width:78px;text-align:center}
+  .scale span{color:var(--ink-faint);font-size:13px}
+
+  .row{display:flex;gap:16px;padding:16px 20px;border-bottom:1px solid var(--hair-soft);align-items:baseline}
+  .amt{flex:0 0 84px;font:400 15px/1.3 var(--sans);color:var(--c);letter-spacing:.02em}
+  .rw b{display:block;font:500 20px/1.2 var(--serif)}
+  .rw span{display:block;color:var(--ink-soft);font-size:14.5px;line-height:1.45;margin-top:4px;max-width:44ch}
+
+  .brew,.gap{padding:18px 20px;font-size:15px;line-height:1.5}
+  .brew{background:var(--panel-teal)}
+  .gap{color:var(--ink-soft);border-top:1px solid var(--hair-soft)}
+  .brew em,.gap em{
+    font-style:normal;display:block;font-size:10.5px;letter-spacing:.22em;
+    color:var(--ink-faint);margin-bottom:8px;
+  }
+  .gap em{color:var(--rule-accent)}
+
+  .p-item{border-bottom:1px solid var(--hair-soft)}
+  .p-head{
+    width:100%;display:flex;gap:14px;align-items:baseline;padding:16px 2px;
+    background:none;border:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  }
+  .p-head b{font:500 21px/1.15 var(--serif);flex:1}
+  .p-head i{font-style:normal;font-size:10.5px;letter-spacing:.14em;color:var(--ink-faint)}
+  .p-head i.low{color:var(--rule-accent)}
+  .p-head u{text-decoration:none;font:300 19px/1 var(--sans);color:var(--ink-faint)}
+  .p-item[data-open="1"] .p-head u{color:var(--rule-accent)}
+  .p-body{padding:0 2px 20px;display:none}
+  .p-item[data-open="1"] .p-body{display:block}
+  .p-body p{margin:0 0 14px;font-size:15px;color:var(--ink-soft);line-height:1.5;max-width:46ch}
+  .p-body p:last-child{margin:0}
+  .p-body em{font-style:normal;display:block;font-size:10px;letter-spacing:.22em;color:var(--ink-faint);margin-bottom:5px}
+  .p-body .warn em{color:var(--rule-accent)}
+
+  .note{margin:40px 0 0;padding:22px;background:var(--panel-purple);font-size:15px;line-height:1.5}
+  .note em{font-style:normal;display:block;font-size:10.5px;letter-spacing:.22em;color:var(--rule-accent);margin-bottom:10px}
+  .hide{display:none}
+  button:focus-visible{outline:1.5px solid var(--rule-accent);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top"><button class="mode" id="mode">LIGHT</button></div>
+
+<div class="mast">
+  <div class="mark">FREQUENCY</div>
+  <div class="sub-mark">BREW YOUR STATE</div>
+  <h1>Blend Bench</h1>
+  <p class="lede">Twelve jars on the table. Choose a state, then the version of it you want, and the bench will tell you what to scoop.</p>
+</div>
+
+<div class="wave-stage" id="stage">
+  <svg viewBox="0 0 600 78" preserveAspectRatio="none" aria-hidden="true"><path id="wave" d=""/></svg>
+  <div class="wave-read"><span id="wLeft">FIVE BANDS</span><span id="wRight">0.5 – 100 Hz</span></div>
+</div>
+
+<nav role="tablist">
+  <button role="tab" id="t-build" aria-selected="true">BUILD A BLEND</button>
+  <button role="tab" id="t-pantry" aria-selected="false">THE TABLE</button>
+</nav>
+
+<section id="p-build">
+  <p class="step">01 — WHERE DO YOU WANT TO LAND</p>
+  <div class="bands" id="bands"></div>
+
+  <div id="feelWrap" class="hide">
+    <p class="step" style="margin-top:38px">02 — WHICH VERSION OF IT</p>
+    <div class="feels" id="feels"></div>
+  </div>
+
+  <div id="recipe"></div>
+
+  <div class="note">
+    <em>ON RATIONING</em>
+    About 160 grams across twelve jars — call it sixty cups if nobody gets greedy. Rooibos, orange peel, lemon peel and elderberry are the ones with real volume. Lemon balm, both roses and the licorice are two or three cups each, so those are pinches, not scoops.
+  </div>
+</section>
+
+<section id="p-pantry" class="hide">
+  <p class="step">TAP ANYTHING TO SEE WHAT IT DOES</p>
+  <div id="pantry"></div>
+  <div class="note">
+    <em>WHAT'S MISSING</em>
+    Ginger and cinnamon — between them they cover warmth, which nothing on this table has. Cacao nibs would give the Gamma cup a reason to exist. Hibiscus for tartness and colour. Lavender and tulsi round out the sleepy end.
+  </div>
+</section>
+
+</div>
+
+<script>
+var BANDS=[
+ {k:'delta',eeg:'DELTA',hz:'2',nm:'LIGHTS OUT',cl:'#C5321F',cd:'#FF5347',cyc:1.1,amp:30},
+ {k:'theta',eeg:'THETA',hz:'5',nm:'DRIFT',cl:'#C2701A',cd:'#FFA23D',cyc:2.4,amp:25},
+ {k:'alpha',eeg:'ALPHA',hz:'11',nm:'TUNE IN',cl:'#0F7A74',cd:'#2FD3C6',cyc:5,amp:20},
+ {k:'beta',eeg:'BETA',hz:'19',nm:'LOCK IN',cl:'#2C3FA0',cd:'#6E8BFF',cyc:9.5,amp:15},
+ {k:'gamma',eeg:'GAMMA',hz:'41',nm:'SPARK',cl:'#7B3FF2',cd:'#C9A8FF',cyc:19,amp:11}
+];
+
+var R={
+ delta:[
+  {f:'Soft landing',s:'Familiar, sweet, nothing challenging',name:'Soft Landing',tag:'CAFFEINE FREE',
+   items:[['Chamomile',3,'The whole point. Apple and honey, and the one herb here with real sleep research behind it.'],
+    ['Rooibos',3,'Body and natural sweetness so the chamomile isn\'t floating alone.'],
+    ['Rose, either jar',1,'Perfume on top. Makes it feel like a gift instead of a remedy.'],
+    ['Licorice root','pinch','One pinch. It makes the whole cup taste finished and sweet with no sugar.']],
+   brew:'Boiling water, 6–8 minutes, covered. Longer is fine — none of this turns bitter.',
+   why:'Chamomile alone reads thin and hay-like. Rooibos gives it a floor to stand on and the rose keeps it from tasting medicinal.',
+   gap:'A pinch of lavender would take this from good to the best cup on the table. We don\'t have any.'},
+  {f:'Out cold',s:'Deeper, darker, less floral',name:'Out Cold',tag:'CAFFEINE FREE',
+   items:[['Rooibos',4,'The base. Red, round, slightly sweet, impossible to over-steep.'],
+    ['Chamomile',2,'Enough to be the calming centre without the cup smelling like a field.'],
+    ['Lemon balm',1,'Scarce, so just a pinch — it adds a soft lemon lift that keeps this from being heavy.'],
+    ['Orange peel',1,'Sweetens the back end. Covers rooibos\'s slightly woody edge.']],
+   brew:'Boiling water, 7–8 minutes, covered.',
+   why:'This is the one to drink an hour before bed. No caffeine anywhere in it, and the citrus is warm rather than sharp — lemon peel would be too bright here, which is why it\'s orange.',
+   gap:'Valerian or passionflower is what a real sleep blend would add. Neither is here, and honestly neither tastes good — this is the better cup.'}],
+ theta:[
+  {f:'Dreamy',s:'Floral, loose, a little strange',name:'Dreamy',tag:'CAFFEINE FREE',
+   items:[['Rose, either jar',2,'Lead with it. Rose is the whole mood of this band — soft focus, slightly unreal.'],
+    ['Rooibos',3,'Carries the rose. Without a base, rose alone tastes like soap.'],
+    ['Chamomile',2,'Bridges the two. Honey note that makes the florals agree with each other.'],
+    ['Lemon balm','pinch','Optional and scarce. A few leaves keeps it from going cloying.']],
+   brew:'Just off boiling, 5–6 minutes. Rose gets soapy if you push it past 7.',
+   why:'Theta is the drowsy, daydreaming band — the blend should smell like more than it tastes. Rose does that better than anything else on this table.',
+   gap:'Vanilla or tulsi would make this unmistakable. Tulsi especially — peppery holy basil is the classic drift herb.'},
+  {f:'Warm and slow',s:'Resinous, odd, memorable',name:'Warm and Slow',tag:'CAFFEINE FREE · WILDCARD',
+   items:[['Rooibos',4,'Base. Its woodiness is the reason juniper works here and nowhere else.'],
+    ['Juniper berries','2 crushed','Crush them with a spoon first. Pine, gin, resin — the strangest thing on the table.'],
+    ['Orange peel',2,'Sweet citrus is what makes juniper read as interesting instead of harsh.'],
+    ['Licorice root','pinch','Rounds the sharp edges off the juniper.']],
+   brew:'Boiling water, 8–10 minutes. Berries need the time.',
+   why:'Juniper is the ingredient nobody expects and the one people will remember. It only works against a sweet base — rooibos and orange peel are doing the diplomacy.',
+   gap:'Cinnamon chips would finish this properly. Skip this cup if you\'re pregnant or have kidney trouble — juniper is traditionally a diuretic.'}],
+ alpha:[
+  {f:'Calm focus',s:'Awake but unbothered — the best-supported cup here',name:'Calm Focus',tag:'LOW CAFFEINE · STRONGEST EVIDENCE',
+   items:[['Sencha',3,'The only real reason this blend works. Green tea carries both caffeine and L-theanine, and that pairing is the most-replicated thing in the whole band system.'],
+    ['Lemon balm',2,'Scarce — use most of what\'s left. Soft lemon, and decent human data on easing stress.'],
+    ['Spearmint',1,'Cool clarity without peppermint\'s slap.'],
+    ['Lemon peel',1,'A bright top note that makes the sencha taste less vegetal.']],
+   brew:'175°F, 2–3 minutes. Not hotter, not longer — sencha turns bitter and astringent fast. With no thermometer: boil it, then wait three minutes before pouring.',
+   why:'This is the honest one. Caffeine plus theanine is repeatedly shown to beat caffeine alone on attention with less jitter, and a cup of sencha has both already.',
+   gap:'Nothing. This is the strongest blend you can make from what\'s on the table.'},
+  {f:'Clear head',s:'Half the caffeine, all the calm',name:'Clear Head',tag:'VERY LOW CAFFEINE',
+   items:[['Sencha',2,'Cut down so this is a late-afternoon cup rather than a 7am one.'],
+    ['Rooibos',2,'Fills the gap the sencha left. Keeps the cup tasting full.'],
+    ['Spearmint',2,'Leads here. Sweet mint is the lift when caffeine isn\'t doing it.'],
+    ['Lemon peel',1,'Sharpens the finish.']],
+   brew:'175°F, 2–3 minutes for the sencha\'s sake. The rooibos won\'t mind.',
+   why:'Same idea as Calm Focus but drinkable at 4pm without touching sleep. Mint does the alertness work that the missing caffeine was doing.',
+   gap:'A slice of fresh ginger would be perfect here — warmth to sit under the mint.'}],
+ beta:[
+  {f:'Work session',s:'The most caffeine this table can make',name:'Work Session',tag:'CAFFEINE — HIGHEST HERE',
+   items:[['Sencha',4,'Everything. This is the only caffeinated thing on the table, so the whole blend is built around getting the most out of it.'],
+    ['Spearmint',1,'Keeps a heavy green tea from tasting like spinach.'],
+    ['Orange peel',1,'Sweetness so you can drink the whole cup fast.'],
+    ['Lemon peel',1,'Cuts through. Makes it taste like it\'s doing something.']],
+   brew:'180°F, 3 minutes. A little hotter and longer than the Alpha cups — you want more out of the leaf. It will be slightly astringent. That\'s the trade.',
+   why:'Beta is the working band and caffeine is the working ingredient. One cup is maybe 30mg — about a third of a coffee — so this is a real but modest lift.',
+   gap:'This is the blend most hurt by what we didn\'t buy. Matcha, guayusa or even black tea would double the caffeine. Ginger would add the bite this is reaching for.'},
+  {f:'Cold morning',s:'Tart, dark, wakes you up sideways',name:'Cold Morning',tag:'CAFFEINE · TART',
+   items:[['Sencha',3,'Still the engine.'],
+    ['Elderberries',2,'Crush lightly. Dark, tart, jammy — the flavour nothing else here gives you.'],
+    ['Orange peel',2,'Sweet counterweight to the elderberry\'s sourness.']],
+   brew:'Two stages. Steep the elderberries and orange peel in boiling water for 6 minutes, let it drop, then add the sencha for the last 2. Berries need heat and time; sencha needs neither.',
+   why:'Elderberry has genuinely decent trial evidence for shortening colds, which makes this the cup to drink when you\'re run down but still have to work.',
+   gap:'Hibiscus would push the tartness further and turn it red. Steep the berries — don\'t eat them raw out of the jar.'}],
+ gamma:[
+  {f:'Bright and strange',s:'The most interesting cup on the table',name:'Bright and Strange',tag:'LOW CAFFEINE · RITUAL',
+   items:[['Sencha',2,'A small amount of lift. Enough to feel it, not enough to run the flavour.'],
+    ['Juniper berries','2 crushed','The spark. Pine and resin against green tea is genuinely unusual and it works.'],
+    ['Lemon peel',2,'Sharp citrus is the bridge between the juniper and the sencha.'],
+    ['Rose, either jar',1,'A little perfume so the whole thing lifts at the end.']],
+   brew:'Crush the juniper, steep it alone in boiling water 5 minutes, let it cool a minute, then add everything else for 2–3 more.',
+   why:'Nothing you drink moves your gamma waves — this band is flavour and ceremony on purpose. So it should be the most interesting cup, not the most functional one.',
+   gap:'Cacao nibs are what this blend actually wants. Skip the juniper if you\'re pregnant or have kidney trouble.'},
+  {f:'Ceremony',s:'Dark, sweet, made to share',name:'Ceremony',tag:'CAFFEINE FREE · RITUAL',
+   items:[['Rooibos',3,'Deep red base, sweet on its own.'],
+    ['Elderberries',2,'Crushed. Dark fruit, gives the cup weight and colour.'],
+    ['Orange peel',1,'Warmth.'],
+    ['Rose, either jar',1,'Aroma. This one should smell like something before you drink it.'],
+    ['Licorice root','pinch','Ties it together and makes it taste sweetened.']],
+   brew:'Boiling water, 8–10 minutes. Make it in a pot, not a cup — this is the one to pour for other people.',
+   why:'No functional claim here at all, and that\'s deliberate. It\'s a good-tasting dark cup that looks like something, which is the entire job of the Gamma band.',
+   gap:'Cacao and cinnamon would make this the best thing on the table. Go light on the licorice — a lot of it raises blood pressure.'}]
+};
+
+var PANTRY=[
+ {n:'Rooibos',oz:'1.1 OZ · 13 CUPS',
+  a:'Red, round, naturally sweet, and it cannot be over-steeped. Caffeine free.',
+  t:'Takes away sharpness — it will soften anything you put in it, including things you wanted sharp.',
+  u:'1 to 1½ tsp per cup. Your main base — use it freely, you have the most of it.',e:'Flavour.'},
+ {n:'Sencha green tea',oz:'0.8 OZ · 9 CUPS',
+  a:'Grassy and savoury, and the only caffeine on the table — about 30mg a cup, roughly a third of a coffee. Carries L-theanine, the one ingredient here with repeated human evidence behind calm alertness.',
+  t:'Turns bitter and astringent above 180°F or past 3 minutes. It punishes carelessness.',
+  u:'1 tsp per cup. 175°F, 2–3 minutes.',
+  e:'Good evidence — caffeine with theanine beats caffeine alone on attention.',low:true},
+ {n:'Orange peel',oz:'0.6 OZ · 7 CUPS',
+  a:'Sweetness without sugar, and a warm citrus that rounds off bitter edges.',
+  t:'Nothing, really. The most forgiving fixer here.',
+  u:'½ to 1 tsp. Reach for this when a blend tastes flat or harsh.',e:'Flavour.'},
+ {n:'Lemon peel granules',oz:'0.6 OZ · 7 CUPS',
+  a:'Sharp, bright citrus at the top of the sip.',
+  t:'Heavy-handed it reads like cleaning product. Half what you think.',
+  u:'¼ to ½ tsp. Best against green tea and mint.',e:'Flavour.'},
+ {n:'Elderberries',oz:'0.6 OZ · 7 CUPS',
+  a:'Dark, tart, jammy. Adds colour and real body.',
+  t:'Sour enough to need something sweet beside it.',
+  u:'Crush lightly, 1 tsp, and give it 8+ minutes or it gives you nothing.',
+  e:'Some evidence — decent trials on shortening cold duration. Steep them, don\'t snack on them raw.'},
+ {n:'Juniper berries',oz:'0.5 OZ · 5 CUPS',
+  a:'Pine, resin, gin. The wildcard and the thing people will remember.',
+  t:'Dominates instantly. It will take over a cup in seconds.',
+  u:'2 to 3 berries, crushed with a spoon, long steep. Never more.',
+  e:'Flavour. Skip it if pregnant or dealing with kidney issues — traditionally a diuretic.',warn:true},
+ {n:'Chamomile, German',oz:'0.3 OZ · 4 CUPS',
+  a:'Apple, honey, soft. The most familiar calming flavour there is.',
+  t:'Goes hay-like and dusty if you use too much or steep it forever.',
+  u:'¾ tsp per cup. Pair with a base — alone it tastes thin.',
+  e:'Some evidence — apigenin binds GABA receptors, human sleep results are modest.',low:true},
+ {n:'Spearmint',oz:'0.3 OZ · 4 CUPS',
+  a:'Sweet, cool, gentler than peppermint. Adds lift with no caffeine.',
+  t:'Above about a third of the blend it stops being an ingredient and becomes the blend.',
+  u:'¼ to ½ tsp.',e:'Some evidence on alertness.',low:true},
+ {n:'Lemon balm',oz:'0.16 OZ · 2 CUPS',
+  a:'Soft lemon with none of the sourness. Calming and bright at the same time.',
+  t:'Delicate — strong flavours bury it entirely.',
+  u:'About two cups\' worth left. Pinches only, and only in blends quiet enough to notice it.',
+  e:'Some evidence on stress and mood.',low:true},
+ {n:'Red rose buds & petals',oz:'0.16 OZ · 2 CUPS',
+  a:'Perfume and beauty. Whole buds look extraordinary dry.',
+  t:'Goes soapy fast, especially over 7 minutes.',
+  u:'A few petals or one bud. Almost gone — save it for cups people will look at.',e:'Flavour.',low:true},
+ {n:'Pink rose petals',oz:'0.16 OZ · 2 CUPS',
+  a:'Same job as the red, softer and prettier loose.',
+  t:'Same soapiness risk.',
+  u:'Interchangeable with the red — use whichever looks better in the cup.',e:'Flavour.',low:true},
+ {n:'Licorice root',oz:'0.16 OZ · 2 CUPS',
+  a:'The finisher. Makes any blend taste sweetened and complete with no sugar.',
+  t:'Bullies every other ingredient in the cup if you use more than a pinch.',
+  u:'A pinch. Genuinely — a pinch.',
+  e:'Flavour. A lot of it raises blood pressure, so keep it to one cup\'s worth per person tonight.',warn:true}
+];
+
+var state={band:null,feel:null,cups:1};
+function el(h){var d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild}
+function isDark(){return document.documentElement.dataset.mode==='dark'}
+function bandColor(b){return isDark()?b.cd:b.cl}
+
+function wavePath(cyc,amp){
+  var w=600,mid=39,p=[];
+  for(var x=0;x<=w;x+=2){
+    var env=Math.sin(Math.PI*(x/w));
+    p.push(x+','+(mid-Math.sin(x/w*cyc*Math.PI*2)*amp*(.32+.68*env)).toFixed(1));
+  }
+  return 'M'+p.join(' L');
+}
+function setWave(cyc,amp,color,left,right){
+  var s=document.getElementById('stage');
+  document.getElementById('wave').setAttribute('d',wavePath(cyc,amp));
+  s.style.setProperty('--w',color);
+  document.getElementById('wLeft').textContent=left;
+  document.getElementById('wRight').textContent=right;
+  s.classList.remove('draw');void s.offsetWidth;s.classList.add('draw');
+}
+function refreshWave(){
+  var b=state.band;
+  if(b) setWave(b.cyc,b.amp,bandColor(b),b.eeg+' · '+b.nm,b.hz+' Hz');
+  else setWave(6,22,isDark()?'#2FD3C6':'#12857F','FIVE BANDS','0.5 – 100 Hz');
+}
+
+function drawBands(){
+  var w=document.getElementById('bands');
+  BANDS.forEach(function(b){
+    var btn=el('<button class="band" aria-pressed="false" style="--cl:'+b.cl+';--cd:'+b.cd+'">'+
+      '<span class="eeg">'+b.eeg+'</span>'+
+      '<span class="hz">'+b.hz+'<i>Hz</i></span>'+
+      '<span class="nm">'+b.nm+'</span></button>');
+    btn.onclick=function(){
+      state.band=b;state.feel=null;state.cups=1;
+      [].forEach.call(w.children,function(c){c.setAttribute('aria-pressed','false')});
+      btn.setAttribute('aria-pressed','true');
+      refreshWave();drawFeels();
+      document.getElementById('recipe').innerHTML='';
+    };
+    w.appendChild(btn);
+  });
+}
+function drawFeels(){
+  var w=document.getElementById('feels');
+  document.getElementById('feelWrap').classList.remove('hide');
+  w.innerHTML='';
+  R[state.band.k].forEach(function(r){
+    var btn=el('<button class="feel" aria-pressed="false" style="--cl:'+state.band.cl+';--cd:'+state.band.cd+'"><b>'+r.f+'</b><span>'+r.s+'</span></button>');
+    btn.onclick=function(){
+      state.feel=r;state.cups=1;
+      [].forEach.call(w.children,function(c){c.setAttribute('aria-pressed','false')});
+      btn.setAttribute('aria-pressed','true');
+      drawRecipe();
+    };
+    w.appendChild(btn);
+  });
+}
+function amount(q,cups){
+  if(typeof q==='string'){
+    if(q==='pinch')return cups===1?'a pinch':cups+' pinches';
+    var m=q.match(/^(\d+)\s+(.*)$/);
+    if(m)return(parseInt(m[1],10)*cups)+' '+m[2];
+    return q;
+  }
+  var t=Math.round(q*0.25*cups*4)/4,wh=Math.floor(t),fr={0:'',0.25:'¼',0.5:'½',0.75:'¾'}[+(t-wh).toFixed(2)];
+  return((wh?wh:'')+(fr?(wh?' ':'')+fr:'')||'¼')+' tsp';
+}
+function drawRecipe(){
+  if(!state.feel)return;
+  var r=state.feel,b=state.band;
+  var rows=r.items.map(function(i){
+    return '<div class="row"><div class="amt">'+amount(i[1],state.cups)+'</div><div class="rw"><b>'+i[0]+'</b><span>'+i[2]+'</span></div></div>';
+  }).join('');
+  document.getElementById('recipe').innerHTML=
+   '<div class="card" style="--cl:'+b.cl+';--cd:'+b.cd+'">'+
+     '<div class="card-top"><div class="tag">'+b.eeg+' · '+b.hz+' Hz · '+r.tag+'</div><h2>'+r.name+'</h2><p class="why">'+r.why+'</p></div>'+
+     '<div class="scale"><button id="minus" aria-label="Fewer cups">−</button><b id="cups"></b>'+
+     '<button id="plus" aria-label="More cups">+</button><span>scales the whole recipe</span></div>'+
+     rows+
+     '<div class="brew"><em>BREW IT</em>'+r.brew+'</div>'+
+     '<div class="gap"><em>WHAT WOULD MAKE IT BETTER</em>'+r.gap+'</div></div>';
+  document.getElementById('cups').textContent=state.cups+(state.cups===1?' CUP':' CUPS');
+  document.getElementById('plus').onclick=function(){state.cups=Math.min(8,state.cups+1);drawRecipe()};
+  document.getElementById('minus').onclick=function(){state.cups=Math.max(1,state.cups-1);drawRecipe()};
+}
+function drawPantry(){
+  var w=document.getElementById('pantry');
+  PANTRY.forEach(function(p){
+    var item=el('<div class="p-item" data-open="0"></div>');
+    var head=el('<button class="p-head"><b>'+p.n+'</b><i class="'+(p.low?'low':'')+'">'+p.oz+'</i><u>+</u></button>');
+    var body=el('<div class="p-body"><p><em>ADDS</em>'+p.a+'</p><p><em>WATCH OUT</em>'+p.t+
+      '</p><p><em>HOW MUCH</em>'+p.u+'</p><p class="'+(p.warn?'warn':'')+'"><em>EVIDENCE</em>'+p.e+'</p></div>');
+    head.onclick=function(){
+      var open=item.dataset.open==='1';
+      item.dataset.open=open?'0':'1';
+      head.querySelector('u').textContent=open?'+':'–';
+    };
+    item.appendChild(head);item.appendChild(body);w.appendChild(item);
+  });
+}
+document.getElementById('mode').onclick=function(){
+  var d=document.documentElement;
+  d.dataset.mode = isDark() ? 'light' : 'dark';
+  this.textContent = isDark() ? 'LIGHT' : 'DARK';
+  refreshWave();
+};
+document.getElementById('t-build').onclick=function(){swap(true)};
+document.getElementById('t-pantry').onclick=function(){swap(false)};
+function swap(build){
+  document.getElementById('p-build').classList.toggle('hide',!build);
+  document.getElementById('p-pantry').classList.toggle('hide',build);
+  document.getElementById('t-build').setAttribute('aria-selected',build);
+  document.getElementById('t-pantry').setAttribute('aria-selected',!build);
+  window.scrollTo(0,0);
+}
+
+drawBands();drawPantry();refreshWave();
+</script>
+</body>
+</html>
