@@ -90,7 +90,7 @@ export function renderAccount() {
       <div class="account-section-label">Account</div>
       ${row('Email', esc(user?.email || '—'))}
       ${row('Sign-in', `<span style="text-transform:capitalize">${esc(String(provider).replace('.com',''))}</span>`)}
-      ${row('Access', `<span class="stat-chip ${profile.isPremium ? 'chip-orange' : 'chip-teal'}" style="font-size:9px">${profile.isPremium ? 'Premium' : 'Beta'}</span>`)}
+      ${row('Access', `<span class="stat-chip chip-teal" style="font-size:9px">Beta</span>`)}
       ${row('Role', profile.isAdmin ? 'Admin' : profile.isTester ? 'Tester' : 'Member')}
     </div>
 
@@ -209,7 +209,7 @@ function exportData() {
   const { projects, tasks, vault, settings, stats, profile, user } = store.state;
   const payload = {
     exportedAt: new Date().toISOString(),
-    account: { email: user?.email, uid: user?.uid, isPremium: !!profile.isPremium },
+    account: { email: user?.email, uid: user?.uid },
     settings, stats, projects, tasks, vault,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });

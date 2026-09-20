@@ -34,9 +34,7 @@ export function renderOverview() {
   const checkedToday = stats?.energyDay === todayKey;
   const energyVal = checkedToday ? (stats.energyToday || 0) : 0;
   const streak = stats?.streak || 0;
-  const accessChip = profile.isPremium
-    ? `<span class="stat-chip chip-orange">Premium</span>`
-    : `<span class="stat-chip chip-teal">Beta</span>`;
+  const accessChip = `<span class="stat-chip chip-teal">Beta</span>`;
 
   const view = document.getElementById('viewOverview');
   view.innerHTML = `

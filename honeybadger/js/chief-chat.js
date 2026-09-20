@@ -130,7 +130,7 @@ async function doSend() {
   } catch (err) {
     const code = err?.code || '';
     console.error('chiefAgent call failed', code, err?.message, err?.details, err);
-    if (code.includes('permission-denied')) bodyEl.textContent = "Chief chat needs a premium or tester account.";
+    if (code.includes('permission-denied')) bodyEl.textContent = "The server turned that request away. Try signing out and back in.";
     else if (code.includes('resource-exhausted')) bodyEl.textContent = "You've hit today's usage limit. Try again tomorrow.";
     // Surface the real reason so we can diagnose instead of a generic message.
     else bodyEl.textContent = `Chief error — ${code || 'unknown'}: ${err?.message || 'no message'}`;
