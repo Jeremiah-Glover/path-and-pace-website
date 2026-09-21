@@ -62,6 +62,9 @@ export function applyTheme(theme) {
   set('--teal-lo', rgba(sec, 0.12));
   set('--border', rgba(tx, isDark ? 0.08 : 0.12));
   set('--border-o', rgba(ac, 0.30));
+  // Hover and lift states, from the ink for the same reason borders are.
+  set('--hover-lo', rgba(tx, isDark ? 0.04 : 0.05));
+  set('--hover-hi', rgba(tx, isDark ? 0.14 : 0.16));
   set('--glow-o', `0 0 18px ${rgba(ac, 0.55)}, 0 0 56px ${rgba(ac, 0.18)}`);
   set('--glow-t', `0 0 18px ${rgba(sec, 0.5)}, 0 0 56px ${rgba(sec, 0.16)}`);
 
