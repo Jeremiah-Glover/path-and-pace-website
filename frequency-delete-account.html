@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delete Your Frequency Account</title>
+<meta name="description" content="How to delete your Frequency account and data, in the app or by request.">
+
+<!--
+================================================================================
+  OWNER CHECKLIST — values used throughout the page
+    • [OPERATOR]       = It's Frequency LLC — owns Frequency; handles deletion requests.
+    • [DEVELOPER]      = Path & Pace LLC (develops & distributes the app).
+    • [CONTACT EMAIL]  = support@path-and-pace.com
+    • [RETENTION]      = per infrastructure vendor (Google Firebase); no separate
+                         copies kept by us
+    • [EFFECTIVE DATE] = October 9, 2026
+  The in-app steps match the apps: Mirror (profile) → Delete account. The server
+  side is the deleteAccount function in the Frequency repo.
+================================================================================
+-->
+
+<style>
+:root {
+  --accent:  #077E72;   /* Frequency teal, light */
+  --bg:      #FAFBFD;
+  --surf:    #FFFFFF;
+  --ink:     #070A13;
+  --muted:   #3E4F58;
+  --border:  rgba(7,10,19,0.12);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent:  #16F3DD;   /* Frequency electric teal */
+    --bg:      #040810;   /* Frequency navy ground */
+    --surf:    #0C111D;
+    --ink:     #F0F5F5;
+    --muted:   #98AAB3;
+    --border:  rgba(240,245,245,0.10);
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+}
+.wrap { max-width: 680px; margin: 0 auto; padding: 40px 22px 72px; }
+
+header.top { margin-bottom: 8px; }
+.eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 10px;
+}
+h1 { font-size: 30px; line-height: 1.15; margin: 0 0 10px; letter-spacing: -0.01em; }
+.updated { font-size: 13px; color: var(--muted); margin: 0 0 28px; }
+.lead { font-size: 18px; color: var(--ink); margin: 0 0 8px; }
+
+section { margin: 34px 0; }
+h2 {
+  font-size: 20px; margin: 0 0 12px; letter-spacing: -0.005em;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 16px; margin: 20px 0 6px; }
+p { margin: 0 0 14px; color: var(--muted); }
+p strong, li strong { color: var(--ink); }
+ul, ol { margin: 0 0 14px; padding-left: 22px; color: var(--muted); }
+li { margin-bottom: 8px; }
+ol.steps { counter-reset: step; list-style: none; padding-left: 0; }
+ol.steps li {
+  position: relative; padding: 0 0 0 40px; margin-bottom: 14px; min-height: 28px;
+}
+ol.steps li::before {
+  counter-increment: step; content: counter(step);
+  position: absolute; left: 0; top: 0;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: var(--bg);
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+a { color: var(--accent); font-weight: 600; }
+
+.card {
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px 22px; margin: 16px 0;
+}
+.card p:last-child { margin-bottom: 0; }
+.email-btn {
+  display: inline-block; margin: 4px 0 2px;
+  background: var(--accent); color: var(--bg) !important; text-decoration: none;
+  font-weight: 700; padding: 12px 22px; border-radius: 10px;
+}
+.note { font-size: 14px; color: var(--muted); }
+
+footer {
+  margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--border);
+  font-size: 14px; color: var(--muted);
+}
+footer a { font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">Frequency</p>
+    <h1>Delete Your Frequency Account</h1>
+    <p class="updated">Last updated: October 9, 2026</p>
+  </header>
+
+  <p class="lead">You can delete your Frequency account, and the information that goes with it, at any time.</p>
+  <p>Frequency is owned by <strong>It's Frequency LLC</strong>, which is responsible for your account and data. The app is developed and distributed by Path &amp; Pace LLC.</p>
+
+  <section>
+    <h2>Delete your account in the app</h2>
+    <p>This is the fastest way, and it takes effect right away.</p>
+    <ol class="steps">
+      <li>Open Frequency on your iPhone or Android phone, or sign in to the web portal.</li>
+      <li>Go to your profile, the <strong>Mirror</strong>.</li>
+      <li>Tap <strong>Delete account</strong>, then <strong>Delete my account</strong> to confirm.</li>
+    </ol>
+    <p>Your account and its data are deleted <strong>immediately</strong>, and you are signed out on that device. <strong>This can't be undone.</strong></p>
+  </section>
+
+  <section>
+    <h2>Request deletion without the app</h2>
+    <p>You don't need the app to delete your account. Email us and we'll take care of it.</p>
+    <div class="card">
+      <p><a class="email-btn" href="mailto:support@path-and-pace.com?subject=Delete%20my%20Frequency%20account">Email a deletion request</a></p>
+      <p class="note">Send your request to <a href="mailto:support@path-and-pace.com">support@path-and-pace.com</a> <strong>from the email address on your account</strong> (or tell us the name you joined with and whether you signed in with Apple or Google). We verify the request is yours, delete the account within 30 days, and reply to confirm.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What gets deleted, what stays, and how long it takes</h2>
+
+    <h3>Deleted from our servers</h3>
+    <ul>
+      <li>Your <strong>sign-in</strong>.</li>
+      <li>Your <strong>name, date of birth, city and state</strong>.</li>
+      <li>Your <strong>page, check-ins, practice days, points and notification settings</strong>.</li>
+      <li>Your <strong>RSVPs</strong> (your seats go back), attendance, pod place, board posts and answers to prompts.</li>
+      <li>Your devices' <strong>push-notification tokens</strong>.</li>
+    </ul>
+
+    <h3>What stays</h3>
+    <p>Nothing that identifies you. Anonymous poll counts stay as they are, because a vote was never stored against a name.</p>
+
+    <h3>Timing and retention</h3>
+    <p>When your account is deleted, your data is removed from our systems right away. We don't keep separate copies of our own — any residual data lives only in the routine backups kept by our infrastructure provider, <strong>Google Firebase</strong>, and is purged on Google's standard backup schedule.</p>
+  </section>
+
+  <section>
+    <h2>Hosts</h2>
+    <p>If you are the society's only host, make another member a host first, so the society is not left with nobody to run it. The app will remind you.</p>
+  </section>
+
+  <footer>
+    <p>Questions about deleting your account or data? Email <a href="mailto:support@path-and-pace.com">support@path-and-pace.com</a>.</p>
+    <p>For the full details on how we handle your data, see the <a href="legal?tab=freq-privacy">Frequency Privacy Policy</a> and the <a href="legal?tab=freq-terms">Frequency Terms</a>.</p>
+    <p>Frequency is owned by It's Frequency LLC; developed &amp; distributed by Path &amp; Pace LLC.</p>
+  </footer>
+
+</div>
+</body>
+</html>
