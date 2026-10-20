@@ -2,3 +2,8 @@
 # Canonical proper-case path for the Boss Up privacy policy:
 /privacy-policy         /BossUpTheApp-Privacy-Policy    301
 /privacy-policy.html    /BossUpTheApp-Privacy-Policy    301
+
+# The Frequency portal lives under /frequency, served by
+# functions/frequency/[[path]].js. This only catches the bare path if the
+# function's catch-all route does not — the portal's own index is one level in.
+/frequency              /frequency/                     301
