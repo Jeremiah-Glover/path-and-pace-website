@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Review · Path &amp; Pace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/product-design/assets/pd.css">
+<style>
+.top{position:static}
+.piece{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center}
+.piece img{width:100%;max-width:560px;aspect-ratio:4/5;object-fit:cover;border-radius:28px;box-shadow:0 30px 60px rgba(30,19,14,.18);justify-self:center;background:linear-gradient(160deg,#F2EEE7,#E7E1D7)}
+.piece h1{font-size:clamp(44px,7vw,72px);line-height:.95}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--hair);border-radius:16px;overflow:hidden}
+.facts div{background:rgba(255,255,255,.85);padding:14px;display:flex;flex-direction:column;gap:3px}
+.facts span{font-size:12px;color:var(--dim)} .facts b{font-size:14px}
+.dots{display:flex;gap:6px}.dots button{width:30px;height:7px;border-radius:7px;border:0;background:var(--hair);cursor:pointer;padding:0}
+.dots button.ok{background:var(--teal)}.dots button.ch{background:var(--amber)}.dots button.on{outline:2px solid var(--text);outline-offset:2px}
+@media (max-width:760px){.piece{grid-template-columns:1fr;gap:20px}}
+</style>
+</head>
+<body>
+<header class="top"><span class="mark" style="font-size:20px">Path &amp; Pace</span><span class="app" id="who"></span><div class="spacer"></div><span class="small muted" id="ver"></span><div class="dots" id="dots" aria-label="Pieces"></div></header>
+<main class="wrap" id="v"><span class="spin dark"></span></main>
+<script src="/product-design/assets/pd.js"></script>
+<script>
+(async () => {
+  const { esc, api, toast } = PD;
+  const t = new URLSearchParams(location.search).get('t') || '';
+  const v = document.getElementById('v');
+  let data, i = 0;
+  try { data = await api('review/' + encodeURIComponent(t)); }
+  catch (e) { v.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+  const P = data.project, fb = new Map(data.feedback.map((f) => [f.pieceId, f]));
+  document.getElementById('who').textContent = `${P.brand ? P.brand + ' · ' : ''}${P.name}${P.owner?.name ? ' · for ' + P.owner.name.split(' ')[0] : ''}`;
+  document.getElementById('ver').textContent = 'Version ' + P.version;
+  const dots = () => {
+    document.getElementById('dots').innerHTML = P.pieces.map((x, j) => { const f = fb.get(x.id); const c = f && f.version === P.version ? (f.status === 'approved' ? 'ok' : 'ch') : ''; return `<button class="${c} ${j === i ? 'on' : ''}" data-j="${j}" aria-label="${esc(x.name)}"></button>`; }).join('');
+    document.querySelectorAll('[data-j]').forEach((b) => (b.onclick = () => { i = +b.dataset.j; draw(); }));
+  };
+  const draw = () => {
+    const x = P.pieces[i], f = fb.get(x.id), done = f && f.version === P.version;
+    v.innerHTML = `<section class="piece">${x.image ? `<img src="${esc(x.image)}" alt="${esc(x.name)} concept">` : '<img alt="">'}
+      <div class="stack" style="gap:20px;max-width:560px"><span class="small" style="font-weight:600;color:var(--orange)">Piece ${esc(x.n || i + 1)} of ${P.pieces.length}</span><h1>${esc(x.name)}</h1>
+      ${x.story ? `<p style="font-size:19px">${esc(x.story)}</p>` : ''}
+      <div class="facts"><div><span>Product</span><b>${esc(x.garment || '—')}</b></div><div><span>Color</span><b>${esc(x.color || '—')}</b></div><div><span>Price</span><b>${x.price ? '$' + Math.round(x.price) : '—'}</b></div></div>
+      ${done ? `<span class="pill ${f.status === 'approved' ? 'ok' : 'warn'}" style="width:max-content">${f.status === 'approved' ? 'You approved this' : 'You asked for changes'}</span>` : ''}
+      <div><label class="l" for="note" style="font-size:13px;font-weight:600;color:var(--text)">Anything to change?</label><textarea class="in" id="note" rows="3" placeholder="Make it bigger, try it in pink…">${done ? esc(f.note) : ''}</textarea></div>
+      <div class="row"><button class="btn primary" id="ok" style="padding:14px 24px;font-size:15px">Approve this piece</button><button class="btn" id="ch" style="padding:14px 20px;font-size:15px">Send changes</button></div>
+      <span class="small muted">No account needed. Your answer is saved against version ${P.version}.</span></div></section>`;
+    const send = async (status) => {
+      try {
+        const r = await api(`review/${encodeURIComponent(t)}/feedback`, { method: 'POST', body: { pieceId: x.id, status, note: document.getElementById('note').value } });
+        fb.set(x.id, r.record); toast(status === 'approved' ? 'Approved. Thank you.' : 'Sent. Thank you.');
+        if (i < P.pieces.length - 1) i++; draw();
+      } catch (e) { toast(e.message); }
+    };
+    document.getElementById('ok').onclick = () => send('approved');
+    document.getElementById('ch').onclick = () => { if (!document.getElementById('note').value.trim()) return toast('Say what to change first.'); send('changes'); };
+    dots();
+  };
+  draw();
+})();
+</script>
+</body>
+</html>
