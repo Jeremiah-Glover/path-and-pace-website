@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Product Design · Path &amp; Pace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/product-design/assets/pd.css">
+<style>
+.hero-row{display:flex;flex-wrap:wrap;align-items:end;gap:18px;justify-content:space-between}
+.pcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;overflow:hidden;padding:0}
+.pcard .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--bg2)}
+.pcard .strip img,.pcard .strip span{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:linear-gradient(160deg,#F2EEE7,#E7E1D7)}
+.pcard .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps span{font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:999px;background:var(--bg2);color:var(--faint)}
+.steps span.on{background:var(--orange);color:#fff}.steps span.done{background:rgba(0,128,130,.12);color:var(--teal)}
+.piece-row{display:grid;grid-template-columns:44px minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,1fr) 34px;gap:8px;align-items:center}
+.piece-row .n{font-weight:700;color:var(--orange);font-size:13px;text-align:center}
+.person{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:12px}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#CD4900,#008082);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:13px}
+.av.off{background:var(--bg2);color:var(--faint)}
+.q{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.q .n{font-size:12px;font-weight:700;color:var(--orange);padding-top:3px}
+.concepts{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.concepts button{all:unset;cursor:pointer;border-radius:14px;position:relative}
+.concepts button[aria-pressed="true"] img{outline:3px solid var(--orange);outline-offset:2px}
+.concepts button .x{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.92);border-radius:8px;font-size:11px;font-weight:600;padding:3px 7px;color:var(--dim)}
+.fitbar{height:10px;border-radius:999px;overflow:hidden;background:var(--bg2);display:flex}
+.res{display:flex;flex-direction:column;overflow:hidden;padding:0}
+.res .ph{position:relative;height:170px;background:linear-gradient(160deg,#F2EEE7,#E7E1D7);display:flex;align-items:center;justify-content:center}
+.res .ph img{width:100%;height:100%;object-fit:contain;background:#fff}
+.res .ph .pill{position:absolute;top:10px}
+.res .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.three span{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:600}
+.three small{font-size:11.5px;color:var(--dim);font-weight:400}
+.seg{display:flex;background:var(--bg2);border-radius:12px;padding:3px;width:max-content}
+.seg button{font-family:inherit;border:0;background:transparent;font-size:13px;font-weight:500;color:var(--dim);padding:8px 14px;border-radius:9px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 2px 8px rgba(110,80,50,.10)}
+.side{display:grid;grid-template-columns:minmax(260px,320px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.side{grid-template-columns:1fr}.piece-row{grid-template-columns:34px 1fr;}.piece-row>*:nth-child(n+3){grid-column:2}}
+.chk{display:flex;align-items:center;gap:9px;font-size:13.5px;cursor:pointer}
+.chk input{accent-color:var(--orange);width:17px;height:17px}
+input[type=range]{accent-color:var(--orange);width:100%}
+.fb{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--hair)}
+</style>
+</head>
+<body>
+<main class="wrap" id="view" aria-live="polite"></main>
+<dialog id="dlg"><div class="in-d" id="dlgBody"></div></dialog>
+<script src="/product-design/assets/pd.js"></script>
+<script>
+const { $, $$, esc, uid, usd, usd0, api, doc, toast, busy } = PD;
+const view = $('#view');
+let S = { ...PD.COSTS };      // shared cost settings
+let projects = [];
+let AI = { text: false, image: null, source: false };
+
+/* ---------- seed: TT. Collection 01 ---------- */
+const TT_SEED = {
+  name: 'Collection 01 · Beautifully Chaotic', brand: 'TT.', products: 'Apparel', due: '2026-12-31',
+  owner: { name: 'Tony Baldwin', role: 'Content Creator', email: '' }, artists: [], production: { name: '' },
+  launch: { run: 30, samplesOverseas: 360, samplesUS: 168.14, labels: 150 },
+  pieces: [
+    { id: 'hidden', n: 'I', name: 'Hidden', garment: 'Lane Seven LS88003 cropped full-zip hoodie', color: 'Black / bone', placement: 'Storm art inside hood (2 × 12×14 in) + tagless TT. (3×2 in)', printSq: 342, presses: 3, blank: 18.54, freight: 0, extras: 0, price: 98, overseas: false, seed: '01' },
+    { id: 'pretend', n: 'II', name: 'Pretend', garment: 'Diznew custom baggy jean (overseas, MOQ 30)', color: 'Washed black', placement: 'Starburst trail (4×14 in) + tagless TT. · pocket chain', printSq: 62, presses: 2, blank: 19.95, freight: 5, extras: 4, price: 98, overseas: true, seed: '02' },
+    { id: 'roar', n: 'III', name: 'Roar', garment: 'Los Angeles Apparel 43021GD garment-dye baby tee', color: 'Washed black', placement: 'Shattered tiger front (11×11 in) + tagless TT. (3×2 in)', printSq: 127, presses: 2, blank: 15.53, freight: 0, extras: 0, price: 58, overseas: false, seed: '03' },
+    { id: 'counted', n: 'IV', name: 'Counted Out', garment: 'Augusta 257 stadium jersey, cropped in production', color: 'Purple', placement: 'Painted number (10×10 in) + star (3×3 in) + tagless TT.', printSq: 115, presses: 3, blank: 20.0, freight: 0, extras: 0, price: 95, overseas: false, seed: '04' },
+    { id: 'system', n: 'V', name: 'The System', garment: 'Diznew cropped denim jacket (overseas, MOQ 30)', color: 'Faded black', placement: 'Back flower (14×16 in) + sleeve hits (2 × 4×10 in) + collar text + tagless TT.', printSq: 313, presses: 5, blank: 21.95, freight: 6, extras: 0, price: 100, overseas: true, seed: '05' },
+  ],
+};
+async function seedTT(btn) {
+  const id = 'tt-collection-01';
+  const p = JSON.parse(JSON.stringify(TT_SEED));
+  for (const x of p.pieces) {
+    try {
+      const blob = await (await fetch(`/product-design/seed/${x.seed}-garment.jpg`)).blob();
+      const up = await PD.upload(blob);
+      x.concepts = [up.url]; x.chosen = 0;
+    } catch { x.concepts = []; }
+    delete x.seed;
+  }
+  await saveProject({ ...p, id, version: 1, created: Date.now() });
+  return id;
+}
+
+/* ---------- data ---------- */
+async function loadAll() {
+  [S, projects, AI] = await Promise.all([
+    PD.costs(),
+    doc.list('global', 'projects').then((d) => d.map((x) => x.data).filter(Boolean)).catch(() => []),
+    api('ai/status').catch(() => AI),
+  ]);
+  projects.sort((a, b) => (b.updated || 0) - (a.updated || 0));
+}
+async function saveProject(p) {
+  p.updated = Date.now();
+  await doc.put('global', 'projects', p.id, p);
+  const i = projects.findIndex((x) => x.id === p.id);
+  if (i >= 0) projects[i] = p; else projects.unshift(p);
+  return p;
+}
+const proj = (id) => projects.find((p) => p.id === id);
+const initials = (n) => String(n || '?').split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+const cover = (x) => (x.concepts && x.concepts[x.chosen || 0]) || x.image || '';
+let saveT;
+function saveSoon(p, ms = 600) { clearTimeout(saveT); saveT = setTimeout(() => saveProject(p).then(() => toast('Saved')).catch((e) => toast(e.message)), ms); }
+
+/* ---------- router ---------- */
+const routes = [
+  [/^#?\/?$/, home], [/^#\/new$/, onboarding], [/^#\/p\/([^/]+)(?:\/(\w+))?$/, project],
+  [/^#\/source$/, source], [/^#\/settings$/, settings], [/^#\/team$/, team],
+];
+function navMark() {
+  const h = location.hash || '#/';
+  const key = h.startsWith('#/source') ? 'source' : h.startsWith('#/settings') ? 'settings' : h.startsWith('#/team') ? 'team' : 'projects';
+  $$('.top nav a').forEach((a) => {
+    const k = a.getAttribute('href').endsWith('#/source') ? 'source' : a.getAttribute('href').endsWith('#/settings') ? 'settings' : a.getAttribute('href').endsWith('#/team') ? 'team' : a.getAttribute('href').endsWith('/studio') ? 'studio' : 'projects';
+    a.toggleAttribute('aria-current', k === key); if (k === key) a.setAttribute('aria-current', 'page');
+  });
+}
+async function route() {
+  navMark();
+  const h = location.hash || '#/';
+  for (const [re, fn] of routes) { const m = h.match(re); if (m) { window.scrollTo(0, 0); return fn(...m.slice(1)); } }
+  home();
+}
+window.addEventListener('hashchange', route);
+
+/* ---------- home ---------- */
+function home() {
+  const welcome = new URLSearchParams(location.search).get('welcome');
+  const hasTT = projects.some((p) => p.id === 'tt-collection-01');
+  view.innerHTML = `
+    <div class="hero-row">
+      <div class="stack" style="gap:6px"><h1>${welcome ? 'Welcome in.' : 'Projects'}</h1><p class="muted">Every brand Path &amp; Pace makes product for, one place.</p></div>
+      <div class="row">${hasTT ? '' : '<button class="btn" id="seed" data-busy="Loading">Load TT. Collection 01</button>'}<a class="btn primary" href="#/new">New project</a></div>
+    </div>
+    <div class="grid" style="--min:300px" id="plist"></div>`;
+  const list = $('#plist');
+  if (!projects.length) list.innerHTML = `<div class="empty">No projects yet. Start one, or load TT. Collection 01 with its five pieces and numbers.</div>`;
+  for (const p of projects) {
+    const L = PD.launch(S, p);
+    const a = document.createElement('a');
+    a.className = 'card pcard'; a.href = `#/p/${p.id}`;
+    const imgs = (p.pieces || []).slice(0, 5).map((x) => cover(x) ? `<img src="${esc(cover(x))}" alt="" loading="lazy">` : '<span></span>').join('') || '<span></span>';
+    a.innerHTML = `<div class="strip">${imgs}</div><div class="body">
+      <div class="row" style="justify-content:space-between"><span class="pill hot">${esc(p.brand || 'Brand')}</span><span class="small muted">${(p.pieces || []).length} pieces</span></div>
+      <h3>${esc(p.name)}</h3><span class="small muted">${esc(p.owner?.name || '')}${p.owner?.role ? ' · ' + esc(p.owner.role) : ''}</span>
+      <div class="three" style="margin-top:6px"><span><small>To launch</small>${usd0(L.total)}</span><span><small>Money back at</small>${isFinite(L.be) ? L.be + ' units' : '—'}</span><span><small>Profit at sell-out</small><b style="color:var(--teal)">${usd0(L.profit)}</b></span></div></div>`;
+    list.append(a);
+  }
+  const sb = $('#seed');
+  if (sb) sb.onclick = () => busy(sb, async () => { const id = await seedTT(); location.hash = `#/p/${id}`; });
+}
+
+/* ---------- onboarding ---------- */
+function onboarding() {
+  const d = { id: uid(), name: '', brand: '', products: 'Apparel', due: '', owner: { name: '', role: '', email: '' }, artists: [{ name: '', contact: '' }], production: { name: '' }, pieces: [blankPiece(0)], launch: { run: 30, samplesOverseas: 0, samplesUS: 0, labels: 0 }, version: 1, created: Date.now() };
+  let step = 0;
+  const STEPS = ['Project', 'People', 'Pieces'];
+  const draw = () => {
+    view.innerHTML = `<div class="hero-row"><div class="stack" style="gap:8px"><h1>New project</h1><div class="steps">${STEPS.map((s, i) => `<span class="${i === step ? 'on' : i < step ? 'done' : ''}">${i < step ? '✓ ' : i + 1 + ' · '}${s}</span>`).join('')}</div></div><span class="muted small">About 2 minutes. Everything can change later.</span></div>
+      <section class="card stack" id="stepBody"></section>
+      <div class="row" style="justify-content:space-between"><button class="btn ghost" id="back" ${step ? '' : 'hidden'}>Back</button><span></span><button class="btn primary" id="next" data-busy="Creating">${step < 2 ? 'Next' : 'Create project'}</button></div>`;
+    const b = $('#stepBody');
+    if (step === 0) {
+      b.innerHTML = `<div class="fields">
+        <div><label class="l" for="f-name">Project name</label><input class="in" id="f-name" value="${esc(d.name)}" placeholder="Collection 02 · …"></div>
+        <div><label class="l" for="f-brand">Brand</label><input class="in" id="f-brand" value="${esc(d.brand)}" placeholder="TT., Meridian Harmony, Frequency…" list="brands"></div>
+        <div><label class="l" for="f-products">Products</label><input class="in" id="f-products" value="${esc(d.products)}" placeholder="Apparel, drinkware, tea tins…"></div>
+        <div><label class="l" for="f-due">Designs locked by</label><input class="in" id="f-due" type="date" value="${esc(d.due)}"></div></div>
+        <datalist id="brands">${[...new Set(projects.map((p) => p.brand).filter(Boolean))].map((x) => `<option value="${esc(x)}">`).join('')}</datalist>`;
+    } else if (step === 1) {
+      b.innerHTML = `<h3>Owner</h3><p class="muted small">Their name fills every client button, like “Send to ${esc(d.owner.name || 'Tony')}”.</p>
+        <div class="fields"><div><label class="l" for="o-name">Name</label><input class="in" id="o-name" value="${esc(d.owner.name)}"></div>
+        <div><label class="l" for="o-role">Role</label><input class="in" id="o-role" value="${esc(d.owner.role)}" placeholder="Content Creator"></div>
+        <div><label class="l" for="o-email">Email (optional)</label><input class="in" id="o-email" type="email" value="${esc(d.owner.email)}"></div></div>
+        <h3 style="margin-top:6px">Artists</h3><div class="stack" id="arts"></div><button class="btn small" id="addArt" style="width:max-content">Add artist</button>
+        <h3 style="margin-top:6px">Production</h3><div class="fields"><div><label class="l" for="pr-name">Production partner</label><input class="in" id="pr-name" value="${esc(d.production.name)}"></div></div>`;
+      const arts = $('#arts');
+      const drawArts = () => {
+        arts.innerHTML = d.artists.map((a, i) => `<div class="fields"><div><label class="l">Artist name</label><input class="in" data-a="${i}" data-k="name" value="${esc(a.name)}"></div><div><label class="l">Contact or portfolio</label><input class="in" data-a="${i}" data-k="contact" value="${esc(a.contact)}"></div></div>`).join('');
+        $$('[data-a]', arts).forEach((el) => (el.oninput = () => (d.artists[el.dataset.a][el.dataset.k] = el.value)));
+      };
+      drawArts();
+      $('#addArt').onclick = () => { d.artists.push({ name: '', contact: '' }); drawArts(); };
+    } else {
+      b.innerHTML = `<p class="muted small">Name each piece and its product. Costs can wait — you can fill them on the Costing tab.</p><div class="stack" id="pcs"></div><button class="btn small" id="addPc" style="width:max-content">Add piece</button>`;
+      const drawP = () => {
+        $('#pcs').innerHTML = d.pieces.map((p, i) => `<div class="piece-row"><span class="n">${esc(p.n)}</span>
+          <input class="in" data-p="${i}" data-k="name" value="${esc(p.name)}" placeholder="Piece name" aria-label="Piece name">
+          <input class="in" data-p="${i}" data-k="garment" value="${esc(p.garment)}" placeholder="Product or blank" aria-label="Product">
+          <input class="in" data-p="${i}" data-k="color" value="${esc(p.color)}" placeholder="Color" aria-label="Color">
+          <button class="btn small ghost" data-del="${i}" aria-label="Remove piece">✕</button></div>`).join('');
+        $$('[data-p]').forEach((el) => (el.oninput = () => (d.pieces[el.dataset.p][el.dataset.k] = el.value)));
+        $$('[data-del]').forEach((el) => (el.onclick = () => { d.pieces.splice(+el.dataset.del, 1); d.pieces.forEach((p, i) => (p.n = roman(i + 1))); drawP(); }));
+      };
+      drawP();
+      $('#addPc').onclick = () => { d.pieces.push(blankPiece(d.pieces.length)); drawP(); };
+    }
+    const grab = () => {
+      if (step === 0) { d.name = $('#f-name').value.trim(); d.brand = $('#f-brand').value.trim(); d.products = $('#f-products').value.trim(); d.due = $('#f-due').value; }
+      if (step === 1) { d.owner = { name: $('#o-name').value.trim(), role: $('#o-role').value.trim(), email: $('#o-email').value.trim() }; d.production = { name: $('#pr-name').value.trim() }; }
+    };
+    $('#back').onclick = () => { grab(); step--; draw(); };
+    $('#next').onclick = () => {
+      grab();
+      if (step === 0 && !d.name) return toast('Give the project a name.');
+      if (step === 1 && !d.owner.name) return toast('Who owns this project?');
+      if (step < 2) { step++; return draw(); }
+      d.pieces = d.pieces.filter((p) => p.name.trim());
+      if (!d.pieces.length) return toast('Add at least one piece.');
+      d.artists = d.artists.filter((a) => a.name.trim());
+      busy($('#next'), async () => { await saveProject(d); location.hash = `#/p/${d.id}/story`; });
+    };
+  };
+  draw();
+}
+const roman = (n) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'][n - 1] || String(n);
+function blankPiece(i) { return { id: uid(), n: roman(i + 1), name: '', garment: '', color: '', placement: '', printSq: 0, presses: 1, blank: 0, freight: 0, extras: 0, price: 0, overseas: false, concepts: [], chosen: 0 }; }
+
+/* ---------- project ---------- */
+const TABS = [['overview', 'Overview'], ['story', 'Story'], ['concepts', 'Concept art'], ['brief', 'Artist brief'], ['costing', 'Costing'], ['review', 'Client review']];
+function project(id, tab = 'overview') {
+  const p = proj(id);
+  if (!p) { view.innerHTML = '<div class="empty">That project was not found. <a href="#/">Back to projects</a></div>'; return; }
+  const owner = p.owner?.name || 'client';
+  const first = owner.split(' ')[0];
+  view.innerHTML = `<div class="hero-row"><div class="stack" style="gap:6px"><span class="pill hot" style="width:max-content">${esc(p.brand || 'Brand')}</span><h1>${esc(p.name)}</h1>
+      <span class="muted small">${esc(p.owner?.name || '')}${p.owner?.role ? ' · ' + esc(p.owner.role) : ''}${p.due ? ' · designs locked by ' + new Date(p.due + 'T12:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span></div>
+      <div class="row"><a class="btn" href="/product-design/studio?p=${encodeURIComponent(p.id)}">Open in Studio</a><a class="btn primary" href="#/p/${p.id}/review">Send to ${esc(first)}</a></div></div>
+    <div class="tabs" role="tablist">${TABS.map(([k, l]) => `<button role="tab" aria-selected="${k === tab}" data-t="${k}">${l}</button>`).join('')}</div>
+    <div id="tab"></div>`;
+  $$('[data-t]').forEach((b) => (b.onclick = () => (location.hash = `#/p/${p.id}/${b.dataset.t}`)));
+  ({ overview, story, concepts, brief, costing, review })[tab]?.(p, $('#tab'));
+}
+
+function overview(p, el) {
+  const L = PD.launch(S, p);
+  el.innerHTML = `<div class="kpis"><div><span class="k">To launch</span><span class="v">${usd0(L.total)}</span></div><div><span class="k">First drop</span><span class="v">${L.units} units</span></div>
+    <div><span class="k">Money back at</span><span class="v" style="color:var(--orange)">${isFinite(L.be) ? L.be + ' units' : '—'}</span></div><div><span class="k">Profit at sell-out</span><span class="v" style="color:var(--teal)">${usd0(L.profit)}</span></div></div>
+    <div class="grid" style="--min:200px" id="pcs"></div>
+    <section class="card stack"><div class="row" style="justify-content:space-between"><h3>People</h3><button class="btn small" id="editP">Edit project</button></div><div class="grid" style="--min:220px" id="ppl"></div></section>`;
+  $('#pcs').innerHTML = L.pieces.map((x) => `<div class="card pcard" style="padding:0">${cover(x) ? `<img class="thumb" style="border-radius:0" src="${esc(cover(x))}" alt="${esc(x.name)} concept">` : '<span class="thumb" style="border-radius:0"></span>'}
+    <div class="body"><span class="small" style="font-weight:700;color:var(--orange)">${esc(x.n)}</span><h3>${esc(x.name)}</h3><span class="small muted">${esc(x.garment)}${x.color ? ' · ' + esc(x.color) : ''}</span>
+    <div class="three"><span><small>Cost</small>${usd(x.c.cogs)}</span><span><small>Price</small>${usd0(x.price)}</span><span><small>Keep</small><b style="color:${x.c.pct >= 40 ? 'var(--teal)' : 'var(--amber)'}">${x.c.pct}%</b></span></div></div></div>`).join('');
+  const person = (n, r, off) => `<div class="person"><span class="av ${off ? 'off' : ''}">${off ? '+' : esc(initials(n))}</span><div class="stack" style="gap:1px"><b style="font-size:14px">${esc(n)}</b><span class="small muted">${esc(r)}</span></div></div>`;
+  $('#ppl').innerHTML = person(p.owner?.name || 'Owner', 'Owner' + (p.owner?.role ? ' · ' + p.owner.role : '')) +
+    ((p.artists || []).length ? p.artists.map((a) => person(a.name, 'Artist' + (a.contact ? ' · ' + a.contact : ''))).join('') : person('No artist yet', 'Artist', true)) +
+    person(p.production?.name || 'Not set', 'Production', !p.production?.name);
+  $('#editP').onclick = () => editProject(p);
+}
+function editProject(p) {
+  const body = $('#dlgBody');
+  body.innerHTML = `<h2>Edit project</h2><div class="fields">
+    <div><label class="l">Project name</label><input class="in" id="e-name" value="${esc(p.name)}"></div><div><label class="l">Brand</label><input class="in" id="e-brand" value="${esc(p.brand)}"></div>
+    <div><label class="l">Owner</label><input class="in" id="e-on" value="${esc(p.owner?.name)}"></div><div><label class="l">Owner role</label><input class="in" id="e-or" value="${esc(p.owner?.role)}"></div>
+    <div><label class="l">Artists (comma separated)</label><input class="in" id="e-art" value="${esc((p.artists || []).map((a) => a.name).join(', '))}"></div>
+    <div><label class="l">Production partner</label><input class="in" id="e-pr" value="${esc(p.production?.name)}"></div>
+    <div><label class="l">Designs locked by</label><input class="in" type="date" id="e-due" value="${esc(p.due)}"></div></div>
+    <div class="row" style="justify-content:space-between"><button class="btn danger ghost" id="e-del">Delete project</button><div class="row"><button class="btn ghost" id="e-x">Cancel</button><button class="btn primary" id="e-ok">Save</button></div></div>`;
+  $('#dlg').showModal();
+  $('#e-x').onclick = () => $('#dlg').close();
+  $('#e-ok').onclick = async () => {
+    const old = new Map((p.artists || []).map((a) => [a.name, a]));
+    Object.assign(p, { name: $('#e-name').value.trim() || p.name, brand: $('#e-brand').value.trim(), due: $('#e-due').value, owner: { ...p.owner, name: $('#e-on').value.trim(), role: $('#e-or').value.trim() }, production: { name: $('#e-pr').value.trim() },
+      artists: $('#e-art').value.split(',').map((s) => s.trim()).filter(Boolean).map((n) => old.get(n) || { name: n, contact: '' }) });
+    await saveProject(p); $('#dlg').close(); route();
+  };
+  let armed = false;
+  $('#e-del').onclick = async () => {
+    if (!armed) { armed = true; $('#e-del').textContent = 'Click again to delete'; return; }
+    await doc.del('global', 'projects', p.id); projects = projects.filter((x) => x.id !== p.id); $('#dlg').close(); location.hash = '#/';
+  };
+}
+
+function story(p, el) {
+  const first = (p.owner?.name || 'the owner').split(' ')[0];
+  el.innerHTML = `<section class="card stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:4px"><h3>Interview ${esc(first)}</h3><p class="muted small">One question per piece. Type ${esc(first)}'s answers in their own words — the brief and concept art are built from them.</p></div>
+    <button class="btn" id="genQ" data-busy="Writing questions" ${AI.text ? '' : 'disabled title="Add ANTHROPIC_API_KEY in Cloudflare"'}>Write questions with AI</button></div><div class="stack" id="qs"></div></section>`;
+  $('#qs').innerHTML = p.pieces.map((x, i) => `<div class="q"><span class="n">${esc(x.n)}</span><div class="stack" style="gap:6px">
+    <input class="in" data-i="${i}" data-k="question" value="${esc(x.question || '')}" placeholder="${esc(x.name)} · your question" aria-label="${esc(x.name)} question" style="font-weight:600">
+    <textarea class="in" rows="3" data-i="${i}" data-k="answer" placeholder="${esc(first)}'s answer" aria-label="${esc(x.name)} answer">${esc(x.answer || '')}</textarea>
+    <input class="in" data-i="${i}" data-k="storyLine" value="${esc(x.storyLine || '')}" placeholder="One line ${esc(first)} sees on the review link (optional)" aria-label="${esc(x.name)} review line"></div></div>`).join('');
+  $$('[data-i]', el).forEach((f) => (f.oninput = () => { p.pieces[f.dataset.i][f.dataset.k] = f.value; saveSoon(p, 900); }));
+  $('#genQ').onclick = () => busy($('#genQ'), async () => {
+    const r = await api('ai/text', { method: 'POST', body: { task: 'questions', project: p } });
+    for (const q of r.questions || []) { const x = p.pieces.find((y) => y.id === q.pieceId); if (x && !x.question) x.question = q.question; }
+    await saveProject(p); story(p, el);
+  });
+  if (!AI.text) el.querySelector('.card').insertAdjacentHTML('beforeend', '<p class="small faint">AI questions turn on once ANTHROPIC_API_KEY is added in Cloudflare.</p>');
+}
+
+function concepts(p, el) {
+  el.innerHTML = `<p class="muted small">Concept art is a reference for the artist, never the final piece. ${AI.image ? `Generating with ${esc(AI.imageModel || AI.image)}.` : 'AI art turns on once OPENAI_API_KEY (GPT Image) or your Higgsfield API keys are added in Cloudflare. You can upload images now.'}</p><div class="stack" id="cl"></div>`;
+  const cl = $('#cl');
+  p.pieces.forEach((x, i) => {
+    x.concepts = x.concepts || [];
+    const card = document.createElement('section');
+    card.className = 'card stack';
+    card.innerHTML = `<div class="row" style="justify-content:space-between"><h3><span style="color:var(--orange)">${esc(x.n)}</span> ${esc(x.name)}</h3><span class="small muted">${esc(x.garment)}</span></div>
+      <div class="concepts">${x.concepts.map((u, j) => `<button aria-pressed="${j === (x.chosen || 0)}" data-j="${j}" title="Use this one"><img class="thumb" src="${esc(u)}" alt="Concept ${j + 1}"><span class="x" data-rm="${j}">Remove</span></button>`).join('') || '<span class="small faint">No concepts yet.</span>'}</div>
+      <textarea class="in" rows="2" data-dir placeholder="Direction for the AI and the artist: mood, references, palette">${esc(x.direction || '')}</textarea>
+      <div class="row"><button class="btn primary" data-gen data-busy="Making it" ${AI.image ? '' : 'disabled'}>Generate concept</button><label class="btn">Upload image<input type="file" accept="image/*" hidden data-up></label><span class="small faint" data-note></span></div>`;
+    cl.append(card);
+    $('[data-dir]', card).oninput = (e) => { x.direction = e.target.value; saveSoon(p, 900); };
+    $$('[data-j]', card).forEach((b) => (b.onclick = (e) => {
+      if (e.target.dataset.rm != null) { x.concepts.splice(+e.target.dataset.rm, 1); x.chosen = 0; } else x.chosen = +b.dataset.j;
+      saveProject(p).then(() => concepts(p, el));
+    }));
+    $('[data-up]', card).onchange = async (e) => {
+      const f = e.target.files[0]; if (!f) return;
+      try { const up = await PD.upload(f); x.concepts.push(up.url); x.chosen = x.concepts.length - 1; await saveProject(p); concepts(p, el); } catch (err) { toast(err.message); }
+    };
+    $('[data-gen]', card).onclick = (e) => busy(e.currentTarget, async () => {
+      let prompt = `Apparel concept, ${x.name} — ${x.garment}${x.color ? ', ' + x.color : ''}. ${x.answer || ''} ${x.direction || ''}`.trim();
+      if (AI.text) { try { prompt = (await api('ai/text', { method: 'POST', body: { task: 'prompt', project: p, piece: x } })).prompt; } catch {} }
+      const img = await api('ai/image', { method: 'POST', body: { prompt } });
+      x.concepts.push(img.url); x.chosen = x.concepts.length - 1; x.lastPrompt = prompt;
+      await saveProject(p); concepts(p, el);
+    });
+  });
+}
+
+function brief(p, el) {
+  const opts = p.pieces.map((x, i) => `<option value="${i}">${esc(x.n)} · ${esc(x.name)}</option>`).join('');
+  el.innerHTML = `<div class="side"><section class="card stack noprint"><label class="l" for="bp">Piece</label><select class="in" id="bp">${opts}</select>
+      <div id="bmeta" class="stack small"></div>
+      <button class="btn primary" id="bgen" data-busy="Writing the brief" ${AI.text ? '' : 'disabled'}>Write brief with AI</button>
+      <button class="btn" id="bcopy">Copy brief</button><button class="btn" id="bprint">Print or save PDF</button>
+      ${AI.text ? '' : '<p class="small faint">AI briefs turn on once ANTHROPIC_API_KEY is added in Cloudflare. You can write one by hand now.</p>'}</section>
+    <section class="card stack"><div class="row" style="gap:16px;align-items:flex-start"><img id="bimg" class="thumb" style="width:150px" alt=""><div class="stack" style="flex:1;min-width:220px"><h2 id="bt"></h2><span class="small muted" id="bsub"></span></div></div>
+      <div class="md" id="bview"></div><textarea class="in noprint" id="bedit" rows="14" placeholder="The brief, in Markdown"></textarea></section></div>`;
+  let i = 0;
+  const draw = () => {
+    const x = p.pieces[i];
+    $('#bt').textContent = `${x.n} · ${x.name}`; $('#bsub').textContent = `${p.brand} · ${p.name} · for ${(p.artists || []).map((a) => a.name).join(', ') || '[ARTIST]'}`;
+    const c = cover(x); $('#bimg').hidden = !c; if (c) $('#bimg').src = c;
+    $('#bedit').value = x.brief || ''; $('#bview').innerHTML = PD.md(x.brief || '');
+    const miss = [!x.answer && 'story answer', !x.placement && 'placement', !(p.artists || []).length && 'artist'].filter(Boolean);
+    $('#bmeta').innerHTML = miss.length ? `<span class="pill warn" style="width:max-content">Missing: ${miss.join(', ')}</span>` : '<span class="pill ok" style="width:max-content">Ready to write</span>';
+  };
+  $('#bp').onchange = (e) => { i = +e.target.value; draw(); };
+  $('#bedit').oninput = (e) => { p.pieces[i].brief = e.target.value; $('#bview').innerHTML = PD.md(e.target.value); saveSoon(p, 900); };
+  $('#bgen').onclick = () => busy($('#bgen'), async () => { const r = await api('ai/text', { method: 'POST', body: { task: 'brief', project: p, piece: p.pieces[i] } }); p.pieces[i].brief = r.markdown; await saveProject(p); draw(); });
+  $('#bcopy').onclick = async () => { try { await navigator.clipboard.writeText(p.pieces[i].brief || ''); toast('Brief copied'); } catch { toast('Copy did not work in this browser.'); } };
+  $('#bprint').onclick = () => window.print();
+  draw();
+}
+
+function costing(p, el) {
+  const COLS = [['garment', 'Blank', 'text'], ['blank', 'Blank $', '0.01'], ['printSq', 'Print sq in', '1'], ['presses', 'Presses', '1'], ['freight', 'Freight', '0.25'], ['extras', 'Extras', '0.25'], ['price', 'Price', '1']];
+  const draw = () => {
+    const L = PD.launch(S, p);
+    $('#kp').innerHTML = `<div><span class="k">To launch</span><span class="v">${usd0(L.total)}</span></div><div><span class="k">Units</span><span class="v">${L.units}</span></div><div><span class="k">Money back at</span><span class="v" style="color:var(--orange)">${isFinite(L.be) ? L.be + ' units' : 'never'}</span></div><div><span class="k">Profit at sell-out</span><span class="v" style="color:var(--teal)">${usd0(L.profit)}</span></div>`;
+    L.pieces.forEach((x) => { $(`#o-${x.id}`).innerHTML = `${usd(x.c.labor)}`; $(`#c-${x.id}`).textContent = usd(x.c.cogs); const k = $(`#k-${x.id}`); k.textContent = x.c.pct + '%'; k.style.color = x.c.pct >= 40 ? 'var(--teal)' : 'var(--amber)'; });
+  };
+  el.innerHTML = `<div class="kpis" id="kp"></div>
+    <section class="card stack"><div class="row" style="justify-content:space-between"><h3>Per piece</h3><span class="small muted">Production ${usd(PD.r2(S.pressMarket * (1 + S.markup / 100)))} a press · ${usd(S.floor)} minimum · <a href="#/settings">change shared costs</a></span></div>
+    <div class="tscroll"><table class="t"><thead><tr><th>Piece</th>${COLS.map((c) => `<th>${c[1]}</th>`).join('')}<th>Overseas</th><th>Production</th><th>Unit cost</th><th>Keep</th><th></th></tr></thead><tbody>
+    ${p.pieces.map((x, i) => `<tr><td><b>${esc(x.n)}</b> ${esc(x.name)}</td>${COLS.map(([k, , st]) => `<td><input class="in" ${st === 'text' ? 'style="min-width:180px"' : `type="number" step="${st}" min="0"`} data-i="${i}" data-k="${k}" value="${esc(x[k] ?? '')}" aria-label="${esc(x.name)} ${k}"></td>`).join('')}
+      <td><input type="checkbox" data-i="${i}" data-k="overseas" ${x.overseas ? 'checked' : ''} aria-label="${esc(x.name)} overseas" style="accent-color:var(--orange);width:17px;height:17px"></td><td id="o-${x.id}"></td><td id="c-${x.id}" style="font-weight:600"></td><td id="k-${x.id}" style="font-weight:700"></td>
+      <td><button class="btn small ghost" data-rm="${i}" aria-label="Remove ${esc(x.name)}">✕</button></td></tr>`).join('')}</tbody></table></div>
+    <button class="btn small" id="addPc" style="width:max-content">Add piece</button></section>
+    <section class="card stack"><h3>Launch</h3><div class="fields">
+      ${[['run', 'Units per piece', '1'], ['samplesOverseas', 'Overseas samples $', '1'], ['samplesUS', 'US samples $', '1'], ['labels', 'Labels and tags $', '1']].map(([k, l, st]) => `<div><label class="l">${l}</label><input class="in" type="number" step="${st}" min="0" data-l="${k}" value="${esc((p.launch || {})[k] ?? 0)}"></div>`).join('')}</div></section>`;
+  $$('[data-i]', el).forEach((f) => (f.oninput = f.onchange = () => {
+    const x = p.pieces[f.dataset.i];
+    x[f.dataset.k] = f.type === 'checkbox' ? f.checked : f.type === 'number' ? parseFloat(f.value) || 0 : f.value;
+    draw(); saveSoon(p, 900);
+  }));
+  $$('[data-l]', el).forEach((f) => (f.oninput = () => { p.launch = p.launch || {}; p.launch[f.dataset.l] = parseFloat(f.value) || 0; draw(); saveSoon(p, 900); }));
+  $$('[data-rm]', el).forEach((b) => (b.onclick = () => { if (p.pieces.length < 2) return toast('A project needs at least one piece.'); p.pieces.splice(+b.dataset.rm, 1); saveProject(p).then(() => costing(p, el)); }));
+  $('#addPc').onclick = () => { const x = blankPiece(p.pieces.length); x.name = 'New piece'; p.pieces.push(x); saveProject(p).then(() => costing(p, el)); };
+  draw();
+}
+
+async function review(p, el) {
+  const first = (p.owner?.name || 'the client').split(' ')[0];
+  el.innerHTML = `<section class="card stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:4px"><h3>Send to ${esc(first)}</h3><p class="muted small">${esc(first)} opens a link, no account. They approve each piece or ask for changes, and it's recorded against version ${p.version || 1}.</p></div>
+    <div class="row"><button class="btn" id="bump">New version (${(p.version || 1) + 1})</button><button class="btn primary" id="mk" data-busy="Making link">Make ${esc(first)}'s link</button></div></div>
+    <div class="row" id="linkRow" hidden><input class="in" id="link" readonly style="flex:1;min-width:240px"><button class="btn" id="cp">Copy</button><a class="btn" id="open" target="_blank" rel="noopener">Preview</a></div>
+    <button class="btn small ghost danger" id="rv" style="width:max-content">Turn off all of ${esc(first)}'s links</button></section>
+    <section class="card stack"><h3>What ${esc(first)} said</h3><div id="fbl"><span class="spin dark"></span></div></section>`;
+  $('#mk').onclick = () => busy($('#mk'), async () => { const r = await api('reviews', { method: 'POST', body: { projectId: p.id } }); $('#link').value = r.link; $('#open').href = r.link; $('#linkRow').hidden = false; });
+  $('#cp').onclick = async () => { try { await navigator.clipboard.writeText($('#link').value); toast('Link copied — you send it.'); } catch { $('#link').select(); } };
+  $('#rv').onclick = async () => { await api('reviews/revoke', { method: 'POST', body: { projectId: p.id } }); $('#linkRow').hidden = true; toast('Old links are off. Make a new one when ready.'); };
+  $('#bump').onclick = async () => { p.version = (p.version || 1) + 1; await saveProject(p); review(p, el); toast('Now on version ' + p.version); };
+  const fb = await doc.list(p.id, 'feedback').catch(() => []);
+  const byPiece = new Map(fb.map((d) => [d.data.pieceId, d.data]));
+  $('#fbl').innerHTML = p.pieces.map((x) => { const f = byPiece.get(x.id); return `<div class="fb"><span class="pill ${f ? (f.status === 'approved' ? 'ok' : 'warn') : ''}">${f ? (f.status === 'approved' ? 'Approved' : 'Changes') : 'Waiting'}</span><div class="stack" style="gap:2px"><b>${esc(x.n)} · ${esc(x.name)}</b>${f ? `<span class="small muted">v${f.version} · ${new Date(f.at).toLocaleString()}</span>${f.note ? `<p>${esc(f.note)}</p>` : ''}` : ''}</div></div>`; }).join('');
+}
+
+/* ---------- source blanks ---------- */
+let SRC = { q: '', region: 'us', retail: 40, margin: 45, moq: 50, days: 14, presses: 1, printSq: 36, sample: false, colors: false, hidePriceless: false, items: [] };
+function source() {
+  view.innerHTML = `<div class="hero-row"><div class="stack" style="gap:6px"><h1>Source blanks</h1><p class="muted">Type a product. Only what pays at your price and margin comes back.</p></div></div>
+    <form class="row" id="sf"><input class="in" id="sq" placeholder="cup, crop hoodie, tea tin…" value="${esc(SRC.q)}" style="flex:1;min-width:240px;font-size:18px;font-weight:600;padding:14px 16px">
+      <div class="seg" role="group" aria-label="Where it ships from">${[['us', 'US'], ['overseas', 'Overseas'], ['both', 'Both']].map(([k, l]) => `<button type="button" data-r="${k}" aria-pressed="${SRC.region === k}">${l}</button>`).join('')}</div>
+      <button class="btn primary" id="sgo" data-busy="Searching suppliers" ${AI.source ? '' : 'disabled'}>Search</button></form>
+    ${AI.source ? '' : '<p class="small faint">Search turns on once ANTHROPIC_API_KEY is added in Cloudflare.</p>'}
+    <div class="side"><aside class="card stack" id="flt"></aside><div class="stack"><h2 id="sh"></h2><div class="grid" style="--min:270px" id="sr"></div></div></div>`;
+  const flt = $('#flt');
+  const range = (k, label, min, max, step, fmt) => `<div><div class="row" style="justify-content:space-between;font-size:13.5px"><label for="r-${k}">${label}</label><b id="v-${k}">${fmt(SRC[k])}</b></div><input type="range" id="r-${k}" min="${min}" max="${max}" step="${step}" value="${SRC[k]}" data-k="${k}"></div>`;
+  flt.innerHTML = `<span class="small" style="font-weight:600;color:var(--dim)">Only show what pays</span>
+    ${range('retail', "I'd sell it for", 10, 150, 1, (v) => '$' + v)}${range('margin', 'I want to keep', 10, 80, 1, (v) => v + '%')}
+    <div style="background:linear-gradient(135deg,rgba(205,73,0,.09),rgba(0,128,130,.09));border-radius:14px;padding:14px" class="stack"><div class="row" style="justify-content:space-between"><span class="small">Max you can pay for the blank</span><b id="maxb" style="font-size:26px;color:var(--orange)"></b></div><div id="mbx" class="small muted stack" style="gap:2px"></div></div>
+    ${range('presses', 'Presses per piece', 1, 6, 1, (v) => v)}${range('printSq', 'Print area (sq in)', 0, 400, 1, (v) => v)}
+    <div class="fields" style="grid-template-columns:1fr 1fr"><div><label class="l">Max minimum order</label><input class="in" type="number" min="1" data-k="moq" value="${SRC.moq}"></div><div><label class="l">Ships within (days)</label><input class="in" type="number" min="1" data-k="days" value="${SRC.days}"></div></div>
+    <label class="chk"><input type="checkbox" data-c="sample" ${SRC.sample ? 'checked' : ''}>Single sample available</label>
+    <label class="chk"><input type="checkbox" data-c="colors" ${SRC.colors ? 'checked' : ''}>Comes in 3+ colors</label>
+    <label class="chk"><input type="checkbox" data-c="hidePriceless" ${SRC.hidePriceless ? 'checked' : ''}>Hide items without a listed price</label>`;
+  const calc = () => {
+    const mb = PD.maxBlank(S, SRC.retail, SRC.margin, { presses: SRC.presses, printSq: SRC.printSq });
+    $('#maxb').textContent = mb > 0 ? usd(mb) : '$0';
+    const fees = SRC.retail * S.cardPct / 100 + S.cardFixed, labor = Math.max(S.floor, SRC.presses * S.pressMarket * (1 + S.markup / 100));
+    $('#mbx').innerHTML = [['Sale', SRC.retail], [`− you keep ${SRC.margin}%`, SRC.retail * SRC.margin / 100], ['− production', labor], ['− packaging', S.pkg], ['− card fees · transfer', fees + SRC.printSq * S.sqin]].map(([a, b]) => `<div class="row" style="justify-content:space-between"><span>${a}</span><span>${usd(b)}</span></div>`).join('') + (mb <= 0 ? '<span style="color:var(--amber)">Nothing left for the blank at this price. Raise the price or lower the margin.</span>' : '');
+    drawResults(mb);
+  };
+  $$('[data-k]', flt).forEach((f) => (f.oninput = () => { SRC[f.dataset.k] = parseFloat(f.value) || 0; const v = $('#v-' + f.dataset.k); if (v) v.textContent = f.dataset.k === 'retail' ? '$' + SRC.retail : f.dataset.k === 'margin' ? SRC.margin + '%' : SRC[f.dataset.k]; calc(); }));
+  $$('[data-c]', flt).forEach((f) => (f.onchange = () => { SRC[f.dataset.c] = f.checked; calc(); }));
+  $$('[data-r]').forEach((b) => (b.onclick = () => { SRC.region = b.dataset.r; $$('[data-r]').forEach((x) => x.setAttribute('aria-pressed', x === b)); }));
+  $('#sf').onsubmit = (e) => { e.preventDefault(); SRC.q = $('#sq').value.trim(); if (!SRC.q) return; busy($('#sgo'), async () => { const r = await api('ai/source', { method: 'POST', body: { query: SRC.q, region: SRC.region } }); SRC.items = r.items || []; calc(); }); };
+  calc();
+}
+function drawResults(mb) {
+  const sr = $('#sr'); if (!sr) return;
+  if (!SRC.items.length) { $('#sh').textContent = ''; sr.innerHTML = `<div class="empty">Search a product to see real listings scored against your numbers.</div>`; return; }
+  const scored = SRC.items.map((it) => {
+    const price = typeof it.unitPrice === 'number' ? it.unitPrice : null;
+    const c = price != null ? PD.costPiece(S, { blank: price, presses: SRC.presses, printSq: SRC.printSq, price: SRC.retail, overseas: it.origin === 'Overseas' }) : null;
+    const why = [];
+    if (price == null) why.push('no listed price');
+    else if (c.pct < SRC.margin) why.push(`keeps ${c.pct}%`);
+    if (it.moq != null && it.moq > SRC.moq) why.push(`MOQ ${it.moq}`);
+    if (it.shipsDays != null && it.shipsDays > SRC.days) why.push(`${it.shipsDays} days`);
+    if (SRC.sample && it.sample === false) why.push('no sample');
+    if (SRC.colors && it.colors != null && it.colors < 3) why.push(`${it.colors} colors`);
+    if (SRC.region !== 'both' && it.origin && it.origin.toLowerCase() !== SRC.region) why.push(it.origin);
+    return { it, c, price, why, fit: !why.length };
+  }).filter((x) => !(SRC.hidePriceless && x.price == null)).sort((a, b) => (b.fit - a.fit) || ((b.c?.pct ?? -99) - (a.c?.pct ?? -99)));
+  const nf = scored.filter((x) => x.fit).length;
+  $('#sh').textContent = `${nf} fit, ${scored.length - nf} close`;
+  sr.innerHTML = '';
+  scored.forEach(({ it, c, price, why, fit }) => {
+    const d = document.createElement('div'); d.className = 'card res';
+    d.innerHTML = `<div class="ph">${it.image ? `<img src="${esc(it.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span class="small faint" style="position:absolute;bottom:8px">${it.image ? '' : 'No photo on the listing'}</span>
+      <span class="pill ${fit ? 'ok' : 'warn'}" style="left:10px">${fit ? `Fits · ${c.pct}%` : 'Close · ' + esc(why.join(', '))}</span><span class="pill" style="right:10px;background:rgba(255,255,255,.92)">${esc(it.origin || '')}${it.shipsFrom ? ' · ' + esc(it.shipsFrom) : ''}</span></div>
+      <div class="body"><span class="small" style="font-weight:600;color:var(--orange)">${esc(it.seller || '')}</span><h3>${esc(it.name)}</h3>
+      <div class="three"><span><small>Blank</small>${price != null ? usd(price) : 'Ask'}</span><span><small>You keep</small><b style="color:${c && c.pct >= SRC.margin ? 'var(--teal)' : 'var(--dim)'}">${c ? usd(c.keep) : '—'}</b></span><span><small>Ships</small>${it.shipsDays != null ? it.shipsDays + ' days' : '—'}</span></div>
+      <span class="small">${esc(it.priceNote || '')}${it.moq != null ? ` · MOQ ${it.moq}` : ''}${it.sizes ? ' · ' + esc(it.sizes) : ''}</span><span class="small muted">${esc(it.decoration || '')}</span><div style="flex:1"></div>
+      <div class="row"><button class="btn ${fit ? 'primary' : ''}" data-busy="Importing">Import to library</button><a href="${esc(it.url)}" target="_blank" rel="noopener" class="small">Supplier page</a></div></div>`;
+    $('button', d).onclick = (e) => busy(e.currentTarget, () => importItem(it, price));
+    sr.append(d);
+  });
+}
+async function importItem(it, price) {
+  const id = 'src-' + uid();
+  const color = 'As listed';
+  let photo = null;
+  if (it.image) { try { photo = await api('files/fetch', { method: 'POST', body: { url: it.image } }); } catch (e) { toast('Imported without a photo: ' + e.message, 4000); } }
+  const q = (SRC.q || '').toLowerCase();
+  const type = /cup|mug|tumbler|bottle|glass/.test(q) ? 'drinkware' : /hood/.test(q) ? 'hoodie' : /tee|shirt/.test(q) ? 'tee' : /hat|cap/.test(q) ? 'hat' : 'other';
+  const g = { type, vec: 'tee', brand: it.seller || 'Supplier', style: '—', name: it.name, spec: [it.priceNote, it.moq != null ? 'MOQ ' + it.moq : '', it.shipsDays != null ? 'ships in ' + it.shipsDays + ' days' : ''].filter(Boolean).join(' · ') || 'Imported from sourcing',
+    sample: price, bulk: null, url: it.url, colors: [{ name: color, hex: '#f3f3f1', family: 'white' }], source: it, at: Date.now() };
+  await doc.put('global', 'garments', id, g);
+  if (photo) await doc.put('global', 'photos', (id + '|' + color).replace(/[^a-zA-Z0-9_-]/g, '_'), { key: id + '|' + color, url: photo.url, itemId: id, color, at: Date.now() });
+  toast('In the library. Find it in Studio under ' + (type === 'drinkware' ? 'Drinkware' : type === 'other' ? 'Other' : type) + '.', 4000);
+}
+
+/* ---------- settings ---------- */
+function settings() {
+  view.innerHTML = `<div class="stack" style="gap:6px"><h1>Shared costs</h1><p class="muted">One set of numbers for every brand. Change one here and every project, tile and search updates.</p></div>
+    <section class="card stack"><div class="fields" id="cf"></div><div class="row"><span class="small muted" id="pp"></span><div class="spacer"></div><button class="btn ghost" id="reset">Reset to defaults</button><button class="btn primary" id="save" data-busy="Saving">Save costs</button></div></section>
+    <section class="card stack" style="max-width:520px"><h3>Your password</h3><div class="fields"><div><label class="l">Current</label><input class="in" type="password" id="pw0" autocomplete="current-password"></div><div><label class="l">New (10+ characters)</label><input class="in" type="password" id="pw1" autocomplete="new-password"></div></div><button class="btn" id="pwgo" data-busy="Updating" style="width:max-content">Change password</button></section>`;
+  const fill = () => {
+    $('#cf').innerHTML = PD.COST_FIELDS.map(([k, l, u, st, hint]) => `<div><label class="l" for="s-${k}">${l} (${u})</label><input class="in" type="number" id="s-${k}" step="${st}" min="0" value="${S[k]}" data-s="${k}">${hint ? `<span class="small faint">${hint}</span>` : ''}</div>`).join('');
+    const pp = () => ($('#pp').textContent = `Production comes to ${usd(PD.r2(S.pressMarket * (1 + S.markup / 100)))} a press, never under ${usd(S.floor)} a piece.`);
+    $$('[data-s]').forEach((f) => (f.oninput = () => { S[f.dataset.s] = parseFloat(f.value) || 0; pp(); }));
+    pp();
+  };
+  fill();
+  $('#reset').onclick = () => { S = { ...PD.COSTS }; fill(); };
+  $('#save').onclick = () => busy($('#save'), async () => { await doc.put('global', 'settings', 'costs', S); toast('Costs saved for every project.'); });
+  $('#pwgo').onclick = () => busy($('#pwgo'), async () => { await api('auth/password', { method: 'POST', body: { current: $('#pw0').value, password: $('#pw1').value } }); $('#pw0').value = $('#pw1').value = ''; toast('Password changed.'); });
+}
+
+/* ---------- team ---------- */
+async function team() {
+  const me = PD.me || (await api('me')).user;
+  view.innerHTML = `<div class="stack" style="gap:6px"><h1>Team</h1><p class="muted">Only people here can open Product Design. Clients use review links instead and never need an account.</p></div>
+    <section class="card stack"><div id="ul"><span class="spin dark"></span></div></section>
+    ${me.role === 'owner' ? `<section class="card stack" style="max-width:640px"><h3>Invite someone</h3><div class="fields"><div><label class="l">Name</label><input class="in" id="iname"></div><div><label class="l">Email</label><input class="in" id="iemail" type="email"></div>
+      <div><label class="l">Access</label><select class="in" id="irole"><option value="member">Member — design and edit</option><option value="owner">Owner — also manages the team</option></select></div></div>
+      <button class="btn primary" id="igo" data-busy="Making invite" style="width:max-content">Make invite link</button><div class="row" id="ilinkRow" hidden><input class="in" id="ilink" readonly style="flex:1;min-width:240px"><button class="btn" id="icp">Copy</button></div>
+      <p class="small faint">The link works once and expires in 7 days. You send it however you like.</p></section>` : ''}`;
+  const draw = async () => {
+    const r = await api('users');
+    $('#ul').innerHTML = `<table class="t"><thead><tr><th>Name</th><th>Email</th><th>Access</th><th></th></tr></thead><tbody>${r.users.map((u) => `<tr><td><b>${esc(u.name)}</b></td><td>${esc(u.email)}</td><td>${u.role === 'owner' ? 'Owner' : 'Member'}</td><td>${me.role === 'owner' && u.email !== me.email ? `<button class="btn small ghost danger" data-rm="${esc(u.email)}">Remove</button>` : ''}</td></tr>`).join('')}
+      ${r.invites.map((u) => `<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td><span class="pill warn">Invited</span></td><td></td></tr>`).join('')}</tbody></table>`;
+    $$('[data-rm]').forEach((b) => (b.onclick = async () => { if (b.dataset.armed) { await api('users/' + encodeURIComponent(b.dataset.rm), { method: 'DELETE' }); draw(); } else { b.dataset.armed = 1; b.textContent = 'Click again'; } }));
+  };
+  draw();
+  if (me.role === 'owner') {
+    $('#igo').onclick = () => busy($('#igo'), async () => { const r = await api('users/invite', { method: 'POST', body: { name: $('#iname').value, email: $('#iemail').value, role: $('#irole').value } }); $('#ilink').value = r.link; $('#ilinkRow').hidden = false; draw(); });
+    $('#icp').onclick = async () => { try { await navigator.clipboard.writeText($('#ilink').value); toast('Invite link copied.'); } catch { $('#ilink').select(); } };
+  }
+}
+
+/* ---------- boot ---------- */
+(async () => {
+  await PD.header('projects');
+  await loadAll();
+  if (new URLSearchParams(location.search).get('welcome') && !projects.length) { try { await seedTT(); } catch {} }
+  route();
+})();
+</script>
+</body>
+</html>

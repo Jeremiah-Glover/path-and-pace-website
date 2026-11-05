@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Product Design · Path &amp; Pace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/product-design/assets/pd.css">
+<style>
+body{display:flex;align-items:center;justify-content:center;padding:24px;overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none;z-index:0}
+.o1{width:520px;height:520px;background:radial-gradient(circle,#F08A4B 0%,rgba(240,138,75,0) 70%);top:-160px;left:-140px;animation:drift 18s ease-in-out infinite alternate}
+.o2{width:560px;height:560px;background:radial-gradient(circle,#3FB3B4 0%,rgba(63,179,180,0) 70%);bottom:-200px;right:-160px;animation:drift 22s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.orb{animation:none}}
+.shell{position:relative;z-index:1;width:100%;max-width:980px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center}
+.hero .mark{font-size:clamp(44px,8vw,76px);line-height:1.02;display:block;letter-spacing:-.01em}
+.hero .sub{font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-top:14px}
+.hero p{margin-top:18px;font-size:17px;max-width:420px}
+.panel{background:rgba(255,255,255,.78);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(30,19,14,.07);box-shadow:0 30px 80px rgba(110,80,50,.14);border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:14px}
+.panel h2{font-size:20px}
+.err{color:var(--red);font-size:13.5px;min-height:1em}
+.foot{font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<main class="shell">
+  <section class="hero">
+    <span class="mark">Path &amp; Pace</span>
+    <div class="sub">Product Design</div>
+    <p>From an idea to a sellable product, on real blanks, with the real numbers.</p>
+  </section>
+
+  <form class="panel" id="f" novalidate>
+    <h2 id="title">Sign in</h2>
+    <p class="muted small" id="lede">Members only.</p>
+    <div id="setupOnly" hidden><label class="l" for="code">Setup code</label><input class="in" id="code" autocomplete="one-time-code" placeholder="XXXX-XXXX-XXXX-XXXX" spellcheck="false"></div>
+    <div id="nameRow" hidden><label class="l" for="name">Your name</label><input class="in" id="name" autocomplete="name"></div>
+    <div id="emailRow"><label class="l" for="email">Email</label><input class="in" id="email" type="email" autocomplete="username" required></div>
+    <div><label class="l" for="pw">Password</label><input class="in" id="pw" type="password" autocomplete="current-password" required minlength="10"></div>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn primary" id="go" type="submit" data-busy="Signing in">Sign in</button>
+    <span class="foot">Need access? The studio owner sends you an invite link.</span>
+  </form>
+</main>
+<script src="/product-design/assets/pd.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  const invite = q.get('invite');
+  const next = (q.get('next') || '').startsWith('/product-design') ? q.get('next') : '/product-design/';
+  const $ = (id) => document.getElementById(id);
+  let mode = 'login';
+  const setMode = (m, extra = {}) => {
+    mode = m;
+    $('setupOnly').hidden = m !== 'setup';
+    $('nameRow').hidden = m !== 'setup';
+    $('emailRow').hidden = m === 'invite';
+    $('pw').autocomplete = m === 'login' ? 'current-password' : 'new-password';
+    $('title').textContent = m === 'setup' ? 'Set up Product Design' : m === 'invite' ? `Welcome, ${extra.name}` : 'Sign in';
+    $('lede').textContent = m === 'setup' ? 'First time here. Use the one-time setup code, then choose your password (10+ characters).' : m === 'invite' ? `Choose a password for ${extra.email} (10+ characters).` : 'Members only.';
+    $('go').textContent = m === 'login' ? 'Sign in' : 'Create my account';
+    $('go').dataset.busy = m === 'login' ? 'Signing in' : 'Setting up';
+  };
+  try {
+    if (invite) {
+      const inv = await PD.api('auth/invite?code=' + encodeURIComponent(invite));
+      setMode('invite', inv);
+    } else {
+      const st = await PD.api('auth/state');
+      if (st.user) { location.replace(next); return; }
+      if (st.needsSetup) setMode('setup');
+    }
+  } catch (e) { $('err').textContent = e.message; }
+
+  $('f').addEventListener('submit', async (ev) => {
+    ev.preventDefault(); $('err').textContent = '';
+    const body = { email: $('email').value, password: $('pw').value };
+    let path = 'auth/login';
+    if (mode === 'setup') { path = 'auth/setup'; body.code = $('code').value; body.name = $('name').value; }
+    if (mode === 'invite') { path = 'auth/accept'; body.code = invite; }
+    try {
+      await PD.busy($('go'), () => PD.api(path, { method: 'POST', body }));
+      location.replace(mode === 'setup' ? '/product-design/?welcome=1' : next);
+    } catch (e) { $('err').textContent = e.message; }
+  });
+})();
+</script>
+</body>
+</html>

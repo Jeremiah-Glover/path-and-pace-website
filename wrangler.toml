@@ -1,0 +1,14 @@
+# Cloudflare Pages config for path-and-pace.com (project: path-and-pace-web).
+# Bindings for Product Design (/product-design). Secrets (API keys) stay in the dashboard.
+name = "path-and-pace-web"
+pages_build_output_dir = "."
+compatibility_date = "2025-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pp-product-design"
+database_id = "6154d0fa-9b39-405f-b0fc-086707f6597a"
+
+[[kv_namespaces]]
+binding = "FILES"
+id = "5260fc3358dc49909e2c6b503e9e5ed4"
